@@ -72,3 +72,9 @@ au run
 ~~~
 
 
+Modify tsconfig.json, and add to front:
+~~~
+{
+  "noImplicitAny": true,
+  "strictNullChecks": true,
+~~~
