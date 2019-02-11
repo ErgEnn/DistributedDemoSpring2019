@@ -2,9 +2,11 @@
 
 
 Demo app keeps track of persons and contacts. Every App user has their own data.
+
 AppUser 1-----01< Person 1-----01< Contact >10------1 ContactType
 
 AppUser can also be connected to Role (those tables are provided by IdentityDbContext)
+
 Role 1-----01< UserRole >10-----1 AppUser
 
 ### Steps to recreate solution (or get inspiration)
