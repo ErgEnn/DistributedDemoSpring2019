@@ -5,55 +5,45 @@ export var log = LogManager.getLogger('Home');
 
 export class Home {
 
-  constructor(){
+  constructor() {
     log.debug('constructor');
   }
-  
-  
+
   // ============ View LifeCycle events ==============
-  created(owningView: View, myView: View){
+  created(owningView: View, myView: View) {
     log.debug('created');
   }
-  
-  bind(bindingContext: Object, overrideContext: Object){
-    log.debug('bind');
-    
-  }
-  
-  attached(){
-    log.debug('attached');
-    
-  }
-  
 
-  detached(){
+  bind(bindingContext: Object, overrideContext: Object) {
+    log.debug('bind');
+  }
+
+  attached() {
+    log.debug('attached');
+  }
+
+  detached() {
     log.debug('detached');
-    
   }
-  
-  unbind(){
+
+  unbind() {
     log.debug('unbind');
-    
   }
-  
-  
+
   // ============= Router Events =============
-  canActivate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction){
+  canActivate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
     log.debug('canActivate');
-    
   }
-  
-  activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction){
+
+  activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
     log.debug('activate');
-    
   }
- 
-  canDeactivate(){
+
+  canDeactivate() {
     log.debug('canDeactivate');
-    
-  } 
-  deactivate(){
+  }
+
+  deactivate() {
     log.debug('deactivate');
-    
   }
 }
