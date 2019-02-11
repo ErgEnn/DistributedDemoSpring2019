@@ -44,3 +44,31 @@ dotnet aspnet-codegenerator controller -name PersonsController -actions -m Perso
 dotnet aspnet-codegenerator controller -name ContactsController -actions -m Contact -dc AppDbContext -outDir ApiControllers -api --useAsyncActions  -f
 dotnet aspnet-codegenerator controller -name ContactTypesController -actions -m ContactType -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 ~~~
+
+
+Create Aurelia 
+
+~~~
+au new ClientApp
+~~~
+
+Project Configuration
+
+    Name: ContactClient
+    Platform: Web
+    Bundler: Webpack
+    Loader: None
+    Transpiler: TypeScript
+    Markup Processor: None
+    CSS Processor: None
+    Unit Test Runner: None
+    Integration Test Runner: None
+    Editor: Visual Studio Code
+    Features: None
+    
+~~~
+cd ClientApp
+au run
+~~~
+
+

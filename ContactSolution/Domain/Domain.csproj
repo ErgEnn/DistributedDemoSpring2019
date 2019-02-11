@@ -6,13 +6,9 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.2" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />
       <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Reference Include="Microsoft.Extensions.Identity.Stores, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\..\..\..\..\..\usr\local\share\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.identity.stores\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Identity.Stores.dll</HintPath>
-      </Reference>
-    </ItemGroup>
 
 </Project>
