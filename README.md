@@ -201,6 +201,27 @@ dotnet aspnet-codegenerator controller -name ContactTypesController -actions -m 
 
 ##Aurelia
 
+Install required JS tooling
+
+Download and install Node (LTS version)
+Node installs also NPM - Node Package Manager
+
+update NPM (if you get complaints about access rights, use sudo)
+~~~
+> npm install npm@latest -g
+~~~
+
+Download and install latest TypeScript compiler
+~~~
+> npm install -g typescript
+~~~
+
+Install Aurelia CLI
+~~~
+> npm install aurelia-cli -g
+~~~
+
+
 Create Aurelia app inside base folder (next to ASP.NET solution)
 
 ~~~
@@ -244,15 +265,17 @@ npm install @types/bootstrap -S
 npm install popper.js -S
 ~~~
 
-App code is in \src folder
-Modify main.ts to start from our own custom router page - this provides as with main navigation.
+App code is in src folder
+Modify main.ts to startup from our own custom router page - this provides as with main navigation.
 
 ~~~
 aurelia.start().then(() => aurelia.setRoot(PLATFORM.moduleName('main-router')));
 ~~~
 
+Due to html case-insensitivity we have this pattern between classes and file names:  
+file: my-super-utility-thing.ts class: MySuperUtilityThing
 
-Add html/ts files for main-router
+Add html/ts files for main-router  (class MainRouter)  
 main-router.ts (define one initial default route/page - home)
 ~~~
 import {PLATFORM, LogManager} from "aurelia-framework";
