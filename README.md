@@ -9,18 +9,29 @@ AppUser can also be connected to Role (those tables are provided by IdentityDbCo
 
 Role 1-----01< UserRole >10-----1 AppUser
 
+#### ERD notations used
+Ascii notation for ERD  
+01< - zero or one or many  
+1 - one (ie mandatory)  
+10 - 1 or zero (nullable)
+
+Notation for relationship is at the end of line futher away from principal entity
+
+AppUser ----01< Person - Appuser can have 0-1-many Persons  
+AppUser 1------ Person - Person always has an Appuser (ie Person always has an owner)
+
 ### Steps to recreate solution (or get inspiration)
 
-Create folder where to keep all your different parts of application.
+Create folder where to keep all your different parts of application.  
 This will be commited to the git.
 
-Inside this folder create a new ASP.NET Core Web project/solution.
-Type Asp.NET Web App (Model-View-Controller), Auth: Individual Authentication (Named WebApp in most demo solutions.)
-Solution name should be different (ContactSolution here).
+Inside this folder create a new ASP.NET Core Web project/solution.  
+Type Asp.NET Web App (Model-View-Controller), Auth: Individual Authentication (Named WebApp in most demo solutions.)  
+Solution name should be different (ContactSolution here).  
 
 Delete Data folder from WebApp.
 
-Add DAL project (Class library, Net Standard 2.0)
+Add DAL project (Class library, Net Standard 2.0)  
 Add Domain project (Class library, Net Standard 2.0)
 
 Create Identity directory inside Domain project.
