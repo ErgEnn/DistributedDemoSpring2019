@@ -56,7 +56,7 @@ namespace Domain.Identity
 ~~~
 
 
-Add domain classes, set up your relations
+Add domain classes, set up your relations. Dont forget FK's, be careful with their exact names!
 ~~~
 public abstract class BaseEntity
 {
@@ -71,10 +71,10 @@ public class Contact : BaseEntity
 
     public string ContactValue { get; set; }
 
-    public int ContactTypeId { get; set; } //this in not nullable int - so it is required
+    public int ContactTypeId { get; set; } //FK - this in not nullable int - so it is required relationship
     public ContactType ContactType { get; set; }
 
-    public int PersonId { get; set; }
+    public int PersonId { get; set; } // FK, naming pattern <Class>Id
     public Person Person { get; set; }
 }
     
@@ -435,4 +435,4 @@ Run from inside aurelia project folder
 au run
 ~~~
 
-Open browser and enjoy!
+Open browser (should be port 8080) and enjoy!
