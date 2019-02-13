@@ -21,7 +21,7 @@ namespace Domain
         public int AppUserId { get; set; }
         public AppUser AppUser { get; set; }
         
-        public List<Contact> Contacts { get; set; }
+        public ICollection<Contact> Contacts { get; set; }
 
         
         public string FirstLastName => FirstName + " " + LastName;

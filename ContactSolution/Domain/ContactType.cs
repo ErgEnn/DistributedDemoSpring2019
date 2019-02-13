@@ -11,6 +11,6 @@ namespace Domain
         public string ContactTypeValue { get; set; }
 
 
-        public List<Contact> Contacts { get; set; }
+        public ICollection<Contact> Contacts { get; set; }
     }
 }

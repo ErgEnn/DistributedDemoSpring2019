@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class PersonsController : Controller
     {
         private readonly AppDbContext _context;
@@ -22,8 +25,10 @@ namespace WebApp.Controllers
         // GET: Persons
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Persons.Include(p => p.AppUser);
-            return View(await appDbContext.ToListAsync());
+            var persons = await _context.Persons
+                .Include(p => p.AppUser)
+                .Where(p => p.AppUserId == User.GetUserId()).ToListAsync();
+            return View(persons);
         }
 
         // GET: Persons/Details/5
@@ -57,7 +62,8 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,AppUserId,Id")] Person person)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,AppUserId,Id")]
+            Person person)
         {
             if (ModelState.IsValid)
             {
@@ -65,6 +71,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", person.AppUserId);
             return View(person);
         }
@@ -82,6 +89,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", person.AppUserId);
             return View(person);
         }
@@ -91,7 +99,8 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,AppUserId,Id")] Person person)
+        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,AppUserId,Id")]
+            Person person)
         {
             if (id != person.Id)
             {
@@ -116,8 +125,10 @@ namespace WebApp.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", person.AppUserId);
             return View(person);
         }

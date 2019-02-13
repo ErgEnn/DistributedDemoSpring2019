@@ -6,6 +6,6 @@ namespace Domain.Identity
     public class AppUser :  IdentityUser<int> // PK type is int
     {
         // add relationships and data fields you need
-        public List<Person> Persons { get; set; }
+        public ICollection<Person> Persons { get; set; }
     }
 }
