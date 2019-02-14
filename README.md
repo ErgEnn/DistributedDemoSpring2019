@@ -11,9 +11,9 @@ Role 1-----01< UserRole >10-----1 AppUser
 
 #### ERD notations used
 Ascii notation for ERD  
-01< - zero or one or many  
-1 - one (ie mandatory)  
-10 - 1 or zero (nullable)
+01< - zero or one or many  (ICollection)
+1 - one (ie mandatory FK)  
+10 - 1 or zero (nullable FK)
 
 Notation for relationship is at the end of line futher away from principal entity
 
@@ -170,9 +170,9 @@ dotnet ef database update --project DAL --startup-project WebApp
 ~~~
 
 If you want restart:
-delete Migrations folder from DAL project and delete DB:
+delete Migrations folder from DAL project and drop the DB:
 ~~~
-dotnet ef database delete --project DAL --startup-project WebApp
+dotnet ef database drop --project DAL --startup-project WebApp
 ~~~
 
 
@@ -196,243 +196,105 @@ dotnet aspnet-codegenerator controller -name ContactsController -actions -m Cont
 dotnet aspnet-codegenerator controller -name ContactTypesController -actions -m ContactType -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 ~~~
 
+For JS client app (Aurelia) instructions, look at AURELIA.md
 
 
+## Security in ASP.NET Core (MVC, Rest/WebApi later)
 
-##Aurelia
+ASP.NET Core Identity provides as with pretty good authentication/authorization support.
+Quick overview - UI is provided out of the box, based on Razor pages. 
+In controllers we can use [Authorize] and [AllowAnonymous] attributes - on top of controller and/or some action method.
+And in controller code we can use User object for all identity operations.
 
-Install required JS tooling
-
-Download and install Node (LTS version)
-Node installs also NPM - Node Package Manager
-
-update NPM (if you get complaints about access rights, use sudo)
+Relax identity password requirements (add to startup.cs - ConfigureServices )
 ~~~
-> npm install npm@latest -g
-~~~
-
-Download and install latest TypeScript compiler
-~~~
-> npm install -g typescript
-~~~
-
-Install Aurelia CLI
-~~~
-> npm install aurelia-cli -g
-~~~
-
-
-Create Aurelia app inside base folder (next to ASP.NET solution)
-
-~~~
-au new ClientApp
-~~~
-
-Project Configuration
-
-    Name: ContactClient
-    Platform: Web
-    Bundler: Webpack
-    Loader: None
-    Transpiler: TypeScript
-    Markup Processor: None
-    CSS Processor: None
-    Unit Test Runner: None
-    Integration Test Runner: None
-    Editor: Visual Studio Code
-    Features: None
-    
-~~~
-cd ClientApp
-au run
-~~~
-
-
-Modify tsconfig.json, and add to front:
-~~~
+// TODO: Remove in production
+services.Configure<IdentityOptions>(options =>
 {
-  "noImplicitAny": true,
-  "strictNullChecks": true,
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredUniqueChars = 0;
+    options.Password.RequireNonAlphanumeric = false;
+
+});
 ~~~
 
+Change all IdentityUser references to AppUser:
+in Startup.cs and in Views/Shared/_ValidationScriptsPartial.cshtml.
 
-Install into ClientApp
+
+Add extension method for easy logged in user Id retrieveal:
 ~~~
-npm install jquery -S
-npm install @types/jquery -S
-npm install bootstrap -S
-npm install @types/bootstrap -S
-npm install popper.js -S
-~~~
+public static class IdentityExtensions
+{
+    public static int GetUserId(this ClaimsPrincipal principal)
+    {
+        return GetUserId<int>(principal);
+    }
 
-App code is in src folder
-Modify main.ts to startup from our own custom router page - this provides as with main navigation.
+    public static TKey GetUserId<TKey>(this ClaimsPrincipal principal)
+    {
+        if (principal == null)
+        {
+            throw new ArgumentNullException(nameof(principal));
+        }
 
-~~~
-aurelia.start().then(() => aurelia.setRoot(PLATFORM.moduleName('main-router')));
-~~~
+        string userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-Due to html case-insensitivity we have this pattern between classes and file names:  
-file: my-super-utility-thing.ts class: MySuperUtilityThing
+        if (typeof(TKey) == typeof(int))
+        {
+            if (!int.TryParse(userId, out _))
+            {
+                throw new ArgumentException("ClaimsPrincipal NameIdentifier is not of type int!");
+            }
+        }
 
-Add html/ts files for main-router  (class MainRouter)  
-main-router.ts (define one initial default route/page - home)
-~~~
-import {PLATFORM, LogManager} from "aurelia-framework";
-import {RouterConfiguration, Router} from "aurelia-router";
+        return (TKey) Convert.ChangeType(userId, typeof(TKey));
 
-export var log = LogManager.getLogger('MainRouter');
+        // this is tiny bit slower, but handles GUID type also
+        return (TKey) TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(userId);
 
-export class MainRouter {
-  
-  public router: Router;
-  
-  constructor(){
-    log.debug('constructor');
-  }
-  
-  configureRouter(config: RouterConfiguration, router: Router):void {
-    log.debug('configureRouter');
-    
-    this.router = router;
-    config.title = "Contact App - Aurelia";
-    config.map(
-      [
-        {route: ['', 'home'], name: 'home', moduleId: PLATFORM.moduleName('home'), nav: true, title: 'Home'}
-      ]  
-    );
-    
-  } 
-  
+    }
 }
 ~~~
 
-main-router.html
+Fix controllers security issues! For example, Persons controller should only allow operations based on currently logged in user.
+So you have to control request correctness on every step.
+
+
+So:
+Add [Authorize] on top of controller.
 ~~~
-<template>
-      <!-- content will be rendered here-->
-      <router-view></router-view>
-</template>
-~~~
-
-
-Add bootstrap layout to main-router.html
-~~~
-<template>
-  <!-- import css -->
-  <require from="bootstrap/dist/css/bootstrap.min.css"></require>
-  
-  <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-      <div class="container">
-        <a class="navbar-brand">WebApp</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-          <ul class="navbar-nav flex-grow-1">
-            <li class="nav-item">
-              <a class="nav-link text-dark" >Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" >Persons</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" >Contacts</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" >ContactTypes</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <div class="container">
-    <main role="main" class="pb-3">
-      <!-- content will be rendered here-->
-      <router-view></router-view>
-    </main>
-  </div>
-
-  <footer class="border-top footer text-muted">
-    <div class="container">
-      &copy; 2019 - WebApp 
-    </div>
-  </footer>  
-  
-</template>
+[Authorize]
+public class PersonsController : Controller
+{
 ~~~
 
-
-Add the home.html & home.ts
-
-home.ts
+Index - only return data belonging to the logged in user.
 ~~~
-import {LogManager, View} from "aurelia-framework";
-import {RouteConfig, NavigationInstruction} from "aurelia-router";
-
-export var log = LogManager.getLogger('Home');
-
-export class Home {
-
-  constructor() {
-    log.debug('constructor');
-  }
-
-  // ============ View LifeCycle events ==============
-  created(owningView: View, myView: View) {
-    log.debug('created');
-  }
-
-  bind(bindingContext: Object, overrideContext: Object) {
-    log.debug('bind');
-  }
-
-  attached() {
-    log.debug('attached');
-  }
-
-  detached() {
-    log.debug('detached');
-  }
-
-  unbind() {
-    log.debug('unbind');
-  }
-
-  // ============= Router Events =============
-  canActivate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-    log.debug('canActivate');
-  }
-
-  activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-    log.debug('activate');
-  }
-
-  canDeactivate() {
-    log.debug('canDeactivate');
-  }
-
-  deactivate() {
-    log.debug('deactivate');
-  }
+// GET: Persons
+public async Task<IActionResult> Index()
+{
+    var persons = await _context.Persons
+        .Include(p => p.AppUser)
+        .Where(p => p.AppUserId == User.GetUserId()).ToListAsync();
+    return View(persons);
 }
 ~~~
 
-home.html
-~~~
-<template>
-  Welcome!
-</template>
-~~~
+Details - only return data belonging to the logged in user.
 
+Create GET - don't include AppUser dropdown, new person shall automatically be connected to the current user in POST
 
-Run from inside aurelia project folder
-~~~
-au run
-~~~
+Create POST - attach coorect AppUserId
 
-Open browser (should be port 8080) and enjoy!
+Edit GET - only allow editing of record if it belongs to logged in user
+
+Edit POST - only allow db save, when you are changing data on record which belongs to logged in user (its easy to modify post data)
+
+Delete GET - only show data, if it belong to logged in user
+
+Delete POST - only allow db deletion, when you are deleting record which belongs to logged in user (its easy to modify post data)
+
