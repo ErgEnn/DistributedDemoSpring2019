@@ -22,6 +22,7 @@ namespace WebApp.Controllers
             _context = context;
         }
 
+        
         // GET: Persons
         public async Task<IActionResult> Index()
         {
@@ -53,7 +54,6 @@ namespace WebApp.Controllers
         // GET: Persons/Create
         public IActionResult Create()
         {
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -62,9 +62,11 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,AppUserId,Id")]
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Id")]
             Person person)
         {
+            person.AppUserId = User.GetUserId();
+            
             if (ModelState.IsValid)
             {
                 _context.Add(person);
@@ -72,10 +74,11 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", person.AppUserId);
             return View(person);
         }
 
+        
+        
         // GET: Persons/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

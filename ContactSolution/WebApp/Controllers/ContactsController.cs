@@ -7,9 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Identity;
+using Microsoft.AspNetCore.Authorization;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class ContactsController : Controller
     {
         private readonly AppDbContext _context;
@@ -22,7 +26,11 @@ namespace WebApp.Controllers
         // GET: Contacts
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Contacts.Include(c => c.ContactType).Include(c => c.Person);
+            var appDbContext = _context.Contacts
+                .Include(c => c.ContactType)
+                .Include(c => c.Person)
+                .Where(c => c.Person.AppUserId == User.GetUserId());
+
             return View(await appDbContext.ToListAsync());
         }
 
@@ -49,9 +57,18 @@ namespace WebApp.Controllers
         // GET: Contacts/Create
         public IActionResult Create()
         {
-            ViewData["ContactTypeId"] = new SelectList(_context.ContactTypes, "Id", "ContactTypeValue");
-            ViewData["PersonId"] = new SelectList(_context.Persons, "Id", "FirstName");
-            return View();
+            var vm = new ContactCreateViewModel()
+            {
+                ContactTypeSelectList = new SelectList(
+                    _context.ContactTypes, 
+                    nameof(ContactType.Id), 
+                    nameof(ContactType.ContactTypeValue)),
+                PersonSelectList = new SelectList(
+                    _context.Persons.Where(p => p.AppUserId == User.GetUserId()),
+                    nameof(Person.Id), 
+                    nameof(Person.FirstLastName))
+            };
+            return View(vm);
         }
 
         // POST: Contacts/Create
@@ -59,17 +76,21 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ContactValue,PersonId,ContactTypeId,Id")] Contact contact)
+        public async Task<IActionResult> Create(ContactCreateViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(contact);
+                _context.Add(vm.Contact);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ContactTypeId"] = new SelectList(_context.ContactTypes, "Id", "ContactTypeValue", contact.ContactTypeId);
-            ViewData["PersonId"] = new SelectList(_context.Persons, "Id", "FirstName", contact.PersonId);
-            return View(contact);
+
+            vm.PersonSelectList = new SelectList(_context.Persons.Where(p => p.AppUserId == User.GetUserId()),
+                nameof(Person.Id), nameof(Person.FirstLastName), vm.Contact.PersonId);
+            vm.ContactTypeSelectList = new SelectList(_context.ContactTypes, nameof(ContactType.Id),
+                nameof(ContactType.ContactTypeValue), vm.Contact.ContactTypeId);
+
+            return View(vm);
         }
 
         // GET: Contacts/Edit/5
@@ -85,7 +106,9 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ContactTypeId"] = new SelectList(_context.ContactTypes, "Id", "ContactTypeValue", contact.ContactTypeId);
+
+            ViewData["ContactTypeId"] =
+                new SelectList(_context.ContactTypes, "Id", "ContactTypeValue", contact.ContactTypeId);
             ViewData["PersonId"] = new SelectList(_context.Persons, "Id", "FirstName", contact.PersonId);
             return View(contact);
         }
@@ -95,7 +118,8 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ContactValue,PersonId,ContactTypeId,Id")] Contact contact)
+        public async Task<IActionResult> Edit(int id, [Bind("ContactValue,PersonId,ContactTypeId,Id")]
+            Contact contact)
         {
             if (id != contact.Id)
             {
@@ -120,9 +144,12 @@ namespace WebApp.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ContactTypeId"] = new SelectList(_context.ContactTypes, "Id", "ContactTypeValue", contact.ContactTypeId);
+
+            ViewData["ContactTypeId"] =
+                new SelectList(_context.ContactTypes, "Id", "ContactTypeValue", contact.ContactTypeId);
             ViewData["PersonId"] = new SelectList(_context.Persons, "Id", "FirstName", contact.PersonId);
             return View(contact);
         }
