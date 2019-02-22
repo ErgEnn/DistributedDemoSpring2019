@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +18,11 @@ namespace WebApp.Controllers
     public class PersonsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IPersonRepository _personRepository;
 
-        public PersonsController(AppDbContext context)
+        public PersonsController(IPersonRepository personRepository, AppDbContext context)
         {
+            _personRepository = personRepository;
             _context = context;
         }
 
@@ -27,9 +30,13 @@ namespace WebApp.Controllers
         // GET: Persons
         public async Task<IActionResult> Index()
         {
+            /*
             var persons = await _context.Persons
                 .Include(p => p.AppUser)
                 .Where(p => p.AppUserId == User.GetUserId()).ToListAsync();
+            */
+            var persons = await _personRepository.AllAsync(User.GetUserId());
+               
             return View(persons);
         }
 

@@ -10,70 +10,70 @@ namespace DAL.Base.EF.Repositories
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, new()
     {
-        private readonly DbContext _dbContext;
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly DbContext RepositoryDbContext;
+        protected readonly DbSet<TEntity> RepositoryDbSet;
 
         public BaseRepository(DbContext dbContext)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _dbSet = _dbContext.Set<TEntity>();
+            RepositoryDbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            RepositoryDbSet = RepositoryDbContext.Set<TEntity>();
         }
 
-        public IEnumerable<TEntity> All()
+        public virtual IEnumerable<TEntity> All()
         {
-            return _dbSet.ToList();
+            return RepositoryDbSet.ToList();
         }
 
-        public async Task<IEnumerable<TEntity>> AllAsync()
+        public virtual async Task<IEnumerable<TEntity>> AllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await RepositoryDbSet.ToListAsync();
         }
 
         // id - primary key or composite primary key components in right order
-        public TEntity Find(params object[] id)
+        public virtual TEntity Find(params object[] id)
         {
-            return _dbSet.Find(id);
+            return RepositoryDbSet.Find(id);
         }
 
-        public async Task<TEntity> FindAsync(params object[] id)
+        public virtual async Task<TEntity> FindAsync(params object[] id)
         {
-            return await _dbSet.FindAsync(id);
+            return await RepositoryDbSet.FindAsync(id);
         }
 
-        public void Add(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
-            _dbSet.Add(entity);
+            RepositoryDbSet.Add(entity);
         }
 
-        public async Task AddAsync(TEntity entity)
+        public virtual async Task AddAsync(TEntity entity)
         {
-            await _dbSet.AddAsync(entity);
+            await RepositoryDbSet.AddAsync(entity);
         }
 
-        public TEntity Update(TEntity entity)
+        public virtual TEntity Update(TEntity entity)
         {
-            return _dbSet.Update(entity).Entity;
+            return RepositoryDbSet.Update(entity).Entity;
         }
 
-        public void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
-            _dbSet.Remove(entity);
+            RepositoryDbSet.Remove(entity);
         }
 
-        public void Remove(params object[] id)
+        public virtual void Remove(params object[] id)
         {
-            _dbSet.Remove(Find(id));
+            RepositoryDbSet.Remove(Find(id));
         }
 
         //TODO: these methods should not be here - UOW!! 
-        public int SaveChanges()
+        public virtual int SaveChanges()
         {
-            return _dbContext.SaveChanges();
+            return RepositoryDbContext.SaveChanges();
         }
 
-        public async Task<int> SaveChangesAsync()
+        public virtual async Task<int> SaveChangesAsync()
         {
-            return await _dbContext.SaveChangesAsync();
+            return await RepositoryDbContext.SaveChangesAsync();
         }
     }
 }
