@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Domain;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL
+namespace DAL.App.EF
 {
     // Force identity db context to use our AppUser and AppRole - with int as PK type
     public class AppDbContext : IdentityDbContext<AppUser, AppRole, int>
