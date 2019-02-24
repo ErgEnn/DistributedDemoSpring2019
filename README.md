@@ -104,10 +104,6 @@ public class Person : BaseEntity
 
     public List<Contact> Contacts { get; set; }
 
-    
-    [MaxLength(64)]
-    [MinLength(1)]
-    [Required]
     public int AppUserId { get; set; }
     public AppUser AppUser { get; set; }
     
@@ -288,7 +284,7 @@ Details - only return data belonging to the logged in user.
 
 Create GET - don't include AppUser dropdown, new person shall automatically be connected to the current user in POST
 
-Create POST - attach coorect AppUserId
+Create POST - attach correct AppUserId
 
 Edit GET - only allow editing of record if it belongs to logged in user
 
