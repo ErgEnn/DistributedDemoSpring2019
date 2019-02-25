@@ -1,12 +1,34 @@
-import {LogManager, View} from "aurelia-framework";
-import {RouteConfig, NavigationInstruction} from "aurelia-router";
+import {LogManager, View, autoinject} from "aurelia-framework";
+import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
+import {IContactType} from "../interfaces/IContactType";
+import {ContacttypesService} from "../services/contacttypes-service";
 
 export var log = LogManager.getLogger('ContactTypes.Create');
 
+@autoinject
 export class Create {
 
-  constructor() {
+  private contactType: IContactType;
+  
+  constructor(
+    private router: Router,
+    private contacttypesService: ContacttypesService
+  ) {
     log.debug('constructor');
+  }
+  
+  // ============ View methods ==============
+  submit():void{
+    log.debug('contactType', this.contactType);
+    this.contacttypesService.create(this.contactType).then(
+      response => {
+        if (response.status == 201){
+          this.router.navigateToRoute("contacttypesIndex");
+        } else {
+          log.error('Error in response!', response);
+        }
+      }
+    );
   }
 
   // ============ View LifeCycle events ==============

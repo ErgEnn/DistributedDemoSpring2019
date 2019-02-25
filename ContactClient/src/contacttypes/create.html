@@ -1,3 +1,29 @@
 <template>
-  Create
+  <h1>Create</h1>
+
+  <h4>ContactType</h4>
+  <hr/>
+  <div class="row">
+    <div class="col-md-4">
+      <!-- remove "on" from front of on<somethingevent> ad point out method in your aurelia class-->
+      <form method="post" submit.delegate="submit()">
+
+        <div class="form-group">
+          <label class="control-label" for="ContactTypeValue">ContactTypeValue</label>
+          <!-- value.bind - bind this value to class variable -->
+          <input class="form-control" type="text"
+                 id="ContactTypeValue" name="ContactTypeValue" value.bind="contactType.contactTypeValue"/>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Create" class="btn btn-primary"/>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div>
+    <a route-href="route: contacttypesIndex">Back to List</a>
+  </div>
+
+
 </template>

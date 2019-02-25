@@ -30,6 +30,19 @@ export class ContacttypesService {
       });
 
   }
+  
+  
+  create(entity: IContactType): Promise<Response> {
+    let url = 'https://localhost:5001/api/ContactTypes';
+
+    return this.httpClient.post(url, JSON.stringify(entity) ,{cache: 'no-store'}).then(
+      response => {
+        log.debug('response', response);
+        return response;
+      }
+    );
+    
+  }
 
   // todo: rest crud
 }
