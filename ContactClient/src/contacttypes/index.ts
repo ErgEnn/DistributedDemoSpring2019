@@ -4,9 +4,12 @@ import {RouteConfig, NavigationInstruction} from "aurelia-router";
 export var log = LogManager.getLogger('ContactTypes.Index');
 
 export class Index {
+  
+  private contactTypes: any[] = [];
 
   constructor() {
     log.debug('constructor');
+    this.contactTypes.push({id: 99, contactTypeValue: 'testing'});
   }
 
   // ============ View LifeCycle events ==============
