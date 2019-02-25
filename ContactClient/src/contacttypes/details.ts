@@ -1,11 +1,19 @@
-import {LogManager, View} from "aurelia-framework";
-import {RouteConfig, NavigationInstruction} from "aurelia-router";
+import {LogManager, View, autoinject} from "aurelia-framework";
+import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
+import {ContacttypesService} from "../services/contacttypes-service";
+import {IContactType} from "../interfaces/IContactType";
 
 export var log = LogManager.getLogger('ContactTypes.Details');
 
+@autoinject
 export class Details {
 
-  constructor() {
+  private contactType: IContactType = null;
+
+  constructor(
+    private router: Router,
+    private contacttypesService: ContacttypesService
+  ) {
     log.debug('constructor');
   }
 
@@ -36,7 +44,14 @@ export class Details {
   }
 
   activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-    log.debug('activate');
+    log.debug('activate', params);
+    this.contacttypesService.fetch(params.id).then(
+      contactType => {
+        log.debug('contactType', contactType);
+        this.contactType = contactType;
+      }
+    );
+
   }
 
   canDeactivate() {

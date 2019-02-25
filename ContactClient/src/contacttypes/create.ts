@@ -20,7 +20,7 @@ export class Create {
   // ============ View methods ==============
   submit():void{
     log.debug('contactType', this.contactType);
-    this.contacttypesService.create(this.contactType).then(
+    this.contacttypesService.post(this.contactType).then(
       response => {
         if (response.status == 201){
           this.router.navigateToRoute("contacttypesIndex");

@@ -1,3 +1,23 @@
 <template>
-  Details
+
+  <h1>Details</h1>
+
+  <div>
+    <h4>ContactType</h4>
+    <hr />
+    <dl class="row">
+      <dt class = "col-sm-2">
+        ContactTypeValue
+      </dt>
+      <dd class = "col-sm-10">
+        ${contactType.contactTypeValue}
+      </dd>
+    </dl>
+  </div>
+  <div>
+    <!-- if.bind - add/remove element to dom based on predicate -->
+    <a if.bind="contactType != null" route-href="route: contacttypesEdit; params.bind: {id: contactType.id}">Edit</a> |
+    <a route-href="route: contacttypesIndex">Back to List</a>
+  </div>
+
 </template>

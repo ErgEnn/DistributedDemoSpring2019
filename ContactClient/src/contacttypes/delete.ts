@@ -1,12 +1,32 @@
-import {LogManager, View} from "aurelia-framework";
-import {RouteConfig, NavigationInstruction} from "aurelia-router";
+import {LogManager, View, autoinject} from "aurelia-framework";
+import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
+import {ContacttypesService} from "../services/contacttypes-service";
+import {IContactType} from "../interfaces/IContactType";
 
 export var log = LogManager.getLogger('ContactTypes.Delete');
 
+@autoinject
 export class Delete {
 
-  constructor() {
+  private contactType: IContactType;
+  
+  constructor(
+    private router: Router,
+    private contacttypesService: ContacttypesService
+  ) {
     log.debug('constructor');
+  }
+
+  // ============ View Methods ==============
+
+  submit():void{
+    this.contacttypesService.delete(this.contactType.id).then(response => {
+      if (response.status == 200){
+        this.router.navigateToRoute("contacttypesIndex");
+      } else {
+        log.debug('response', response);
+      }
+    });
   }
 
   // ============ View LifeCycle events ==============
@@ -20,6 +40,7 @@ export class Delete {
 
   attached() {
     log.debug('attached');
+    
   }
 
   detached() {
@@ -36,7 +57,14 @@ export class Delete {
   }
 
   activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-    log.debug('activate');
+    log.debug('activate', params);
+    this.contacttypesService.fetch(params.id).then(
+      contactType => {
+        log.debug('contactType', contactType);
+        this.contactType = contactType;
+      }
+    );
+
   }
 
   canDeactivate() {

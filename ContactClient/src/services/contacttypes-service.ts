@@ -1,48 +1,19 @@
 import {LogManager, autoinject} from "aurelia-framework";
 import {HttpClient} from 'aurelia-fetch-client';
 import {IContactType} from "../interfaces/IContactType";
+import {BaseService} from "./base-service";
+import {AppConfig} from "../app-config";
 
 export var log = LogManager.getLogger('ContacttypesService');
 
 @autoinject
-export class ContacttypesService {
-
+export class ContacttypesService extends BaseService<IContactType> {
+  
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private appConfig: AppConfig
   ) {
-    log.debug('constructor');
-  }
-
-  getAll(): Promise<IContactType[]> {
-    // TODO: use config
-    let url = 'https://localhost:5001/api/ContactTypes';
-
-    return this.httpClient.fetch(url, {cache: 'no-store'})
-      .then(response => {
-        log.debug('resonse', response);
-        return response.json();
-      })
-      .then(jsonData => {
-        log.debug('jsonData', jsonData);
-        return jsonData;
-      }).catch(reason => {
-        log.debug('catch reason', reason);
-      });
-
+    super(httpClient, appConfig, 'ContactTypes');
   }
   
-  
-  create(entity: IContactType): Promise<Response> {
-    let url = 'https://localhost:5001/api/ContactTypes';
-
-    return this.httpClient.post(url, JSON.stringify(entity) ,{cache: 'no-store'}).then(
-      response => {
-        log.debug('response', response);
-        return response;
-      }
-    );
-    
-  }
-
-  // todo: rest crud
 }

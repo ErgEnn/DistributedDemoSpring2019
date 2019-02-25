@@ -2,6 +2,7 @@ import {LogManager, View, autoinject} from "aurelia-framework";
 import {RouteConfig, NavigationInstruction} from "aurelia-router";
 import {IContactType} from "../interfaces/IContactType";
 import {ContacttypesService} from "../services/contacttypes-service";
+import {BaseService} from "../services/base-service";
 
 export var log = LogManager.getLogger('ContactTypes.Index');
 
@@ -16,7 +17,6 @@ export class Index {
     private contacttypesService: ContacttypesService
   ) {
     log.debug('constructor');
-    this.contactTypes.push({id: 99, contactTypeValue: 'testing'});
   }
 
   // ============ View LifeCycle events ==============
@@ -30,7 +30,7 @@ export class Index {
 
   attached() {
     log.debug('attached');
-    this.contacttypesService.getAll().then(
+    this.contacttypesService.fetchAll().then(
       jsonData => {
         log.debug('jsonData', jsonData);
         this.contactTypes = jsonData;
