@@ -1,13 +1,20 @@
-import {LogManager, View} from "aurelia-framework";
+import {LogManager, View, autoinject} from "aurelia-framework";
 import {RouteConfig, NavigationInstruction} from "aurelia-router";
+import {IContactType} from "../interfaces/IContactType";
+import {ContacttypesService} from "../services/contacttypes-service";
 
 export var log = LogManager.getLogger('ContactTypes.Index');
 
+// automatically inject dependencies declared as private constructor parameters
+// will be accessible as this.<variablename> in class
+@autoinject
 export class Index {
-  
-  private contactTypes: any[] = [];
 
-  constructor() {
+  private contactTypes: IContactType[] = [];
+
+  constructor(
+    private contacttypesService: ContacttypesService
+  ) {
     log.debug('constructor');
     this.contactTypes.push({id: 99, contactTypeValue: 'testing'});
   }
@@ -23,6 +30,12 @@ export class Index {
 
   attached() {
     log.debug('attached');
+    this.contacttypesService.getAll().then(
+      jsonData => {
+        log.debug('jsonData', jsonData);
+        this.contactTypes = jsonData;
+      }
+    );
   }
 
   detached() {
