@@ -8,7 +8,7 @@ export var log = LogManager.getLogger('ContactTypes.Details');
 @autoinject
 export class Details {
 
-  private contactType: IContactType = null;
+  private contactType: IContactType | null = null;
 
   constructor(
     private router: Router,

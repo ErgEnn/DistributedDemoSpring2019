@@ -8,7 +8,7 @@ export var log = LogManager.getLogger('ContactTypes.Edit');
 @autoinject
 export class Edit {
 
-  private contactType : IContactType = null;
+  private contactType : IContactType | null = null;
   
   constructor(
     private router: Router,
@@ -20,7 +20,7 @@ export class Edit {
   // ============ View methods ==============
   submit():void{
     log.debug('contactType', this.contactType);
-    this.contacttypesService.put(this.contactType).then(
+    this.contacttypesService.put(this.contactType!).then(
       response => {
         if (response.status == 204){
           this.router.navigateToRoute("contacttypesIndex");
