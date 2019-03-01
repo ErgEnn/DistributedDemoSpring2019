@@ -12,35 +12,31 @@ namespace DAL.App.EF
     public class AppUnitOfWork : IAppUnitOfWork
     {
         private readonly AppDbContext _appDbContext;
-        
+
         // repo cache
         private readonly Dictionary<Type, object> _repositoryCache = new Dictionary<Type, object>();
-        
-        // caching is ok, but creation is fixed - repeating code
-        private IPersonRepository _personRepository;
-        public IPersonRepository Persons => 
-            _personRepository ?? (_personRepository = new PersonRepository(_appDbContext));
-        
-        // no caching, every time new repo is created on access
-        public IContactRepository Contacts => new ContactRepository(_appDbContext);
-        
-        //better, creation is centralized into getorcreate factory
-        public IContactTypeRepository ContactTypes => 
-            GetOrCreateRepository((dataContext) => new ContactTypeRepository(dataContext));
 
-        
+        public IPersonRepository Persons =>
+            GetOrCreateRepository(dataContext => new PersonRepository(dataContext));
+
+        // no caching, every time new repo is created on access
+        public IContactRepository Contacts =>
+            GetOrCreateRepository(dataContext => new ContactRepository(dataContext));
+
+        public IContactTypeRepository ContactTypes =>
+            GetOrCreateRepository(dataContext => new ContactTypeRepository(dataContext));
+
+        public IBaseRepository<TEntity> BaseRepository<TEntity>() where TEntity : class, new() =>
+            GetOrCreateRepository((dataContext) => new BaseRepository<TEntity>(dataContext));
+
+
         public AppUnitOfWork(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
-        
-        public IBaseRepository<TEntity> BaseRepository<TEntity>() where TEntity : class, new()
-        {
-            return new BaseRepository<TEntity>(_appDbContext);
-        }
 
 
-        private TRepository GetOrCreateRepository<TRepository>(Func<AppDbContext,TRepository> factoryMethod)
+        private TRepository GetOrCreateRepository<TRepository>(Func<AppDbContext, TRepository> factoryMethod)
         {
             // try to get repo by type from cache dictionary
             _repositoryCache.TryGetValue(typeof(TRepository), out var repoObject);
@@ -50,17 +46,19 @@ namespace DAL.App.EF
                 return (TRepository) repoObject;
             }
 
+            // call the factory method to actually create the repo object
             repoObject = factoryMethod(_appDbContext);
+            // add it to cache
             _repositoryCache[typeof(TRepository)] = repoObject;
             return (TRepository) repoObject;
         }
 
-        public int SaveChanges()
+        public virtual int SaveChanges()
         {
             return _appDbContext.SaveChanges();
         }
 
-        public async Task<int> SaveChangesAsync()
+        public virtual async Task<int> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync();
         }

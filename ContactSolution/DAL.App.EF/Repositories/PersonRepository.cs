@@ -22,5 +22,19 @@ namespace DAL.App.EF.Repositories
                 .Where(b => b.AppUserId == userId)
                 .ToListAsync();
         }
+
+        public override async Task<Person> FindAsync(params object[] id)
+        {
+            var person = await base.FindAsync(id);
+
+            if (person != null)
+            {
+                await RepositoryDbContext.Entry(person).Reference(c => c.AppUser).LoadAsync();
+            }
+            
+            return person;
+        }
+        
+        
     }
 }

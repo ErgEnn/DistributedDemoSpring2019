@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using DAL;
 using DAL.App.EF;
@@ -45,7 +46,7 @@ namespace WebApp
                 options.UseMySql(
                     Configuration.GetConnectionString("MysqlConnection")));
 
-            services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             
             
             services.AddDefaultIdentity<AppUser>()
