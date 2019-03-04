@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.DAL.Base", "Contr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.DAL.App", "Contracts.DAL.App\Contracts.DAL.App.csproj", "{20204F78-BEA6-498D-B503-627D1E1CCC06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.Base.EF", "DAL.Base.EF\DAL.Base.EF.csproj", "{953AEB68-5146-42B7-8C1A-1994D3158B3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,5 +51,9 @@ Global
 		{20204F78-BEA6-498D-B503-627D1E1CCC06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20204F78-BEA6-498D-B503-627D1E1CCC06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20204F78-BEA6-498D-B503-627D1E1CCC06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{953AEB68-5146-42B7-8C1A-1994D3158B3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{953AEB68-5146-42B7-8C1A-1994D3158B3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{953AEB68-5146-42B7-8C1A-1994D3158B3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{953AEB68-5146-42B7-8C1A-1994D3158B3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

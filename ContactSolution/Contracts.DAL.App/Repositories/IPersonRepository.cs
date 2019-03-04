@@ -3,7 +3,7 @@ using Domain;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IPersonRepository : IBaseRepository<Person, int>
+    public interface IPersonRepository : IBaseRepositoryAsync<Person, int>
     {
         
     }

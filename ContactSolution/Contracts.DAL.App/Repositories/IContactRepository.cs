@@ -3,7 +3,7 @@ using Domain;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IContactRepository : IBaseRepository<Contact, int>
+    public interface IContactRepository : IBaseRepositoryAsync<Contact, int>
     {
         
     }

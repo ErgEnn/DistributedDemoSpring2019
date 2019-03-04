@@ -9,6 +9,7 @@ namespace Contracts.DAL.Base.Repositories
     {
     }
 
+    [Obsolete("IBaseRepository is deprecated, please use IBaseRepositoryAsync instead.")]
     public interface IBaseRepository<TEntity> : IBaseRepository<TEntity, int>
         where TEntity : class, IBaseEntity<int>, new()
     {
@@ -32,6 +33,7 @@ namespace Contracts.DAL.Base.Repositories
         Task AddAsync(TEntity entity);
     }
 
+    [Obsolete("IBaseRepository is deprecated, please use IBaseRepositoryAsync instead.")]
     public interface IBaseRepository<TEntity, TKey> : IBaseRepositoryCommon<TEntity, TKey>
         where TEntity : class, IBaseEntity<TKey>, new()
         where TKey : IComparable
