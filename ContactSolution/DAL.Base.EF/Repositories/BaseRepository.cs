@@ -14,9 +14,9 @@ namespace DAL.Base.EF.Repositories
         protected readonly DbContext RepositoryDbContext;
         protected readonly DbSet<TEntity> RepositoryDbSet;
 
-        public BaseRepository(DbContext dbContext)
+        public BaseRepository(IDataContext dataContext)
         {
-            RepositoryDbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            RepositoryDbContext = (dataContext as DbContext) ?? throw new ArgumentNullException(nameof(dataContext));
             RepositoryDbSet = RepositoryDbContext.Set<TEntity>();
         }
 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
+using Contracts.DAL.Base.Helpers;
 using Contracts.DAL.Base.Repositories;
 using DAL.App.EF.Repositories;
 using DAL.Base.EF.Repositories;
@@ -14,45 +15,30 @@ namespace DAL.App.EF
     {
         private readonly AppDbContext _appDbContext;
 
-        // repo cache
-        private readonly Dictionary<Type, object> _repositoryCache = new Dictionary<Type, object>();
+        private readonly IRepositoryProvider _repositoryProvider;
 
         public IPersonRepository Persons =>
-            GetOrCreateRepository(dataContext => new PersonRepository(dataContext));
+            _repositoryProvider.GetRepository<IPersonRepository>();
 
         // no caching, every time new repo is created on access
         public IContactRepository Contacts =>
-            GetOrCreateRepository(dataContext => new ContactRepository(dataContext));
+            _repositoryProvider.GetRepository<IContactRepository>();
 
         public IContactTypeRepository ContactTypes =>
-            GetOrCreateRepository(dataContext => new ContactTypeRepository(dataContext));
+            _repositoryProvider.GetRepository<IContactTypeRepository>();
 
         public IBaseRepositoryAsync<TEntity> BaseRepository<TEntity>() where TEntity : class, IBaseEntity, new() =>
-            GetOrCreateRepository((dataContext) => new BaseRepository<TEntity>(dataContext));
+            _repositoryProvider.GetRepositoryForEntity<TEntity>();
 
 
-        public AppUnitOfWork(AppDbContext appDbContext)
+        public AppUnitOfWork(AppDbContext appDbContext, IRepositoryProvider repositoryProvider)
         {
             _appDbContext = appDbContext;
+            _repositoryProvider = repositoryProvider;
         }
 
 
-        private TRepository GetOrCreateRepository<TRepository>(Func<AppDbContext, TRepository> factoryMethod)
-        {
-            // try to get repo by type from cache dictionary
-            _repositoryCache.TryGetValue(typeof(TRepository), out var repoObject);
-            if (repoObject != null)
-            {
-                // we have it, cat it to correct type and return
-                return (TRepository) repoObject;
-            }
 
-            // call the factory method to actually create the repo object
-            repoObject = factoryMethod(_appDbContext);
-            // add it to cache
-            _repositoryCache[typeof(TRepository)] = repoObject;
-            return (TRepository) repoObject;
-        }
 
         public virtual int SaveChanges()
         {

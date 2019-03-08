@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Contracts.DAL.Base;
 using Domain;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DAL.App.EF
 {
     // Force identity db context to use our AppUser and AppRole - with int as PK type
-    public class AppDbContext : IdentityDbContext<AppUser, AppRole, int>
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, int>, IDataContext
     {
         public DbSet<Person> Persons { get; set; }
         public DbSet<Contact> Contacts { get; set; }
