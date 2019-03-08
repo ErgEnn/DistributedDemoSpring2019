@@ -57,9 +57,13 @@ namespace WebApp
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             
             
-            services.AddDefaultIdentity<AppUser>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<AppDbContext>();
+            services
+                .AddIdentity<AppUser, AppRole>()
+                //.AddDefaultIdentity<AppUser>()
+                //.AddDefaultUI(UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+            
 
             // Relax password requirements for easy testing
             // TODO: Remove in production
