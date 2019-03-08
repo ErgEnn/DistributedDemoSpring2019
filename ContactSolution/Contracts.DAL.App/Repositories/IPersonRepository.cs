@@ -5,7 +5,7 @@ using Domain;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IPersonRepository : IBaseRepository<Person>
+    public interface IPersonRepository : IBaseRepositoryAsync<Person>
     {
         // add here custom methods
         Task<IEnumerable<Person>> AllAsync(int userId);

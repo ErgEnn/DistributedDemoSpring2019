@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
+using Contracts.DAL.Base;
 using Contracts.DAL.Base.Repositories;
 using DAL.App.EF.Repositories;
 using DAL.Base.EF.Repositories;
@@ -26,7 +27,7 @@ namespace DAL.App.EF
         public IContactTypeRepository ContactTypes =>
             GetOrCreateRepository(dataContext => new ContactTypeRepository(dataContext));
 
-        public IBaseRepository<TEntity> BaseRepository<TEntity>() where TEntity : class, new() =>
+        public IBaseRepositoryAsync<TEntity> BaseRepository<TEntity>() where TEntity : class, IBaseEntity, new() =>
             GetOrCreateRepository((dataContext) => new BaseRepository<TEntity>(dataContext));
 
 
