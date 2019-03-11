@@ -31,9 +31,9 @@ namespace DAL.App.EF
             _repositoryProvider.GetRepositoryForEntity<TEntity>();
 
 
-        public AppUnitOfWork(AppDbContext appDbContext, IRepositoryProvider repositoryProvider)
+        public AppUnitOfWork(IDataContext dataContext, IRepositoryProvider repositoryProvider)
         {
-            _appDbContext = appDbContext;
+            _appDbContext = (dataContext as AppDbContext) ?? throw new ArgumentNullException(nameof(dataContext));
             _repositoryProvider = repositoryProvider;
         }
 

@@ -18,10 +18,12 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApp.Helpers;
 
 namespace WebApp
 {
@@ -78,6 +80,7 @@ namespace WebApp
 
             });
 
+            services.AddTransient<IEmailSender, EmailSender>();
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

@@ -18,16 +18,19 @@ namespace WebApp.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<AppRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<AppUser> userManager,
+            RoleManager<AppRole> roleManager,
             SignInManager<AppUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
@@ -55,6 +58,17 @@ namespace WebApp.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            
+            [Required]
+            [MaxLength(64)]
+            [MinLength(1)]
+            public string FirstName { get; set; }
+            
+            [Required]
+            [MaxLength(64)]
+            [MinLength(1)]
+            public string LastName { get; set; }
+
         }
 
         public void OnGet(string returnUrl = null)
@@ -67,11 +81,18 @@ namespace WebApp.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = Input.Email, Email = Input.Email };
+                var user = new AppUser
+                {
+                    UserName = Input.Email, 
+                    Email = Input.Email,
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(
@@ -84,6 +105,8 @@ namespace WebApp.Areas.Identity.Pages.Account
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    
+
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

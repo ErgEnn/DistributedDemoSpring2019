@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.App.EF;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
 {
@@ -44,9 +45,12 @@ namespace WebApp.Controllers
             return View(contactType);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: ContactTypes/Create
         public IActionResult Create()
         {
+
+
             return View();
         }
 
