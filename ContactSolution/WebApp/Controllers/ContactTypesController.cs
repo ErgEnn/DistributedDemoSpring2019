@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
+using DAL.App.EF;
 using Domain;
 
 namespace WebApp.Controllers
@@ -13,7 +14,8 @@ namespace WebApp.Controllers
     public class ContactTypesController : Controller
     {
         private readonly AppDbContext _context;
-
+        
+        
         public ContactTypesController(AppDbContext context)
         {
             _context = context;
