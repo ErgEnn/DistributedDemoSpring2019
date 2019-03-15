@@ -31,6 +31,7 @@ namespace Contracts.DAL.Base.Repositories
         Task<IEnumerable<TEntity>> AllAsync();
         Task<TEntity> FindAsync(params object[] id);
         Task AddAsync(TEntity entity);
+
     }
 
     [Obsolete("IBaseRepository is deprecated, please use IBaseRepositoryAsync instead.")]

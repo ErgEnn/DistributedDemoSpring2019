@@ -7,7 +7,7 @@ namespace DAL.App.EF.Repositories
 {
     public class ContactTypeRepository  : BaseRepositoryAsync<ContactType>, IContactTypeRepository
     {
-        public ContactTypeRepository(DbContext repositoryDbContext) : base(repositoryDbContext)
+        public ContactTypeRepository(AppDbContext repositoryDbContext) : base(repositoryDbContext)
         {
         }
     }

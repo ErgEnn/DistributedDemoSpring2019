@@ -61,6 +61,7 @@ namespace DAL.Base.EF.Repositories
         {
             await RepositoryDbSet.AddAsync(entity);
         }
+
     }
     
     

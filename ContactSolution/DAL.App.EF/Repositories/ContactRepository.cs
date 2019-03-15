@@ -9,7 +9,7 @@ namespace DAL.App.EF.Repositories
 {
     public class ContactRepository : BaseRepositoryAsync<Contact>, IContactRepository
     {
-        public ContactRepository(DbContext repositoryDbContext) : base(repositoryDbContext)
+        public ContactRepository(AppDbContext repositoryDbContext) : base(repositoryDbContext)
         {
         }
     }

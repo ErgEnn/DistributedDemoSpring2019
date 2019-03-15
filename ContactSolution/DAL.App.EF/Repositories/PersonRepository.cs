@@ -7,7 +7,7 @@ namespace DAL.App.EF.Repositories
 {
     public class PersonRepository : BaseRepositoryAsync<Person>, IPersonRepository
     {
-        public PersonRepository(DbContext repositoryDbContext) : base(repositoryDbContext)
+        public PersonRepository(AppDbContext repositoryDbContext) : base(repositoryDbContext)
         {
         }
     }
