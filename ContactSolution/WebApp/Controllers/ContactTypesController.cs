@@ -45,7 +45,6 @@ namespace WebApp.Controllers
             return View(contactType);
         }
 
-        [Authorize(Roles = "Admin")]
         // GET: ContactTypes/Create
         public IActionResult Create()
         {

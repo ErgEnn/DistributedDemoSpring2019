@@ -1,0 +1,11 @@
+@model Domain.ContactType
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="form-group">
+    <label asp-for="ContactTypeValue" class="control-label"></label>
+    <input asp-for="ContactTypeValue" class="form-control" />
+    <span asp-validation-for="ContactTypeValue" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <input type="submit" value="Create" class="btn btn-primary" />
+</div>

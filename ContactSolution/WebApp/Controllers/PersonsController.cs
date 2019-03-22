@@ -13,6 +13,7 @@ using Domain;
 using Domain.Identity;
 using Identity;
 using Microsoft.AspNetCore.Authorization;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -105,11 +106,13 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            ViewData["AppUserId"] = new SelectList(
+            var vm = new PersonCreateEditViewModel();
+            vm.Person = person;
+            vm.AppUserSelectList = new SelectList(
                 await _uow.BaseRepository<AppUser>().AllAsync(),
-                "Id", "Id", person.AppUserId);
+                nameof(AppUser.Id), nameof(AppUser.FirstLastName), vm.Person.AppUserId);
 
-            return View(person);
+            return View(vm);
         }
 
         // POST: Persons/Edit/5
@@ -117,25 +120,26 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,AppUserId,Id")]
-            Person person)
+        public async Task<IActionResult> Edit(int id, PersonCreateEditViewModel vm)
         {
-            if (id != person.Id)
+            if (id != vm.Person.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _uow.Persons.Update(person);
+                _uow.Persons.Update(vm.Person);
                 await _uow.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["AppUserId"] = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), "Id", "Id",
-                person.AppUserId);
-            return View(person);
+            vm.AppUserSelectList = new SelectList(
+                await _uow.BaseRepository<AppUser>().AllAsync(), 
+                nameof(AppUser.Id), nameof(AppUser.FirstLastName),
+                vm.Person.AppUserId);
+            return View(vm);
         }
 
         // GET: Persons/Delete/5
