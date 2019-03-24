@@ -157,12 +157,12 @@ Run from asp.net solution folder:
 
 Add db migration
 ~~~
-dotnet ef migrations add InitialDbCreation --project DAL --startup-project WebApp
+dotnet ef migrations add InitialDbCreation --project DAL.App.EF --startup-project WebApp
 ~~~
 
 Apply migration
 ~~~
-dotnet ef database update --project DAL --startup-project WebApp
+dotnet ef database update --project DAL.App.EF --startup-project WebApp
 ~~~
 
 If you want restart:
