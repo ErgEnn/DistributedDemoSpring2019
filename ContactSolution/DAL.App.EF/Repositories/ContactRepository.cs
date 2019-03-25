@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using DAL.Base.EF.Repositories;
 using Domain;
+using DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
@@ -12,5 +14,6 @@ namespace DAL.App.EF.Repositories
         public ContactRepository(AppDbContext repositoryDbContext) : base(repositoryDbContext)
         {
         }
+
     }
 }

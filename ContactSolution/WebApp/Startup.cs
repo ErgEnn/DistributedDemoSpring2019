@@ -22,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using WebApp.Helpers;
 
 namespace WebApp
@@ -98,6 +99,10 @@ namespace WebApp
                     options.AllowAreas = true;
                     options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
+                }).AddJsonOptions(options =>
+                {
+                    //options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                    options.SerializerSettings.Formatting = Formatting.Indented;
                 });
             
             services.ConfigureApplicationCookie(options =>

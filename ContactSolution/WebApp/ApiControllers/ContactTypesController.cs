@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.App.EF;
 using Domain;
+using DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -17,7 +18,7 @@ namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ContactTypesController : ControllerBase
     {
 
@@ -29,10 +30,23 @@ namespace WebApp.ApiControllers
 
         // GET: api/ContactTypes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ContactType>>> GetContactTypes()
+        public async Task<ActionResult<IEnumerable<ContactTypeDTO>>> GetContactTypes()
         {
-            var res = await _uow.ContactTypes.AllAsync();
-            return Ok(res);
+            /*
+             Moved functionality over to repository
+            var res = new List<ContactTypeDTO>();
+            var contactTypes = await _uow.ContactTypes.AllAsync();
+            foreach (var contactType in contactTypes)
+            {
+                res.Add(new ContactTypeDTO()
+                {
+                    Id = contactType.Id,
+                    ContactTypeValue = contactType.ContactTypeValue,
+                    ContactCount = contactType.Contacts.Count
+                });   
+            }
+            */
+            return Ok(await _uow.ContactTypes.GetAllWithContactCountAsync());
         }
 
         // GET: api/ContactTypes/5
