@@ -45,14 +45,14 @@ namespace WebApp.ApiControllers.Identity
             {
                 // create claims based user 
                 var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser);
-                
+          
                 // get the Json Web Token
                 var jwt = JwtHelper.GenerateJwt(
                     claimsPrincipal.Claims, 
                     _configuration["JWT:Key"], 
                     _configuration["JWT:Issuer"], 
                     int.Parse(_configuration["JWT:ExpireDays"]));
-                return Ok(jwt);
+                return Ok(new {token = jwt});
             }
 
             return StatusCode(403);
