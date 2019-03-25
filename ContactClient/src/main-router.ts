@@ -1,13 +1,15 @@
-import {PLATFORM, LogManager} from "aurelia-framework";
+import {PLATFORM, LogManager, autoinject} from "aurelia-framework";
 import {RouterConfiguration, Router} from "aurelia-router";
+import { AppConfig } from "app-config";
 
 export var log = LogManager.getLogger('MainRouter');
 
+@autoinject
 export class MainRouter {
   
   public router: Router;
   
-  constructor(){
+  constructor(private appConfig: AppConfig){
     log.debug('constructor');
   }
   

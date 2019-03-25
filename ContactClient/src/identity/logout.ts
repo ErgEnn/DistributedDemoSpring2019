@@ -1,5 +1,6 @@
+import { AppConfig } from 'app-config';
 import {LogManager, View, autoinject} from "aurelia-framework";
-import {RouteConfig, NavigationInstruction} from "aurelia-router";
+import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
 import {IContactType} from "../interfaces/IContactType";
 import {ContacttypesService} from "../services/contacttypes-service";
 import {BaseService} from "../services/base-service";
@@ -14,7 +15,9 @@ export class Logout {
   private contactTypes: IContactType[] = [];
 
   constructor(
-    private contacttypesService: ContacttypesService
+    private contacttypesService: ContacttypesService,
+    private router: Router,
+    private appConfig: AppConfig
   ) {
     log.debug('constructor');
   }
@@ -47,6 +50,8 @@ export class Logout {
 
   activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
     log.debug('activate');
+    this.appConfig.jwt = null;
+    this.router.navigateToRoute('home');
   }
 
   canDeactivate() {
