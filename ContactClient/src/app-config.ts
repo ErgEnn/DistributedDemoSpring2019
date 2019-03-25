@@ -7,7 +7,8 @@ export var log = LogManager.getLogger('AppConfig');
 export class AppConfig {
   
   public apiUrl = 'https://localhost:5001/api/';
-  
+  public jwt: string | null = null;
+
   constructor() {
     log.debug('constructor');
   }
