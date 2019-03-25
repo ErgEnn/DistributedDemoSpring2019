@@ -20,11 +20,6 @@ export class MainRouter {
       [
         {route: ['', 'home'], name: 'home', moduleId: PLATFORM.moduleName('home'), nav: true, title: 'Home'},
 
-        {route: ['login','account/login'], name: 'account' + 'Login', moduleId: PLATFORM.moduleName('account/login'), nav: false, title: 'Login'},
-        {route: ['register','account/register'], name: 'account' + 'Register', moduleId: PLATFORM.moduleName('account/register'), nav: false, title: 'Register'},
-
-
-
         //{route: '', name: '', moduleId: PLATFORM.moduleName(''), nav: true, title: ''},
         {route: ['persons','persons/index'], name: 'persons' + 'Index', moduleId: PLATFORM.moduleName('persons/index'), nav: true, title: 'Persons'},
         {route: 'persons/create', name: 'persons' + 'Create', moduleId: PLATFORM.moduleName('persons/create'), nav: false, title: 'Persons Create'},
