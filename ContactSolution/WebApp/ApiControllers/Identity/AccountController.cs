@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Domain.Identity;
 using Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using WebApp.Areas.Identity.Pages.Account;
 
 namespace WebApp.ApiControllers.Identity
@@ -16,14 +19,17 @@ namespace WebApp.ApiControllers.Identity
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
-        
+        private readonly ILogger<RegisterModel> _logger;
+        private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
 
-        public AccountController(SignInManager<AppUser> signInManager, IConfiguration configuration, UserManager<AppUser> userManager)
+        public AccountController(SignInManager<AppUser> signInManager, IConfiguration configuration, UserManager<AppUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender)
         {
             _signInManager = signInManager;
             _configuration = configuration;
             _userManager = userManager;
+            _logger = logger;
+            _emailSender = emailSender;
         }
 
         [HttpPost]
@@ -35,6 +41,7 @@ namespace WebApp.ApiControllers.Identity
             if (appUser == null)
             {
                 // user is not found, return 403
+                _logger.LogInformation("User not found.");
                 return StatusCode(403);
             }
             
@@ -52,6 +59,7 @@ namespace WebApp.ApiControllers.Identity
                     _configuration["JWT:Key"], 
                     _configuration["JWT:Issuer"], 
                     int.Parse(_configuration["JWT:ExpireDays"]));
+                _logger.LogInformation("Token generated for user");
                 return Ok(new {token = jwt});
             }
 
@@ -59,9 +67,45 @@ namespace WebApp.ApiControllers.Identity
         }
         
         [HttpPost]
-        public async Task<string> Register([FromBody] RegisterDTO model)
+        public async Task<ActionResult<string>> Register([FromBody] RegisterDTO model)
         {
-            return "foo";
+            if (ModelState.IsValid)
+            {
+                var appUser = new AppUser { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(appUser, model.Password);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("New user created.");
+                    /*
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                    
+                    var callbackUrl = Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { userId = appUser.Id, code = code },
+                        protocol: Request.Scheme);
+
+                    await _emailSender.SendEmailAsync(model.Email, "Confirm your email",
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+*/
+                    
+                    // create claims based user 
+                    var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser);
+          
+                    // get the Json Web Token
+                    var jwt = JwtHelper.GenerateJwt(
+                        claimsPrincipal.Claims, 
+                        _configuration["JWT:Key"], 
+                        _configuration["JWT:Issuer"], 
+                        int.Parse(_configuration["JWT:ExpireDays"]));
+                    _logger.LogInformation("Token generated for user");
+                    return Ok(new {token = jwt});
+                    
+                }
+                return StatusCode(406); //406 Not Acceptable
+            }
+            
+            return StatusCode(400); //400 Bad Request
         }
 
 

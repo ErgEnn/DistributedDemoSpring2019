@@ -158,18 +158,18 @@ Run from asp.net solution folder:
 
 Add db migration
 ~~~
-dotnet ef migrations add InitialDbCreation --project DAL --startup-project WebApp
+dotnet ef migrations add InitialDbCreation --project DAL.App.EF --startup-project WebApp
 ~~~
 
 Apply migration
 ~~~
-dotnet ef database update --project DAL --startup-project WebApp
+dotnet ef database update --project DAL.App.EF --startup-project WebApp
 ~~~
 
 If you want restart:
 delete Migrations folder from DAL project and drop the DB:
 ~~~
-dotnet ef database drop --project DAL --startup-project WebApp
+dotnet ef database drop --project DAL.App.EF --startup-project WebApp
 ~~~
 
 

@@ -1,8 +1,7 @@
-import {LogManager, View, autoinject} from "aurelia-framework";
-import {RouteConfig, NavigationInstruction} from "aurelia-router";
-import {IContactType} from "../interfaces/IContactType";
-import {ContacttypesService} from "../services/contacttypes-service";
-import {BaseService} from "../services/base-service";
+import { LogManager, View, autoinject } from "aurelia-framework";
+import { RouteConfig, NavigationInstruction, Router } from "aurelia-router";
+import { IdentityService } from "services/identity-service";
+import { AppConfig } from "app-config";
 
 export var log = LogManager.getLogger('Identity.Register');
 
@@ -11,10 +10,15 @@ export var log = LogManager.getLogger('Identity.Register');
 @autoinject
 export class Register {
 
-  private contactTypes: IContactType[] = [];
+  private email: string;
+  private password: string;
+  private confirmPassword: string;
+
 
   constructor(
-    private contacttypesService: ContacttypesService
+    private identityService: IdentityService,
+    private appConfig: AppConfig,
+    private router: Router
   ) {
     log.debug('constructor');
   }
@@ -56,4 +60,25 @@ export class Register {
   deactivate() {
     log.debug('deactivate');
   }
+
+  // ==================== View methods ================
+  submit(): void {
+    log.debug("submit", this.email, this.password);
+    if (this.password==null || this.confirmPassword==null || this.email == null || 
+      this.password != this.confirmPassword || this.password.length < 6 || 
+      this.email.length == 0){
+      alert('Passwords dont match or password too short or username too short!');
+      return;
+    }
+
+    this.identityService.register(this.email, this.password)
+        .then(jwtDTO => {
+          if (jwtDTO.token !== undefined) {
+            log.debug("submit token", jwtDTO.token);
+            this.appConfig.jwt = jwtDTO.token;
+            this.router.navigateToRoute('home');
+          }
+        });
+  }
+
 }
