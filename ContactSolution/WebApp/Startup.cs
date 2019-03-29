@@ -12,6 +12,7 @@ using DAL.App.EF.Helpers;
 using DAL.App.EF.Repositories;
 using DAL.Base.EF.Helpers;
 using Domain.Identity;
+using Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -57,15 +58,15 @@ namespace WebApp
             services.AddSingleton<IRepositoryFactory, AppRepositoryFactory>();
             services.AddScoped<IRepositoryProvider, BaseRepositoryProvider>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
-            
-            
+
+
             services
                 .AddIdentity<AppUser, AppRole>()
                 //.AddDefaultIdentity<AppUser>()
                 //.AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-            
+
 
             // Relax password requirements for easy testing
             // TODO: Remove in production
@@ -77,16 +78,16 @@ namespace WebApp
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireNonAlphanumeric = false;
-
             });
 
             services.AddTransient<IEmailSender, EmailSender>();
-            
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<AppUser> userManager,
+            RoleManager<AppRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -100,6 +101,9 @@ namespace WebApp
                 app.UseHsts();
             }
 
+            
+            app.IdentityAddDefaultRolesAndUsers(userManager, roleManager);
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -108,12 +112,11 @@ namespace WebApp
 
             app.UseMvc(routes =>
             {
-
                 routes.MapRoute(
                     name: "area",
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-                
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

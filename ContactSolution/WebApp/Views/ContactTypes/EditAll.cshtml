@@ -1,0 +1,29 @@
+@model List<Domain.ContactType>
+
+@{
+    ViewBag.Title = "Edit all at once!";
+}
+
+<h2>Edit all at once!</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditAll">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            
+            @for(var i=0; i<Model.Count(); i++)    
+            {
+                <input type="hidden" asp-for="@Model[i].Id"/>
+                <div class="form-group">
+                    <label asp-for="@Model[i].ContactTypeValue" class="control-label"></label>
+                    <input asp-for="@Model[i].ContactTypeValue" class="form-control"/>
+                    <span asp-validation-for="@Model[i].ContactTypeValue" class="text-danger"></span>
+                </div>
+            }
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>

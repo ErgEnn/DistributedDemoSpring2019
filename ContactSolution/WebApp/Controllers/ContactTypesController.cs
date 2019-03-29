@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,16 +16,47 @@ namespace WebApp.Controllers
     public class ContactTypesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public ContactTypesController(AppDbContext context)
+        public ContactTypesController(AppDbContext context, IAppUnitOfWork uow)
         {
             _context = context;
+            _uow = uow;
         }
 
         // GET: ContactTypes
         public async Task<IActionResult> Index()
         {
             return View(await _context.ContactTypes.ToListAsync());
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditAll()
+        {
+
+            var vm = (await _uow.ContactTypes.AllAsync()).ToList();
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditAll(List<ContactType> vm)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var contactType in vm)
+                {
+                    _uow.ContactTypes.Update(contactType);
+                }
+
+                await _uow.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));   
+            }
+
+            vm = (await _uow.ContactTypes.AllAsync()).ToList();
+
+            return View(vm);
         }
 
         // GET: ContactTypes/Details/5
