@@ -58,7 +58,9 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Create([Bind("ContactTypeValue,Id")] ContactType contactType)
         {
             if (ModelState.IsValid)
-            {
+            {  //_bll.ContactTypeService.Add(contactType);
+                //_bll.ContactService.Add(contact);
+                    // _bll.SaveChanges();
                 _context.Add(contactType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
