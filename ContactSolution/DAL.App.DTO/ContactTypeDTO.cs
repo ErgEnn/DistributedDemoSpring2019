@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace DTO
+﻿namespace DAL.App.DTO
 {
     public class ContactTypeDTO
     {
