@@ -11,7 +11,7 @@ namespace DAL.Base.EF.Repositories
     public class BaseRepositoryAsync<TEntity> : BaseRepositoryAsync<TEntity, int>
         where TEntity: class, IBaseEntity<int>, new()
     {
-        public BaseRepositoryAsync(DbContext repositoryDbContext) : base(repositoryDbContext)
+        public BaseRepositoryAsync(IDataContext repositoryDbContext) : base(repositoryDbContext)
         {
         }
     }
@@ -24,9 +24,9 @@ namespace DAL.Base.EF.Repositories
         protected readonly DbContext RepositoryDbContext;
         protected readonly DbSet<TEntity> RepositoryDbSet;
 
-        public  BaseRepositoryAsync(DbContext repositoryDbContext)
+        public  BaseRepositoryAsync(IDataContext repositoryDbContext)
         {
-            RepositoryDbContext = repositoryDbContext;
+            RepositoryDbContext = (DbContext) repositoryDbContext ;
             // get the dbset by type from db context
             RepositoryDbSet = RepositoryDbContext.Set<TEntity>();
         }

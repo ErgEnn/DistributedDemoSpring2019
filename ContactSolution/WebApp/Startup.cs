@@ -6,9 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
+using Contracts.DAL.Base;
+using Contracts.DAL.Base.Helpers;
 using DAL;
 using DAL.App.EF;
+using DAL.App.EF.Helpers;
 using DAL.App.EF.Repositories;
+using DAL.Base.EF.Helpers;
 using Domain.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -53,8 +57,13 @@ namespace WebApp
                     Configuration.GetConnectionString("MysqlConnection")));
 
 
+            services.AddScoped<IDataContext, AppDbContext>();
+            services.AddScoped<IBaseRepositoryProvider, BaseRepositoryProvider>();
+            services.AddSingleton<IBaseRepositoryFactory, AppRepositoryFactory>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 
+            
+            
             /*
             services.AddDefaultIdentity<AppUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
