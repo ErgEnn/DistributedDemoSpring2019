@@ -12,7 +12,7 @@ namespace BLL.App.Helpers
             // Register all your custom services here!
             ServiceCreationMethodCache.Add(typeof(IPersonService), uow => new PersonService(uow));
             ServiceCreationMethodCache.Add(typeof(IContactService), uow => new ContactService(uow));
-            ServiceCreationMethodCache.Add(typeof(IContactTypeService), uow => new ContactService(uow));
+            ServiceCreationMethodCache.Add(typeof(IContactTypeService), uow => new ContactTypeService(uow));
         }
        
       

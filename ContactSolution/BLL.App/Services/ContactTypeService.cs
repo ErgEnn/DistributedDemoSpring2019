@@ -20,7 +20,7 @@ namespace BLL.App.Services
 
         public async Task<IEnumerable<ContactTypeDTO>> GetAllWithContactCountAsync()
         {
-            throw new System.NotImplementedException();
+            return await AppUnitOfWork.ContactTypes.GetAllWithContactCountAsync();
         }
     }
 }

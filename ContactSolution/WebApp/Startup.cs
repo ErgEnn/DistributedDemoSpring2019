@@ -4,6 +4,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BLL.App;
+using BLL.App.Helpers;
+using Contracts.BLL.App;
+using Contracts.BLL.Base.Helpers;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
@@ -23,6 +27,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -62,6 +67,10 @@ namespace WebApp
             services.AddSingleton<IBaseRepositoryFactory, AppRepositoryFactory>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 
+            services.AddSingleton<IBaseServiceFactory, AppServiceFactory>();
+            services.AddScoped<IBaseServiceProvider, AppServiceProvider>();
+            services.AddScoped<IAppBLL, AppBLL>();
+            
             
             
             /*

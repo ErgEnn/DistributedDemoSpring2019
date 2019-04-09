@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -22,10 +23,11 @@ namespace WebApp.ApiControllers
     public class ContactTypesController : ControllerBase
     {
 
-        private readonly IAppUnitOfWork _uow;
-        public ContactTypesController(IAppUnitOfWork uow)
+        private readonly IAppBLL _bll;
+
+        public ContactTypesController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: api/ContactTypes
@@ -46,14 +48,14 @@ namespace WebApp.ApiControllers
                 });   
             }
             */
-            return Ok(await _uow.ContactTypes.GetAllWithContactCountAsync());
+            return Ok(await _bll.ContactTypes.GetAllWithContactCountAsync());
         }
 
         // GET: api/ContactTypes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ContactType>> GetContactType(int id)
         {
-            var contactType = await _uow.ContactTypes.FindAsync(id);
+            var contactType = await _bll.ContactTypes.FindAsync(id);
 
             if (contactType == null)
             {
@@ -72,8 +74,8 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _uow.ContactTypes.Update(contactType);
-            await _uow.SaveChangesAsync();
+            _bll.ContactTypes.Update(contactType);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -82,8 +84,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<ContactType>> PostContactType(ContactType contactType)
         {
-            await _uow.ContactTypes.AddAsync(contactType);
-            await _uow.SaveChangesAsync();
+            await _bll.ContactTypes.AddAsync(contactType);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetContactType", new { id = contactType.Id }, contactType);
         }
@@ -92,14 +94,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ContactType>> DeleteContactType(int id)
         {
-            var contactType = await _uow.ContactTypes.FindAsync(id);
+            var contactType = await _bll.ContactTypes.FindAsync(id);
             if (contactType == null)
             {
                 return NotFound();
             }
 
-            _uow.ContactTypes.Remove(contactType);
-            await _uow.SaveChangesAsync();
+            _bll.ContactTypes.Remove(contactType);
+            await _bll.SaveChangesAsync();
 
             return contactType;
         }
