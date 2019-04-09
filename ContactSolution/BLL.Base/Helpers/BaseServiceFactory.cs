@@ -20,7 +20,7 @@ namespace BLL.Base.Helpers
         }
 
 
-        public Func<IBaseUnitOfWork, object> GetServiceFactory<TService>()
+        public virtual Func<IBaseUnitOfWork, object> GetServiceFactory<TService>()
         {
             if (ServiceCreationMethodCache.ContainsKey(typeof(TService)))
             {
@@ -30,7 +30,7 @@ namespace BLL.Base.Helpers
             throw new NullReferenceException("No service creation method found for " + typeof(TService).FullName);
         }
 
-        public Func<IBaseUnitOfWork, object> GetEntityServiceFactory<TEntity>() where TEntity : class, IBaseEntity<int>, new()
+        public virtual Func<IBaseUnitOfWork, object> GetEntityServiceFactory<TEntity>() where TEntity : class, IBaseEntity<int>, new()
         {
             return (IBaseUnitOfWork uow) => new BaseEntityService<TEntity>(uow);
         }

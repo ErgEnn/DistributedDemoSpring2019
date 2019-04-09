@@ -9,25 +9,26 @@ namespace BLL.Base
 {
     public class BaseBLL : IBaseBLL
     {
-        public Guid InstanceId { get; } = Guid.NewGuid();
+        public virtual Guid InstanceId { get; } = Guid.NewGuid();
 
-        protected readonly IBaseUnitOfWork Uow;
+
+        protected readonly IBaseUnitOfWork BaseUnitOfWork;
         protected readonly IBaseServiceProvider ServiceProvider;
 
-        public BaseBLL(IBaseUnitOfWork uow, IBaseServiceProvider serviceProvider)
+        public BaseBLL(IBaseUnitOfWork baseUnitOfWork, IBaseServiceProvider serviceProvider)
         {
-            Uow = uow;
+            BaseUnitOfWork = baseUnitOfWork;
             ServiceProvider = serviceProvider;
         }
 
-        public IBaseEntityService<TEntity> BaseEntityService<TEntity>() where TEntity : class, IBaseEntity<int>, new()
+        public virtual IBaseEntityService<TEntity> BaseEntityService<TEntity>() where TEntity : class, IBaseEntity<int>, new()
         {
             return ServiceProvider.GetEntityService<TEntity>();
         }
 
-        public async Task<int> SaveChangesAsync()
+        public virtual async Task<int> SaveChangesAsync()
         {
-            return await Uow.SaveChangesAsync();   
+            return await BaseUnitOfWork.SaveChangesAsync();   
         }
         
     }
