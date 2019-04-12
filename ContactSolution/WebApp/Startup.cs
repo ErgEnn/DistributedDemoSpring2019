@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BLL.App;
+using BLL.App.Helpers;
+using BLL.Base.Helpers;
 using Contracts.BLL.App;
+using Contracts.BLL.Base.Helpers;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
@@ -62,6 +65,8 @@ namespace WebApp
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             
             
+            services.AddSingleton<IBaseServiceFactory<IAppUnitOfWork>, AppServiceFactory>();
+            services.AddScoped<IBaseServiceProvider, BaseServiceProvider<IAppUnitOfWork>>();
             services.AddScoped<IAppBLL, AppBLL>();
             
 
