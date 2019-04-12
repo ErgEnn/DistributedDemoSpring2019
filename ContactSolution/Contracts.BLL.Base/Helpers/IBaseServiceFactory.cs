@@ -10,5 +10,8 @@ namespace Contracts.BLL.Base.Helpers
 
         Func<TUnitOfWork, object> GetServiceFactoryForEntity<TEntity>()
             where TEntity : class, IBaseEntity, new();
+
+        void AddCreationMethod<TService>(Func<TUnitOfWork, TService> creationMethod) 
+            where TService: class;
     }
 }

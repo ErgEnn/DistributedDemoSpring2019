@@ -9,9 +9,15 @@ namespace BLL.App.Helpers
     {
         public AppServiceFactory()
         {
-            Add<IPersonService>(uow => new PersonService(uow));
-            Add<IContactService>(uow => new ContactService(uow));
-            Add<IContactTypeService>(uow => new ContactTypeService(uow));
+            RegisterAllCreationMethods();
         }
+
+        private void RegisterAllCreationMethods()
+        {
+            AddCreationMethod<IPersonService>(uow => new PersonService(uow));
+            AddCreationMethod<IContactService>(uow => new ContactService(uow));
+            AddCreationMethod<IContactTypeService>(uow => new ContactTypeService(uow));
+        }
+        
     }
 }

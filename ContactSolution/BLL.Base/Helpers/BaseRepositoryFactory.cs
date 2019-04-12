@@ -10,7 +10,7 @@ namespace BLL.Base.Helpers
     public class BaseServiceFactory<TUnitOfWork> : IBaseServiceFactory<TUnitOfWork>
         where TUnitOfWork : IUnitOfWork
     {
-        protected readonly Dictionary<Type, Func<TUnitOfWork, object>> ServiceCreationMethods;
+        private readonly Dictionary<Type, Func<TUnitOfWork, object>> _serviceCreationMethods;
 
         public BaseServiceFactory() : this(new Dictionary<Type, Func<TUnitOfWork, object>>())
         {
@@ -18,20 +18,16 @@ namespace BLL.Base.Helpers
 
         public BaseServiceFactory(Dictionary<Type, Func<TUnitOfWork, object>> serviceCreationMethods)
         {
-            ServiceCreationMethods = serviceCreationMethods;
+            _serviceCreationMethods = serviceCreationMethods;
         }
 
 
-        public void Add<TService>(Func<TUnitOfWork, TService> creationMethod)
-        where TService: class
-        {
-            ServiceCreationMethods.Add(typeof(TService), creationMethod );
-        }
+
 
         public virtual Func<TUnitOfWork, object> GetServiceFactory<TService>()
         {
             // try to get repo by type from cache dictionary
-            ServiceCreationMethods.TryGetValue(typeof(TService), out var serviceCreationMethod);
+            _serviceCreationMethods.TryGetValue(typeof(TService), out var serviceCreationMethod);
             return serviceCreationMethod;
         }
 
@@ -40,5 +36,11 @@ namespace BLL.Base.Helpers
         {
             return uow => new BaseEntityService<TEntity, TUnitOfWork>(uow);
         }
+
+        public virtual void AddCreationMethod<TService>(Func<TUnitOfWork, TService> creationMethod) where TService : class
+        {
+            _serviceCreationMethods.Add(typeof(TService), creationMethod );
+        }
+        
     }
 }
