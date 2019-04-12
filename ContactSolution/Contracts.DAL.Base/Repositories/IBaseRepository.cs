@@ -11,7 +11,7 @@ namespace Contracts.DAL.Base.Repositories
     }
 
     public interface IBaseRepositoryAsync<TEntity> : IBaseRepositoryAsync<TEntity, int>
-        where TEntity : class, IBaseEntity<int>, new()
+        where TEntity : class, IBaseEntity, new()
     {
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -20,13 +21,12 @@ namespace WebApp.Controllers
     [Authorize]
     public class PersonsController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public PersonsController(IAppUnitOfWork uow)
+        public PersonsController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
-
 
         // GET: Persons
         public async Task<IActionResult> Index()
@@ -36,7 +36,7 @@ namespace WebApp.Controllers
                 .Include(p => p.AppUser)
                 .Where(p => p.AppUserId == User.GetUserId()).ToListAsync();
             */
-            var persons = await _uow.Persons.AllAsync(User.GetUserId());
+            var persons = await _bll.Persons.AllAsync(User.GetUserId());
 
             return View(persons);
         }
@@ -55,7 +55,7 @@ namespace WebApp.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             */
 
-            var person = await _uow.Persons.FindAsync(id);
+            var person = await _bll.Persons.FindAsync(id);
 
             if (person == null)
             {
@@ -82,8 +82,8 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                await _uow.Persons.AddAsync(person);
-                await _uow.SaveChangesAsync();
+                await _bll.Persons.AddAsync(person);
+                await _bll.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -100,7 +100,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var person = await _uow.Persons.FindAsync(id);
+            var person = await _bll.Persons.FindAsync(id);
             if (person == null)
             {
                 return NotFound();
@@ -109,7 +109,7 @@ namespace WebApp.Controllers
             var vm = new PersonCreateEditViewModel();
             vm.Person = person;
             vm.AppUserSelectList = new SelectList(
-                await _uow.BaseRepository<AppUser>().AllAsync(),
+                await _bll.BaseService<AppUser>().AllAsync(),
                 nameof(AppUser.Id), nameof(AppUser.FirstLastName), vm.Person.AppUserId);
 
             return View(vm);
@@ -129,14 +129,14 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                _uow.Persons.Update(vm.Person);
-                await _uow.SaveChangesAsync();
+                _bll.Persons.Update(vm.Person);
+                await _bll.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
 
             vm.AppUserSelectList = new SelectList(
-                await _uow.BaseRepository<AppUser>().AllAsync(), 
+                await _bll.BaseService<AppUser>().AllAsync(), 
                 nameof(AppUser.Id), nameof(AppUser.FirstLastName),
                 vm.Person.AppUserId);
             return View(vm);
@@ -150,7 +150,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var person = await _uow.Persons.FindAsync(id);
+            var person = await _bll.Persons.FindAsync(id);
             if (person == null)
             {
                 return NotFound();
@@ -164,8 +164,8 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _uow.Persons.Remove(id);
-            await _uow.SaveChangesAsync();
+            _bll.Persons.Remove(id);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

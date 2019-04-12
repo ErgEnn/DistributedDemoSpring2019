@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.App;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
@@ -58,6 +60,10 @@ namespace WebApp
             services.AddSingleton<IRepositoryFactory, AppRepositoryFactory>();
             services.AddScoped<IRepositoryProvider, BaseRepositoryProvider>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+            
+            
+            services.AddScoped<IAppBLL, AppBLL>();
+            
 
 
             services
