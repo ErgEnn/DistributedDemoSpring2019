@@ -44,11 +44,11 @@ namespace DAL.Base.EF.Helpers
         }
 
 
-        public virtual IBaseRepositoryAsync<TEntity> GetEntityRepository<TEntity>() where TEntity : class, IBaseEntity<int>, new()
+        public virtual IBaseRepository<TEntity> GetEntityRepository<TEntity>() where TEntity : class, IBaseEntity, new()
         {
             if (_repositoryCache.ContainsKey(typeof(IBaseRepositoryAsync<TEntity>)))
             {
-                return (IBaseRepositoryAsync<TEntity>) _repositoryCache[typeof(IBaseRepositoryAsync<TEntity>)];
+                return (IBaseRepository<TEntity>) _repositoryCache[typeof(IBaseRepositoryAsync<TEntity>)];
             }
             // didn't find the repo in cache, lets create it
             var repoCreationMethod = _repositoryFactory.GetEntityRepositoryFactory<TEntity>();
@@ -57,7 +57,7 @@ namespace DAL.Base.EF.Helpers
 
 
             _repositoryCache[typeof(IBaseRepositoryAsync<TEntity>)] = repo;
-            return (IBaseRepositoryAsync<TEntity>) repo;
+            return (IBaseRepository<TEntity>) repo;
 
         }
 

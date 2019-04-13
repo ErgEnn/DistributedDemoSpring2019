@@ -6,13 +6,10 @@ using Domain;
 
 namespace BLL.App.Services
 {
-    public class ContactService : BaseEntityService<Contact>, IContactService
+    public class ContactService : BaseEntityService<Contact, IAppUnitOfWork>, IContactService
     {
-        protected readonly IAppUnitOfWork AppUnitOfWork;
-
-        public ContactService(IBaseUnitOfWork uow) : base(uow)
+        public ContactService(IAppUnitOfWork uow) : base(uow)
         {
-            AppUnitOfWork = (IAppUnitOfWork) uow;
         }
     }
 }

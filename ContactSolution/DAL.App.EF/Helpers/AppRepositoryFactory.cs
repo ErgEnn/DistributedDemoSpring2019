@@ -9,10 +9,14 @@ namespace DAL.App.EF.Helpers
     {
         public AppRepositoryFactory()
         {
-            _repositoryCreationMethodCache.Add(typeof(IContactRepository), dataContext => new ContactRepository(dataContext));
-            _repositoryCreationMethodCache.Add(typeof(IContactTypeRepository), dataContext => new ContactTypeRepository(dataContext));
-            _repositoryCreationMethodCache.Add(typeof(IPersonRepository), dataContext => new PersonRepository(dataContext));
-           
+            RegisterRepositories();
+        }
+
+        private void RegisterRepositories()
+        {
+            AddToCreationMethods<IContactRepository>(dataContext => new ContactRepository(dataContext));
+            AddToCreationMethods<IContactTypeRepository>(dataContext => new ContactTypeRepository(dataContext));
+            AddToCreationMethods<IPersonRepository>(dataContext => new PersonRepository(dataContext));
         }
     }
     

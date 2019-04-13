@@ -6,13 +6,10 @@ using Domain;
 
 namespace BLL.App.Services
 {
-    public class PersonService : BaseEntityService<Person>, IPersonService
+    public class PersonService : BaseEntityService<Person, IAppUnitOfWork>, IPersonService
     {
-        protected readonly IAppUnitOfWork AppUnitOfWork;
-
-        public PersonService(IBaseUnitOfWork uow) : base(uow)
+        public PersonService(IAppUnitOfWork uow) : base(uow)
         {
-            AppUnitOfWork = (IAppUnitOfWork) uow;
         }
         
     }

@@ -17,7 +17,7 @@ namespace DAL.Base.EF
             UOWDbContext = (DbContext) dataContext;
         }
 
-        public IBaseRepositoryAsync<TEntity> BaseRepositoryAsync<TEntity>() where TEntity : class, IBaseEntity<int>, new()
+        public IBaseRepository<TEntity> BaseRepository<TEntity>() where TEntity : class, IBaseEntity, new()
         {
             return _repositoryProvider.GetEntityRepository<TEntity>();
         }
@@ -25,6 +25,11 @@ namespace DAL.Base.EF
         public async Task<int> SaveChangesAsync()
         {
             return await UOWDbContext.SaveChangesAsync();
+        }
+
+        public int SaveChanges()
+        {
+            return UOWDbContext.SaveChanges();
         }
     }
 }

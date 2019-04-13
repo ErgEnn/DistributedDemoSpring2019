@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.Base;
 using Contracts.DAL.Base.Repositories;
@@ -8,23 +9,23 @@ using Microsoft.EntityFrameworkCore;
 namespace DAL.Base.EF.Repositories
 {
 
-    public class BaseRepositoryAsync<TEntity> : BaseRepositoryAsync<TEntity, int>
-        where TEntity: class, IBaseEntity<int>, new()
+    public class BaseRepository<TEntity> : BaseRepository<TEntity, int>, IBaseRepository<TEntity>
+        where TEntity: class, IBaseEntity, new()
     {
-        public BaseRepositoryAsync(IDataContext repositoryDbContext) : base(repositoryDbContext)
+        public BaseRepository(IDataContext repositoryDbContext) : base(repositoryDbContext)
         {
         }
     }
 
     
-    public class BaseRepositoryAsync<TEntity,TKey>: IBaseRepositoryAsync<TEntity,TKey>
+    public class BaseRepository<TEntity,TKey>: IBaseRepository<TEntity,TKey>
         where TEntity: class, IBaseEntity<TKey>, new()
         where TKey: IComparable
     {
         protected readonly DbContext RepositoryDbContext;
         protected readonly DbSet<TEntity> RepositoryDbSet;
 
-        public  BaseRepositoryAsync(IDataContext repositoryDbContext)
+        public  BaseRepository(IDataContext repositoryDbContext)
         {
             RepositoryDbContext = (DbContext) repositoryDbContext ;
             // get the dbset by type from db context
@@ -62,6 +63,20 @@ namespace DAL.Base.EF.Repositories
             await RepositoryDbSet.AddAsync(entity);
         }
 
+        public IEnumerable<TEntity> All()
+        {
+            return RepositoryDbSet.ToList();
+        }
+
+        public TEntity Find(params object[] id)
+        {
+            return RepositoryDbSet.Find(id);
+        }
+
+        public void Add(TEntity entity)
+        {
+            RepositoryDbSet.Add(entity);
+        }
     }
     
     

@@ -7,28 +7,29 @@ using Contracts.DAL.Base;
 
 namespace BLL.Base
 {
-    public class BaseBLL : IBaseBLL
+    public class BaseBLL<TUnitOfWork> : IBaseBLL
+    where TUnitOfWork: IBaseUnitOfWork
     {
         public virtual Guid InstanceId { get; } = Guid.NewGuid();
 
 
-        protected readonly IBaseUnitOfWork BaseUnitOfWork;
+        protected readonly TUnitOfWork UnitOfWork;
         protected readonly IBaseServiceProvider ServiceProvider;
 
-        public BaseBLL(IBaseUnitOfWork baseUnitOfWork, IBaseServiceProvider serviceProvider)
+        public BaseBLL(TUnitOfWork unitOfWork, IBaseServiceProvider serviceProvider)
         {
-            BaseUnitOfWork = baseUnitOfWork;
+            UnitOfWork = unitOfWork;
             ServiceProvider = serviceProvider;
         }
 
-        public virtual IBaseEntityService<TEntity> BaseEntityService<TEntity>() where TEntity : class, IBaseEntity<int>, new()
+        public virtual IBaseEntityService<TEntity> BaseEntityService<TEntity>() where TEntity : class, IBaseEntity, new()
         {
             return ServiceProvider.GetEntityService<TEntity>();
         }
 
         public virtual async Task<int> SaveChangesAsync()
         {
-            return await BaseUnitOfWork.SaveChangesAsync();   
+            return await UnitOfWork.SaveChangesAsync();   
         }
         
     }

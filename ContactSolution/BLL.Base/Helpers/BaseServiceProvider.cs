@@ -6,26 +6,27 @@ using Contracts.DAL.Base;
 
 namespace BLL.Base.Helpers
 {
-    public class BaseServiceProvider : IBaseServiceProvider
+    public class BaseServiceProvider<TUnitOfWork> : IBaseServiceProvider
+        where TUnitOfWork : IBaseUnitOfWork
     {
         protected readonly Dictionary<Type, object> ServiceCache;
-        protected readonly IBaseServiceFactory ServiceFactory;
-        protected readonly IBaseUnitOfWork BaseUnitOfWork;
+        protected readonly IBaseServiceFactory<TUnitOfWork> ServiceFactory;
+        protected readonly TUnitOfWork Uow;
 
 
-        public BaseServiceProvider(IBaseServiceFactory serviceFactory, IBaseUnitOfWork uow) : this(
+        public BaseServiceProvider(IBaseServiceFactory<TUnitOfWork> serviceFactory, TUnitOfWork uow) : this(
             new Dictionary<Type, object>(), serviceFactory, uow)
         {
         }
 
-        public BaseServiceProvider(Dictionary<Type, object> serviceCache, IBaseServiceFactory serviceFactory,
-            IBaseUnitOfWork baseUnitOfWork)
+        public BaseServiceProvider(Dictionary<Type, object> serviceCache,
+            IBaseServiceFactory<TUnitOfWork> serviceFactory,
+            TUnitOfWork uow)
         {
             ServiceCache = serviceCache;
             ServiceFactory = serviceFactory;
-            BaseUnitOfWork = baseUnitOfWork;
+            Uow = uow;
         }
-
 
         public virtual TService GetService<TService>()
         {
@@ -38,7 +39,7 @@ namespace BLL.Base.Helpers
             var repoCreationMethod = ServiceFactory.GetServiceFactory<TService>();
 
 
-            object repo = repoCreationMethod(BaseUnitOfWork);
+            object repo = repoCreationMethod(Uow);
 
 
             ServiceCache[typeof(TService)] = repo;
@@ -46,7 +47,7 @@ namespace BLL.Base.Helpers
         }
 
         public virtual IBaseEntityService<TEntity> GetEntityService<TEntity>()
-            where TEntity : class, IBaseEntity<int>, new()
+            where TEntity : class, IBaseEntity, new()
         {
             if (ServiceCache.ContainsKey(typeof(IBaseEntityService<TEntity>)))
             {
@@ -56,7 +57,7 @@ namespace BLL.Base.Helpers
             // didn't find the repo in cache, lets create it
             var repoCreationMethod = ServiceFactory.GetEntityServiceFactory<TEntity>();
 
-            object repo = repoCreationMethod(BaseUnitOfWork);
+            object repo = repoCreationMethod(Uow);
 
 
             ServiceCache[typeof(IBaseEntityService<TEntity>)] = repo;

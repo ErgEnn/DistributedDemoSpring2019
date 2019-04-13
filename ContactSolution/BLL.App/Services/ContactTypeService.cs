@@ -9,18 +9,15 @@ using Domain;
 
 namespace BLL.App.Services
 {
-    public class ContactTypeService : BaseEntityService<ContactType>, IContactTypeService
+    public class ContactTypeService : BaseEntityService<ContactType, IAppUnitOfWork>, IContactTypeService
     {
-        protected readonly IAppUnitOfWork AppUnitOfWork;
-
-        public ContactTypeService(IBaseUnitOfWork uow) : base(uow)
+        public ContactTypeService(IAppUnitOfWork uow) : base(uow)
         {
-            AppUnitOfWork = (IAppUnitOfWork) uow;
         }
 
         public async Task<IEnumerable<ContactTypeDTO>> GetAllWithContactCountAsync()
         {
-            return await AppUnitOfWork.ContactTypes.GetAllWithContactCountAsync();
+            return await Uow.ContactTypes.GetAllWithContactCountAsync();
         }
     }
 }

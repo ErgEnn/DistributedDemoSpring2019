@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BLL.App;
 using BLL.App.Helpers;
+using BLL.Base.Helpers;
 using Contracts.BLL.App;
 using Contracts.BLL.Base.Helpers;
 using Contracts.DAL.App;
@@ -67,8 +68,8 @@ namespace WebApp
             services.AddSingleton<IBaseRepositoryFactory, AppRepositoryFactory>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 
-            services.AddSingleton<IBaseServiceFactory, AppServiceFactory>();
-            services.AddScoped<IBaseServiceProvider, AppServiceProvider>();
+            services.AddSingleton<IBaseServiceFactory<IAppUnitOfWork>, AppServiceFactory>();
+            services.AddScoped<IBaseServiceProvider, BaseServiceProvider<IAppUnitOfWork>>();
             services.AddScoped<IAppBLL, AppBLL>();
             
             

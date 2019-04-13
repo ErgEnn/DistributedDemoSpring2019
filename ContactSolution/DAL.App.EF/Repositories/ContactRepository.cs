@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ContactRepository : BaseRepositoryAsync<Contact>, IContactRepository
+    public class ContactRepository : BaseRepository<Contact>, IContactRepository
     {
         public ContactRepository(IDataContext repositoryDbContext) : base(repositoryDbContext)
         {

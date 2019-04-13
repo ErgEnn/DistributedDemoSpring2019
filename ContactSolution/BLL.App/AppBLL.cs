@@ -8,7 +8,7 @@ using Contracts.DAL.Base;
 
 namespace BLL.App
 {
-    public class AppBLL : BaseBLL, IAppBLL
+    public class AppBLL : BaseBLL<IAppUnitOfWork>, IAppBLL
     {
         protected readonly IAppUnitOfWork AppUnitOfWork;
         

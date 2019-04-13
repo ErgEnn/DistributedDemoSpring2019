@@ -5,8 +5,9 @@ namespace Contracts.DAL.Base
 {
     public interface IBaseUnitOfWork
     {
-        IBaseRepositoryAsync<TEntity> BaseRepositoryAsync<TEntity>() 
-            where TEntity : class, IBaseEntity<int>, new();
+        IBaseRepository<TEntity> BaseRepository<TEntity>() 
+            where TEntity : class, IBaseEntity, new();
         Task<int> SaveChangesAsync();
+        int SaveChanges();
     }
 }

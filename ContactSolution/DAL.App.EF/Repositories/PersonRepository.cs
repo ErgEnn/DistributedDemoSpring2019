@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class PersonRepository : BaseRepositoryAsync<Person>, IPersonRepository
+    public class PersonRepository : BaseRepository<Person>, IPersonRepository
     {
         public PersonRepository(IDataContext repositoryDbContext) : base(repositoryDbContext)
         {
