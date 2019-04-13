@@ -12,7 +12,7 @@ namespace BLL.Base.Services
     where TUnitOfWork: IBaseUnitOfWork
     {
         protected readonly TUnitOfWork Uow;
-        private readonly IBaseRepositoryAsync<TEntity> _repo; 
+        private readonly IBaseRepository<TEntity> _repo; 
 
         public BaseEntityService(TUnitOfWork uow)
         {
@@ -48,6 +48,21 @@ namespace BLL.Base.Services
         public virtual async Task AddAsync(TEntity entity)
         {
             await _repo.AddAsync(entity);
+        }
+
+        public IEnumerable<TEntity> All()
+        {
+            return _repo.All();
+        }
+
+        public TEntity Find(params object[] id)
+        {
+            return _repo.Find(id);
+        }
+
+        public void Add(TEntity entity)
+        {
+            _repo.Add(entity);
         }
     }
 }

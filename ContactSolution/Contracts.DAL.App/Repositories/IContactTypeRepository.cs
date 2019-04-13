@@ -6,7 +6,7 @@ using Domain;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IContactTypeRepository : IBaseRepositoryAsync<ContactType, int>
+    public interface IContactTypeRepository : IBaseRepository<ContactType>
     {      
         Task<IEnumerable<ContactTypeDTO>> GetAllWithContactCountAsync();
     }

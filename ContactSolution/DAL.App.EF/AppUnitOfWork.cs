@@ -12,10 +12,10 @@ using Remotion.Linq.Clauses;
 
 namespace DAL.App.EF
 {
-    public class AppUnitOfWork : BaseUnitOfWork, IAppUnitOfWork
+    public class AppUnitOfWork : BaseUnitOfWork<AppDbContext>, IAppUnitOfWork
     {
         
-        public AppUnitOfWork(IDataContext dbContext, IBaseRepositoryProvider repositoryProvider) : base(dbContext, repositoryProvider)
+        public AppUnitOfWork(AppDbContext dbContext, IBaseRepositoryProvider repositoryProvider) : base(dbContext, repositoryProvider)
         {
         }
 

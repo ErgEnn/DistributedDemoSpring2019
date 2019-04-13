@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DAL.App.EF
 {
     // Force identity db context to use our AppUser and AppRole - with int as PK type
-    public class AppDbContext : IdentityDbContext<AppUser, AppRole, int>, IDataContext
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, int>
     {
         public DbSet<Person> Persons { get; set; }
         public DbSet<Contact> Contacts { get; set; }

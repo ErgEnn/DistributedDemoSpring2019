@@ -4,25 +4,27 @@ using Contracts.DAL.Base;
 using Contracts.DAL.Base.Helpers;
 using Contracts.DAL.Base.Repositories;
 using DAL.Base.EF.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Base.EF.Helpers
 {
-    public class BaseRepositoryProvider : IBaseRepositoryProvider
+    public class BaseRepositoryProvider<TDbContext> : IBaseRepositoryProvider
+    where TDbContext: DbContext
     {
         protected readonly Dictionary<Type, object> _repositoryCache;
-        protected readonly IBaseRepositoryFactory _repositoryFactory;
-        protected readonly IDataContext _dataContext;
+        protected readonly IBaseRepositoryFactory<TDbContext> _repositoryFactory;
+        protected readonly TDbContext DataContext;
         
-        public BaseRepositoryProvider(IBaseRepositoryFactory repositoryFactory, IDataContext dataContext):
+        public BaseRepositoryProvider(IBaseRepositoryFactory<TDbContext> repositoryFactory, TDbContext dataContext):
             this(new Dictionary<Type, object>(), repositoryFactory, dataContext)
         {
         }
         
-        public BaseRepositoryProvider(Dictionary<Type, object> repositoryCache, IBaseRepositoryFactory repositoryFactory, IDataContext dataContext)
+        public BaseRepositoryProvider(Dictionary<Type, object> repositoryCache, IBaseRepositoryFactory<TDbContext> repositoryFactory, TDbContext dataContext)
         {
             _repositoryCache = repositoryCache;
             _repositoryFactory = repositoryFactory;
-            _dataContext = dataContext;
+            DataContext = dataContext;
         }
 
         public virtual TRepository GetRepository<TRepository>()
@@ -36,7 +38,7 @@ namespace DAL.Base.EF.Helpers
             var repoCreationMethod = _repositoryFactory.GetRepositoryFactory<TRepository>();
 
 
-            object repo = repoCreationMethod(_dataContext);
+            object repo = repoCreationMethod(DataContext);
         
 
             _repositoryCache[typeof(TRepository)] = repo;
@@ -53,7 +55,7 @@ namespace DAL.Base.EF.Helpers
             // didn't find the repo in cache, lets create it
             var repoCreationMethod = _repositoryFactory.GetEntityRepositoryFactory<TEntity>();
 
-            object repo = repoCreationMethod(_dataContext);
+            object repo = repoCreationMethod(DataContext);
 
 
             _repositoryCache[typeof(IBaseRepositoryAsync<TEntity>)] = repo;

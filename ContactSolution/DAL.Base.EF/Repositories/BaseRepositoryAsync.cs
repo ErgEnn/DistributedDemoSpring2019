@@ -8,26 +8,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Base.EF.Repositories
 {
-
-    public class BaseRepository<TEntity> : BaseRepository<TEntity, int>, IBaseRepository<TEntity>
-        where TEntity: class, IBaseEntity, new()
+    public class BaseRepository<TEntity, TDbContext> : BaseRepository<TEntity, TDbContext, int>,
+        IBaseRepository<TEntity>
+        where TEntity : class, IBaseEntity, new()
+        where TDbContext : DbContext
     {
-        public BaseRepository(IDataContext repositoryDbContext) : base(repositoryDbContext)
+        public BaseRepository(TDbContext repositoryDbContext) : base(repositoryDbContext)
         {
         }
     }
 
-    
-    public class BaseRepository<TEntity,TKey>: IBaseRepository<TEntity,TKey>
-        where TEntity: class, IBaseEntity<TKey>, new()
-        where TKey: IComparable
+
+    public class BaseRepository<TEntity, TDbContext, TKey> : IBaseRepository<TEntity, TKey>
+        where TEntity : class, IBaseEntity<TKey>, new()
+        where TDbContext: DbContext
+        where TKey : IComparable
     {
         protected readonly DbContext RepositoryDbContext;
         protected readonly DbSet<TEntity> RepositoryDbSet;
 
-        public  BaseRepository(IDataContext repositoryDbContext)
+        public BaseRepository(TDbContext repositoryDbContext)
         {
-            RepositoryDbContext = (DbContext) repositoryDbContext ;
+            RepositoryDbContext = repositoryDbContext;
             // get the dbset by type from db context
             RepositoryDbSet = RepositoryDbContext.Set<TEntity>();
         }
@@ -38,12 +40,12 @@ namespace DAL.Base.EF.Repositories
             return RepositoryDbSet.Update(entity).Entity;
         }
 
-        public virtual void  Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
             RepositoryDbSet.Remove(entity);
         }
 
-        public virtual void  Remove(params object[] id)
+        public virtual void Remove(params object[] id)
         {
             RepositoryDbSet.Remove(FindAsync(id).Result);
         }
@@ -78,6 +80,4 @@ namespace DAL.Base.EF.Repositories
             RepositoryDbSet.Add(entity);
         }
     }
-    
-    
 }

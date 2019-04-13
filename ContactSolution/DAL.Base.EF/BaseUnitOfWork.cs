@@ -6,15 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Base.EF
 {
-    public class BaseUnitOfWork : IBaseUnitOfWork
+    public class BaseUnitOfWork<TDbContext> : IBaseUnitOfWork
+    where TDbContext : DbContext
     {
-        protected readonly DbContext UOWDbContext;
+        protected readonly TDbContext UOWDbContext;
         protected readonly IBaseRepositoryProvider _repositoryProvider;
 
-        public BaseUnitOfWork(IDataContext dataContext, IBaseRepositoryProvider repositoryProvider)
+        public BaseUnitOfWork(TDbContext dataContext, IBaseRepositoryProvider repositoryProvider)
         {
             _repositoryProvider = repositoryProvider;
-            UOWDbContext = (DbContext) dataContext;
+            UOWDbContext =  dataContext;
         }
 
         public IBaseRepository<TEntity> BaseRepository<TEntity>() where TEntity : class, IBaseEntity, new()

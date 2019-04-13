@@ -9,11 +9,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ContactRepository : BaseRepository<Contact>, IContactRepository
+    public class ContactRepository : BaseRepository<Contact, AppDbContext>, IContactRepository
     {
-        public ContactRepository(IDataContext repositoryDbContext) : base(repositoryDbContext)
+        public ContactRepository(AppDbContext repositoryDbContext) : base(repositoryDbContext)
         {
         }
 
+        public async Task<IEnumerable<Contact>> AllForUserAsync(int userId)
+        {
+            return await RepositoryDbSet
+                .Include(c => c.ContactType)
+                .Include(c => c.Person)
+                .Where(c => c.Person.AppUserId == userId).ToListAsync();
+        }
+
+        public async Task<Contact> FindForUserAsync(int id, int userId)
+        {
+            var contact = await RepositoryDbSet
+                .Include(c => c.ContactType)
+                .Include(c => c.Person)
+                .FirstOrDefaultAsync(m => m.Id == id && m.Person.AppUserId == userId);
+
+            return contact;
+
+        }
     }
 }

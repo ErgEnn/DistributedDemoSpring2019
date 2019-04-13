@@ -63,9 +63,9 @@ namespace WebApp
                     Configuration.GetConnectionString("MysqlConnection")));
 
 
-            services.AddScoped<IDataContext, AppDbContext>();
-            services.AddScoped<IBaseRepositoryProvider, BaseRepositoryProvider>();
-            services.AddSingleton<IBaseRepositoryFactory, AppRepositoryFactory>();
+            //services.AddScoped<IDataContext, AppDbContext>();
+            services.AddScoped<IBaseRepositoryProvider, BaseRepositoryProvider<AppDbContext>>();
+            services.AddSingleton<IBaseRepositoryFactory<AppDbContext>, AppRepositoryFactory>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 
             services.AddSingleton<IBaseServiceFactory<IAppUnitOfWork>, AppServiceFactory>();

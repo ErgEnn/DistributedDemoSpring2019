@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using BLL.Base.Services;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
@@ -10,6 +12,11 @@ namespace BLL.App.Services
     {
         public PersonService(IAppUnitOfWork uow) : base(uow)
         {
+        }
+
+        public async Task<IEnumerable<Person>> AllForUserAsync(int userId)
+        {
+            return await Uow.Persons.AllForUserAsync(userId);
         }
         
     }

@@ -1,4 +1,4 @@
-@model Domain.Contact
+@model ContactCreateEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -13,21 +13,21 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ContactValue" class="control-label"></label>
-                <input asp-for="ContactValue" class="form-control" />
-                <span asp-validation-for="ContactValue" class="text-danger"></span>
+                <label asp-for="Contact.ContactValue" class="control-label"></label>
+                <input asp-for="Contact.ContactValue" class="form-control" />
+                <span asp-validation-for="Contact.ContactValue" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PersonId" class="control-label"></label>
-                <select asp-for="PersonId" class="form-control" asp-items="ViewBag.PersonId"></select>
-                <span asp-validation-for="PersonId" class="text-danger"></span>
+                <label asp-for="Contact.PersonId" class="control-label"></label>
+                <select asp-for="Contact.PersonId" class="form-control" asp-items="Model.PersonSelectList"></select>
+                <span asp-validation-for="Contact.PersonId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ContactTypeId" class="control-label"></label>
-                <select asp-for="ContactTypeId" class="form-control" asp-items="ViewBag.ContactTypeId"></select>
-                <span asp-validation-for="ContactTypeId" class="text-danger"></span>
+                <label asp-for="Contact.ContactTypeId" class="control-label"></label>
+                <select asp-for="Contact.ContactTypeId" class="form-control" asp-items="Model.ContactTypeSelectList"></select>
+                <span asp-validation-for="Contact.ContactTypeId" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Contact.Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

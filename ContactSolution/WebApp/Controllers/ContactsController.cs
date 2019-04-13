@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,22 +18,21 @@ namespace WebApp.Controllers
     [Authorize]
     public class ContactsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public ContactsController(AppDbContext context)
+        public ContactsController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
+
 
         // GET: Contacts
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Contacts
-                .Include(c => c.ContactType)
-                .Include(c => c.Person)
-                .Where(c => c.Person.AppUserId == User.GetUserId());
+            var contacts = await _bll.Contacts.AllForUserAsync(User.GetUserId());
+                
 
-            return View(await appDbContext.ToListAsync());
+            return View(contacts);
         }
 
         // GET: Contacts/Details/5
@@ -43,10 +43,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contacts
-                .Include(c => c.ContactType)
-                .Include(c => c.Person)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var contact = await _bll.Contacts.FindForUserAsync(id.Value, User.GetUserId());
+
             if (contact == null)
             {
                 return NotFound();
@@ -56,16 +54,16 @@ namespace WebApp.Controllers
         }
 
         // GET: Contacts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var vm = new ContactCreateViewModel()
+            var vm = new ContactCreateEditViewModel()
             {
                 ContactTypeSelectList = new SelectList(
-                    _context.ContactTypes, 
+                    await _bll.ContactTypes.AllAsync(),
                     nameof(ContactType.Id), 
                     nameof(ContactType.ContactTypeValue)),
                 PersonSelectList = new SelectList(
-                    _context.Persons.Where(p => p.AppUserId == User.GetUserId()),
+                    await _bll.Persons.AllForUserAsync(User.GetUserId()),
                     nameof(Person.Id), 
                     nameof(Person.FirstLastName))
             };
@@ -77,19 +75,27 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ContactCreateViewModel vm)
+        public async Task<IActionResult> Create(ContactCreateEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(vm.Contact);
-                await _context.SaveChangesAsync();
+                _bll.Contacts.Add(vm.Contact);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            vm.PersonSelectList = new SelectList(_context.Persons.Where(p => p.AppUserId == User.GetUserId()),
-                nameof(Person.Id), nameof(Person.FirstLastName), vm.Contact.PersonId);
-            vm.ContactTypeSelectList = new SelectList(_context.ContactTypes, nameof(ContactType.Id),
-                nameof(ContactType.ContactTypeValue), vm.Contact.ContactTypeId);
+
+            vm.ContactTypeSelectList = new SelectList(
+                await _bll.ContactTypes.AllAsync(),
+                nameof(ContactType.Id),
+                nameof(ContactType.ContactTypeValue),
+                vm.Contact.ContactTypeId);
+            vm.PersonSelectList = new SelectList(
+                await _bll.Persons.AllForUserAsync(User.GetUserId()),
+                nameof(Person.Id),
+                nameof(Person.FirstLastName), vm.Contact.PersonId);
+
+           
 
             return View(vm);
         }
@@ -102,16 +108,26 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contacts.FindAsync(id);
+            var contact = await _bll.Contacts.FindAsync(id);
             if (contact == null)
             {
                 return NotFound();
             }
+            
+            var vm = new ContactCreateEditViewModel();
+            vm.Contact = contact;
+            vm.ContactTypeSelectList = new SelectList(
+                await _bll.ContactTypes.AllAsync(),
+                nameof(ContactType.Id),
+                nameof(ContactType.ContactTypeValue),
+                vm.Contact.ContactTypeId);
+            vm.PersonSelectList = new SelectList(
+                await _bll.Persons.AllForUserAsync(User.GetUserId()),
+                nameof(Person.Id),
+                nameof(Person.FirstLastName), vm.Contact.PersonId);
 
-            ViewData["ContactTypeId"] =
-                new SelectList(_context.ContactTypes, "Id", "ContactTypeValue", contact.ContactTypeId);
-            ViewData["PersonId"] = new SelectList(_context.Persons, "Id", "FirstName", contact.PersonId);
-            return View(contact);
+            
+            return View(vm);
         }
 
         // POST: Contacts/Edit/5
@@ -119,40 +135,33 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ContactValue,PersonId,ContactTypeId,Id")]
-            Contact contact)
+        public async Task<IActionResult> Edit(int id, ContactCreateEditViewModel vm)
         {
-            if (id != contact.Id)
+            if (id != vm.Contact.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(contact);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ContactExists(contact.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                _bll.Contacts.Update(vm.Contact);
+                await _bll.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["ContactTypeId"] =
-                new SelectList(_context.ContactTypes, "Id", "ContactTypeValue", contact.ContactTypeId);
-            ViewData["PersonId"] = new SelectList(_context.Persons, "Id", "FirstName", contact.PersonId);
-            return View(contact);
+            vm.ContactTypeSelectList = new SelectList(
+                await _bll.ContactTypes.AllAsync(),
+                nameof(ContactType.Id),
+                nameof(ContactType.ContactTypeValue),
+                vm.Contact.ContactTypeId);
+            vm.PersonSelectList = new SelectList(
+                await _bll.Persons.AllForUserAsync(User.GetUserId()),
+                nameof(Person.Id),
+                nameof(Person.FirstLastName), vm.Contact.PersonId);
+
+            return View(vm);
         }
 
         // GET: Contacts/Delete/5
@@ -163,10 +172,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contacts
-                .Include(c => c.ContactType)
-                .Include(c => c.Person)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var contact = await _bll.Contacts.FindForUserAsync(id.Value, User.GetUserId());
             if (contact == null)
             {
                 return NotFound();
@@ -180,15 +186,12 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var contact = await _context.Contacts.FindAsync(id);
-            _context.Contacts.Remove(contact);
-            await _context.SaveChangesAsync();
+            var contact = await _bll.Contacts.FindForUserAsync(id, User.GetUserId());
+
+            _bll.Contacts.Remove(contact);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ContactExists(int id)
-        {
-            return _context.Contacts.Any(e => e.Id == id);
-        }
     }
 }

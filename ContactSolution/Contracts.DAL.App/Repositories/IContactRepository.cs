@@ -5,8 +5,11 @@ using Domain;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IContactRepository : IBaseRepositoryAsync<Contact, int>
+    public interface IContactRepository : IBaseRepository<Contact>
     {
+        Task<IEnumerable<Contact>> AllForUserAsync(int userId);
+        Task<Contact> FindForUserAsync(int id, int userId);
+        
     }
     
 }

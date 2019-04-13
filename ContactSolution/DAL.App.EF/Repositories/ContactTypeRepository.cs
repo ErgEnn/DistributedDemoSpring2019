@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ContactTypeRepository : BaseRepository<ContactType>, IContactTypeRepository
+    public class ContactTypeRepository : BaseRepository<ContactType, AppDbContext>, IContactTypeRepository
     {
-        public ContactTypeRepository(IDataContext repositoryDbContext) : base(repositoryDbContext)
+        public ContactTypeRepository(AppDbContext repositoryDbContext) : base(repositoryDbContext)
         {
         }
 

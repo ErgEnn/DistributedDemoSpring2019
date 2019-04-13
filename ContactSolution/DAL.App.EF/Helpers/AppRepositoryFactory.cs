@@ -5,7 +5,7 @@ using DAL.Base.EF.Helpers;
 
 namespace DAL.App.EF.Helpers
 {
-    public class AppRepositoryFactory : BaseRepositoryFactory, IBaseRepositoryFactory
+    public class AppRepositoryFactory : BaseRepositoryFactory<AppDbContext>
     {
         public AppRepositoryFactory()
         {
