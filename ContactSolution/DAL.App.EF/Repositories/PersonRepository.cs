@@ -22,7 +22,7 @@ namespace DAL.App.EF.Repositories
 
         public async Task<Person> FindForUserAsync(int id, int userId)
         {
-            return await RepositoryDbSet.Include(p => p.AppUser).FirstOrDefaultAsync(p => p.AppUserId == userId);
+            return await RepositoryDbSet.Include(p => p.AppUser).FirstOrDefaultAsync(p => p.Id == id && p.AppUserId == userId);
         }
 
         public async Task<bool> BelongsToUserAsync(int id, int userId)
