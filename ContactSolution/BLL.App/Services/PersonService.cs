@@ -18,6 +18,15 @@ namespace BLL.App.Services
         {
             return await Uow.Persons.AllForUserAsync(userId);
         }
-        
+
+        public async Task<Person> FindForUserAsync(int id, int userId)
+        {
+            return await Uow.Persons.FindForUserAsync(id, userId);
+        }
+
+        public async Task<bool> BelongsToUserAsync(int id, int userId)
+        {
+            return await Uow.Persons.BelongsToUserAsync(id, userId);
+        }
     }
 }

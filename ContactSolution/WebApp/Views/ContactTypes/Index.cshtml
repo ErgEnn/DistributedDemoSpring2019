@@ -1,4 +1,4 @@
-@model IEnumerable<Domain.ContactType>
+@model IEnumerable<DAL.App.DTO.ContactTypeDTO>
 
 @{
     ViewData["Title"] = "Index";
@@ -15,6 +15,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ContactTypeValue)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactCount)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +26,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ContactTypeValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactCount)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

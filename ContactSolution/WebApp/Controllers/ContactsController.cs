@@ -108,7 +108,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var contact = await _bll.Contacts.FindAsync(id);
+            var contact = await _bll.Contacts.FindForUserAsync(id.Value, User.GetUserId());
             if (contact == null)
             {
                 return NotFound();
@@ -145,7 +145,9 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
 
+                //TODO: Check for ownership, does this contact belong to logged in user
                 _bll.Contacts.Update(vm.Contact);
+                
                 await _bll.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
