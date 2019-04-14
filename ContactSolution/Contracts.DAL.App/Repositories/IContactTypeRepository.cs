@@ -8,6 +8,6 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface IContactTypeRepository : IBaseRepository<ContactType>
     {      
-        Task<IEnumerable<ContactTypeDTO>> GetAllWithContactCountAsync();
+        Task<List<ContactTypeDTO>> GetAllWithContactCountAsync();
     }
 }

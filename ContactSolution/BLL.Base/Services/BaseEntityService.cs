@@ -35,7 +35,7 @@ namespace BLL.Base.Services
             _repo.Remove(id);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> AllAsync()
+        public virtual async Task<List<TEntity>> AllAsync()
         {
             return await _repo.AllAsync();
         }
@@ -50,7 +50,7 @@ namespace BLL.Base.Services
             await _repo.AddAsync(entity);
         }
 
-        public IEnumerable<TEntity> All()
+        public List<TEntity> All()
         {
             return _repo.All();
         }

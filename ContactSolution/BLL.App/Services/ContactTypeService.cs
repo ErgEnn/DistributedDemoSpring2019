@@ -15,7 +15,7 @@ namespace BLL.App.Services
         {
         }
 
-        public async Task<IEnumerable<ContactTypeDTO>> GetAllWithContactCountAsync()
+        public async Task<List<ContactTypeDTO>> GetAllWithContactCountAsync()
         {
             return await Uow.ContactTypes.GetAllWithContactCountAsync();
         }

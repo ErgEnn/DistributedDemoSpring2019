@@ -7,10 +7,9 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface IContactRepository : IBaseRepository<Contact>
     {
-        Task<IEnumerable<Contact>> AllForUserAsync(int userId);
+        Task<List<Contact>> AllForUserAsync(int userId);
         Task<Contact> FindForUserAsync(int id, int userId);
-
-        Task<bool> BelongsToUser(int id, int userId);
+        Task<bool> BelongsToUserAsync(int id, int userId);
         
     }
     

@@ -14,7 +14,7 @@ namespace BLL.App.Services
         {
         }
 
-        public async Task<IEnumerable<Person>> AllForUserAsync(int userId)
+        public async Task<List<Person>> AllForUserAsync(int userId)
         {
             return await Uow.Persons.AllForUserAsync(userId);
         }

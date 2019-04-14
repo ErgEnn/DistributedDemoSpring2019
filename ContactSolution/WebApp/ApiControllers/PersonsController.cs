@@ -2,38 +2,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.App.EF;
 using Domain;
+using Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public class PersonsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public PersonsController(AppDbContext context)
+        public PersonsController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
+
 
         // GET: api/Persons
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
         {
-            return await _context.Persons.ToListAsync();
+            return await _bll.Persons.AllForUserAsync(User.GetUserId());
         }
 
         // GET: api/Persons/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Person>> GetPerson(int id)
         {
-            var person = await _context.Persons.FindAsync(id);
+            var person = await _bll.Persons.FindForUserAsync(id, User.GetUserId());
 
             if (person == null)
             {
@@ -52,23 +59,16 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(person).State = EntityState.Modified;
+            // check for the ownership - is this Person record really belonging to logged in user.
+            if (!await _bll.Persons.BelongsToUserAsync(id, User.GetUserId()))
+            {
+                return NotFound();
+            }
+            person.AppUserId = User.GetUserId();
+            
+            _bll.Persons.Update(person);
+            await _bll.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PersonExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return NoContent();
         }
@@ -77,31 +77,29 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Person>> PostPerson(Person person)
         {
-            _context.Persons.Add(person);
-            await _context.SaveChangesAsync();
+            person.AppUserId = User.GetUserId();
+            
+            _bll.Persons.Add(person);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetPerson", new { id = person.Id }, person);
         }
 
         // DELETE: api/Persons/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Person>> DeletePerson(int id)
+        public async Task<ActionResult> DeletePerson(int id)
         {
-            var person = await _context.Persons.FindAsync(id);
-            if (person == null)
+            // check for the ownership - is this Person record really belonging to logged in user.
+            if (!await _bll.Persons.BelongsToUserAsync(id, User.GetUserId()))
             {
                 return NotFound();
             }
+            
+            _bll.Persons.Remove(id);
+            await _bll.SaveChangesAsync();
 
-            _context.Persons.Remove(person);
-            await _context.SaveChangesAsync();
-
-            return person;
+            return NoContent();
         }
 
-        private bool PersonExists(int id)
-        {
-            return _context.Persons.Any(e => e.Id == id);
-        }
     }
 }

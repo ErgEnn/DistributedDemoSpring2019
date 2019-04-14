@@ -20,7 +20,7 @@ namespace DAL.App.EF.Repositories
         /// Get all the records, include contacts
         /// </summary>
         /// <returns></returns>
-        public override async Task<IEnumerable<ContactType>> AllAsync()
+        public override async Task<List<ContactType>> AllAsync()
         {
             return await RepositoryDbSet.Include(c => c.Contacts).ToListAsync();
         }
@@ -29,7 +29,7 @@ namespace DAL.App.EF.Repositories
         /// Get all the ContactTypes from db, include count of contacts for every ContactType
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<ContactTypeDTO>> GetAllWithContactCountAsync()
+        public virtual async Task<List<ContactTypeDTO>> GetAllWithContactCountAsync()
         {
 /*
       Result is single query against db!
@@ -40,7 +40,7 @@ namespace DAL.App.EF.Repositories
       ) AS `ContactCount`
       FROM `ContactTypes` AS `c`
 
- */            
+ */
             return await RepositoryDbSet
                 .Select(c => new ContactTypeDTO()
                 {

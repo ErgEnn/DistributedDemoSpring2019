@@ -15,7 +15,7 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        public async Task<IEnumerable<Contact>> AllForUserAsync(int userId)
+        public async Task<List<Contact>> AllForUserAsync(int userId)
         {
             return await RepositoryDbSet
                 .Include(c => c.ContactType)
@@ -31,10 +31,9 @@ namespace DAL.App.EF.Repositories
                 .FirstOrDefaultAsync(m => m.Id == id && m.Person.AppUserId == userId);
 
             return contact;
-
         }
 
-        public async Task<bool> BelongsToUser(int id, int userId)
+        public async Task<bool> BelongsToUserAsync(int id, int userId)
         {
             return await RepositoryDbSet.AnyAsync(c => c.Id == id && c.Person.AppUserId == userId);
         }

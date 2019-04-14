@@ -2,38 +2,43 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.App.EF;
 using Domain;
+using Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ContactsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public ContactsController(AppDbContext context)
+        public ContactsController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
 
         // GET: api/Contacts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
         {
-            return await _context.Contacts.ToListAsync();
+            return await _bll.Contacts.AllForUserAsync(User.GetUserId());
         }
 
         // GET: api/Contacts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> GetContact(int id)
         {
-            var contact = await _context.Contacts.FindAsync(id);
+            var contact = await _bll.Contacts.FindForUserAsync(id, User.GetUserId());
 
             if (contact == null)
             {
@@ -52,23 +57,14 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _context.Entry(contact).State = EntityState.Modified;
+            // check, that the Person being used is really belongs to logged in user
+            if (!await _bll.Contacts.BelongsToUserAsync(id, User.GetUserId()))
+            {
+                return NotFound();
+            }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ContactExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _bll.Contacts.Update(contact);
+            await _bll.SaveChangesAsync();
 
             return NoContent();
         }
@@ -77,31 +73,35 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<Contact>> PostContact(Contact contact)
         {
-            _context.Contacts.Add(contact);
-            await _context.SaveChangesAsync();
+            
+            // check, that the Person being used is really belongs to logged in user
+            if (!await _bll.Persons.BelongsToUserAsync(contact.PersonId, User.GetUserId()))
+            {
+                return NotFound();
+            }
+            
+            _bll.Contacts.Add(contact);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
         }
 
         // DELETE: api/Contacts/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Contact>> DeleteContact(int id)
+        public async Task<ActionResult> DeleteContact(int id)
         {
-            var contact = await _context.Contacts.FindAsync(id);
-            if (contact == null)
+
+            // check, that the Person being used is really belongs to logged in user
+            if (!await _bll.Contacts.BelongsToUserAsync(id, User.GetUserId()))
             {
                 return NotFound();
             }
+            
+            _bll.Contacts.Remove(id);
+            await _bll.SaveChangesAsync();
 
-            _context.Contacts.Remove(contact);
-            await _context.SaveChangesAsync();
-
-            return contact;
+            return NoContent();
         }
 
-        private bool ContactExists(int id)
-        {
-            return _context.Contacts.Any(e => e.Id == id);
-        }
     }
 }

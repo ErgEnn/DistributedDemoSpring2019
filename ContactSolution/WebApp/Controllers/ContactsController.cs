@@ -141,7 +141,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            if (!await _bll.Contacts.BelongsToUser(id, User.GetUserId()))
+            if (!await _bll.Contacts.BelongsToUserAsync(id, User.GetUserId()))
             {
                 return NotFound();
             }
@@ -190,7 +190,7 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!await _bll.Contacts.BelongsToUser(id, User.GetUserId()))
+            if (!await _bll.Contacts.BelongsToUserAsync(id, User.GetUserId()))
             {
                 return NotFound();
             }

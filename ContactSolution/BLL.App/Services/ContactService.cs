@@ -14,7 +14,7 @@ namespace BLL.App.Services
         {
         }
 
-        public async Task<IEnumerable<Contact>> AllForUserAsync(int userId)
+        public async Task<List<Contact>> AllForUserAsync(int userId)
         {
             return await Uow.Contacts.AllForUserAsync(userId);
         }
@@ -24,9 +24,9 @@ namespace BLL.App.Services
             return await Uow.Contacts.FindForUserAsync(id, userId);
         }
 
-        public async Task<bool> BelongsToUser(int id, int userId)
+        public async Task<bool> BelongsToUserAsync(int id, int userId)
         {
-            return await Uow.Contacts.BelongsToUser(id, userId);
+            return await Uow.Contacts.BelongsToUserAsync(id, userId);
         }
     }
 }

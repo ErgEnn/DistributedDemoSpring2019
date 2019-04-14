@@ -34,21 +34,8 @@ namespace WebApp.ApiControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ContactTypeDTO>>> GetContactTypes()
         {
-            /*
-             Moved functionality over to repository
-            var res = new List<ContactTypeDTO>();
-            var contactTypes = await _uow.ContactTypes.AllAsync();
-            foreach (var contactType in contactTypes)
-            {
-                res.Add(new ContactTypeDTO()
-                {
-                    Id = contactType.Id,
-                    ContactTypeValue = contactType.ContactTypeValue,
-                    ContactCount = contactType.Contacts.Count
-                });   
-            }
-            */
-            return Ok(await _bll.ContactTypes.GetAllWithContactCountAsync());
+
+            return await _bll.ContactTypes.GetAllWithContactCountAsync();
         }
 
         // GET: api/ContactTypes/5

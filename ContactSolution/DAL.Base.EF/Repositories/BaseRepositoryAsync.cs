@@ -50,7 +50,7 @@ namespace DAL.Base.EF.Repositories
             RepositoryDbSet.Remove(FindAsync(id).Result);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> AllAsync()
+        public virtual async Task<List<TEntity>> AllAsync()
         {
             return await RepositoryDbSet.ToListAsync();
         }
@@ -65,7 +65,7 @@ namespace DAL.Base.EF.Repositories
             await RepositoryDbSet.AddAsync(entity);
         }
 
-        public IEnumerable<TEntity> All()
+        public List<TEntity> All()
         {
             return RepositoryDbSet.ToList();
         }

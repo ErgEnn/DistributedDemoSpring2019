@@ -105,16 +105,16 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            
+
             // check for the ownership - is this Person record really belonging to logged in user.
-            if (! await _bll.Persons.BelongsToUserAsync(id, User.GetUserId()))
+            if (!await _bll.Persons.BelongsToUserAsync(id, User.GetUserId()))
             {
                 return NotFound();
             }
 
 
             person.AppUserId = User.GetUserId();
-            
+
             if (ModelState.IsValid)
             {
                 _bll.Persons.Update(person);
@@ -150,11 +150,11 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             // check for the ownership - is this Person record really belonging to logged in user.
-            if (! await _bll.Persons.BelongsToUserAsync(id, User.GetUserId()))
+            if (!await _bll.Persons.BelongsToUserAsync(id, User.GetUserId()))
             {
                 return NotFound();
             }
-            
+
             _bll.Persons.Remove(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
