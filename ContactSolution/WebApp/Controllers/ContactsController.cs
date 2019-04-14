@@ -30,7 +30,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var contacts = await _bll.Contacts.AllForUserAsync(User.GetUserId());
-                
+
 
             return View(contacts);
         }
@@ -60,11 +60,11 @@ namespace WebApp.Controllers
             {
                 ContactTypeSelectList = new SelectList(
                     await _bll.ContactTypes.AllAsync(),
-                    nameof(ContactType.Id), 
+                    nameof(ContactType.Id),
                     nameof(ContactType.ContactTypeValue)),
                 PersonSelectList = new SelectList(
                     await _bll.Persons.AllForUserAsync(User.GetUserId()),
-                    nameof(Person.Id), 
+                    nameof(Person.Id),
                     nameof(Person.FirstLastName))
             };
             return View(vm);
@@ -95,7 +95,6 @@ namespace WebApp.Controllers
                 nameof(Person.Id),
                 nameof(Person.FirstLastName), vm.Contact.PersonId);
 
-           
 
             return View(vm);
         }
@@ -113,7 +112,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            
+
             var vm = new ContactCreateEditViewModel();
             vm.Contact = contact;
             vm.ContactTypeSelectList = new SelectList(
@@ -126,7 +125,7 @@ namespace WebApp.Controllers
                 nameof(Person.Id),
                 nameof(Person.FirstLastName), vm.Contact.PersonId);
 
-            
+
             return View(vm);
         }
 
@@ -142,12 +141,15 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
+            if (!await _bll.Contacts.BelongsToUser(id, User.GetUserId()))
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-
-                //TODO: Check for ownership, does this contact belong to logged in user
                 _bll.Contacts.Update(vm.Contact);
-                
+
                 await _bll.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
@@ -188,12 +190,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var contact = await _bll.Contacts.FindForUserAsync(id, User.GetUserId());
+            if (!await _bll.Contacts.BelongsToUser(id, User.GetUserId()))
+            {
+                return NotFound();
+            }
 
-            _bll.Contacts.Remove(contact);
+            _bll.Contacts.Remove(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

@@ -23,5 +23,10 @@ namespace BLL.App.Services
         {
             return await Uow.Contacts.FindForUserAsync(id, userId);
         }
+
+        public async Task<bool> BelongsToUser(int id, int userId)
+        {
+            return await Uow.Contacts.BelongsToUser(id, userId);
+        }
     }
 }

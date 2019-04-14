@@ -9,6 +9,8 @@ namespace Contracts.DAL.App.Repositories
     {
         Task<IEnumerable<Contact>> AllForUserAsync(int userId);
         Task<Contact> FindForUserAsync(int id, int userId);
+
+        Task<bool> BelongsToUser(int id, int userId);
         
     }
     

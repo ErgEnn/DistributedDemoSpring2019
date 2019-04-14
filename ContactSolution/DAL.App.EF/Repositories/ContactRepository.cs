@@ -33,5 +33,10 @@ namespace DAL.App.EF.Repositories
             return contact;
 
         }
+
+        public async Task<bool> BelongsToUser(int id, int userId)
+        {
+            return await RepositoryDbSet.AnyAsync(c => c.Id == id && c.Person.AppUserId == userId);
+        }
     }
 }
