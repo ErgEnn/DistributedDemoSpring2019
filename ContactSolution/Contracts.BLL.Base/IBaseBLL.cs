@@ -8,8 +8,10 @@ namespace Contracts.BLL.Base
 {
     public interface IBaseBLL : ITrackableInstance
     {
-        IBaseEntityService<TEntity> BaseEntityService<TEntity>() 
-            where TEntity : class, IBaseEntity, new();
+        IBaseEntityService<TBLLEntity> BaseEntityService<TBLLEntity, TDALEntity, TDomainEntity>()
+            where TBLLEntity : class, new()
+            where TDALEntity : class, new()
+            where TDomainEntity : class, IBaseEntity, new();    
         
         Task<int> SaveChangesAsync();   
     }

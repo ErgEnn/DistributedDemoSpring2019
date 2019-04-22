@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DAL;
-using DAL.App.EF;
-using Domain;
 using Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using BLLAppDTO = BLL.App.DTO;
+using DALAppDTO = DAL.App.DTO;
 
 namespace WebApp.ApiControllers
 {
@@ -29,14 +27,14 @@ namespace WebApp.ApiControllers
 
         // GET: api/Contacts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
+        public async Task<ActionResult<IEnumerable<BLLAppDTO.Contact>>> GetContacts()
         {
             return await _bll.Contacts.AllForUserAsync(User.GetUserId());
         }
 
         // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contact>> GetContact(int id)
+        public async Task<ActionResult<BLLAppDTO.Contact>> GetContact(int id)
         {
             var contact = await _bll.Contacts.FindForUserAsync(id, User.GetUserId());
 
@@ -50,7 +48,7 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Contacts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContact(int id, Contact contact)
+        public async Task<IActionResult> PutContact(int id, BLLAppDTO.Contact contact)
         {
             if (id != contact.Id)
             {
@@ -71,37 +69,34 @@ namespace WebApp.ApiControllers
 
         // POST: api/Contacts
         [HttpPost]
-        public async Task<ActionResult<Contact>> PostContact(Contact contact)
+        public async Task<ActionResult<BLLAppDTO.Contact>> PostContact(BLLAppDTO.Contact contact)
         {
-            
             // check, that the Person being used is really belongs to logged in user
             if (!await _bll.Persons.BelongsToUserAsync(contact.PersonId, User.GetUserId()))
             {
                 return NotFound();
             }
-            
+
             _bll.Contacts.Add(contact);
             await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
+            return CreatedAtAction("GetContact", new {id = contact.Id}, contact);
         }
 
         // DELETE: api/Contacts/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteContact(int id)
         {
-
             // check, that the Person being used is really belongs to logged in user
             if (!await _bll.Contacts.BelongsToUserAsync(id, User.GetUserId()))
             {
                 return NotFound();
             }
-            
+
             _bll.Contacts.Remove(id);
             await _bll.SaveChangesAsync();
 
             return NoContent();
         }
-
     }
 }

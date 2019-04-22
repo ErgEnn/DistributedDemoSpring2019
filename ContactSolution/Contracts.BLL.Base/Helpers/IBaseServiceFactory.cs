@@ -11,7 +11,10 @@ namespace Contracts.BLL.Base.Helpers
 
         Func<TUnitOfWork, object> GetServiceFactory<TService>();
 
-        Func<TUnitOfWork, object> GetEntityServiceFactory<TEntity>()
-            where TEntity : class, IBaseEntity, new();
+        
+        Func<TUnitOfWork, object> GetEntityServiceFactory<TBLLEntity, TDALEntity, TDomainEntity>()
+            where TBLLEntity : class, new()
+            where TDALEntity : class, new()
+            where TDomainEntity : class, IBaseEntity, new();
     }
 }

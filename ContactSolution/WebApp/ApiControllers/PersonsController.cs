@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DAL;
-using DAL.App.EF;
-using Domain;
 using Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using BLLAppDTO = BLL.App.DTO;
+using DALAppDTO = DAL.App.DTO;
 
 namespace WebApp.ApiControllers
 {
@@ -31,14 +28,14 @@ namespace WebApp.ApiControllers
 
         // GET: api/Persons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
+        public async Task<ActionResult<IEnumerable<BLLAppDTO.Person>>> GetPersons()
         {
             return await _bll.Persons.AllForUserAsync(User.GetUserId());
         }
 
         // GET: api/Persons/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetPerson(int id)
+        public async Task<ActionResult<BLLAppDTO.Person>> GetPerson(int id)
         {
             var person = await _bll.Persons.FindForUserAsync(id, User.GetUserId());
 
@@ -52,7 +49,7 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Persons/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson(int id, Person person)
+        public async Task<IActionResult> PutPerson(int id, BLLAppDTO.Person person)
         {
             if (id != person.Id)
             {
@@ -75,7 +72,7 @@ namespace WebApp.ApiControllers
 
         // POST: api/Persons
         [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
+        public async Task<ActionResult<BLLAppDTO.Person>> PostPerson(BLLAppDTO.Person person)
         {
             person.AppUserId = User.GetUserId();
             

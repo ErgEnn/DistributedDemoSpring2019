@@ -4,14 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DAL;
-using DAL.App.EF;
-using Domain;
-using Domain.Identity;
 using Identity;
 using Microsoft.AspNetCore.Authorization;
+using BLLAppDTO=BLL.App.DTO;
+using DALAppDTO=DAL.App.DTO; 
 
 namespace WebApp.Controllers
 {
@@ -62,7 +58,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Id")] Person person)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Id")] BLLAppDTO.Person person)
         {
             person.AppUserId = User.GetUserId();
 
@@ -99,7 +95,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Person person)
+        public async Task<IActionResult> Edit(int id, BLLAppDTO.Person person)
         {
             if (id != person.Id)
             {

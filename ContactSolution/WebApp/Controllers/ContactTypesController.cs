@@ -4,12 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DAL;
-using DAL.App.EF;
-using Domain;
-
+using BLLAppDTO=BLL.App.DTO;
+using DALAppDTO=DAL.App.DTO; 
 namespace WebApp.Controllers
 {
     public class ContactTypesController : Controller
@@ -57,7 +53,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ContactTypeValue,Id")] ContactType contactType)
+        public async Task<IActionResult> Create([Bind("ContactTypeValue,Id")] BLLAppDTO.ContactType contactType)
         {
             if (ModelState.IsValid)
             { 
@@ -89,7 +85,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ContactTypeValue,Id")] ContactType contactType)
+        public async Task<IActionResult> Edit(int id, [Bind("ContactTypeValue,Id")] BLLAppDTO.ContactType contactType)
         {
             if (id != contactType.Id)
             {

@@ -46,22 +46,24 @@ namespace BLL.Base.Helpers
             return (TService) repo;
         }
 
-        public virtual IBaseEntityService<TEntity> GetEntityService<TEntity>()
-            where TEntity : class, IBaseEntity, new()
+        public virtual IBaseEntityService<TBLLEntity> GetEntityService<TBLLEntity, TDALEntity, TDomainEntity>()
+            where TBLLEntity : class, new()
+            where TDALEntity : class, new()
+            where TDomainEntity : class, IBaseEntity, new()        
         {
-            if (ServiceCache.ContainsKey(typeof(IBaseEntityService<TEntity>)))
+            if (ServiceCache.ContainsKey(typeof(IBaseEntityService<TBLLEntity>)))
             {
-                return (IBaseEntityService<TEntity>) ServiceCache[typeof(IBaseEntityService<TEntity>)];
+                return (IBaseEntityService<TBLLEntity>) ServiceCache[typeof(IBaseEntityService<TBLLEntity>)];
             }
 
             // didn't find the repo in cache, lets create it
-            var repoCreationMethod = ServiceFactory.GetEntityServiceFactory<TEntity>();
+            var repoCreationMethod = ServiceFactory.GetEntityServiceFactory<TBLLEntity, TDALEntity, TDomainEntity>();
 
             object repo = repoCreationMethod(Uow);
 
 
-            ServiceCache[typeof(IBaseEntityService<TEntity>)] = repo;
-            return (IBaseEntityService<TEntity>) repo;
+            ServiceCache[typeof(IBaseEntityService<TBLLEntity>)] = repo;
+            return (IBaseEntityService<TBLLEntity>) repo;
         }
     }
 }

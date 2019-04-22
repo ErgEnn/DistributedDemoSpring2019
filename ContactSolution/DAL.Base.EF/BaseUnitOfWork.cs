@@ -18,9 +18,11 @@ namespace DAL.Base.EF
             UOWDbContext =  dataContext;
         }
 
-        public IBaseRepository<TEntity> BaseRepository<TEntity>() where TEntity : class, IBaseEntity, new()
+        public IBaseRepository<TDALEntity> BaseRepository<TDALEntity, TDomainEntity>()
+            where TDALEntity : class, new()
+            where TDomainEntity : class, IBaseEntity, new()
         {
-            return _repositoryProvider.GetEntityRepository<TEntity>();
+            return _repositoryProvider.GetEntityRepository<TDALEntity, TDomainEntity>();
         }
 
         public async Task<int> SaveChangesAsync()

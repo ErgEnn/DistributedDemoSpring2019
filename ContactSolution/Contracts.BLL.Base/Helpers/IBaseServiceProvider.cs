@@ -6,6 +6,11 @@ namespace Contracts.BLL.Base.Helpers
     public interface IBaseServiceProvider
     {
         TService GetService<TService>();
-        IBaseEntityService<TEntity> GetEntityService<TEntity>() where TEntity : class, IBaseEntity, new();
+
+        IBaseEntityService<TBLLEntity> GetEntityService<TBLLEntity, TDALEntity, TDomainEntity>()
+            where TBLLEntity : class, new()
+            where TDALEntity : class, new()
+            where TDomainEntity : class, IBaseEntity, new();
+
     }
 }

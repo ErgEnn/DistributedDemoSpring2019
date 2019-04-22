@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using Contracts.DAL.Base;
 using Contracts.DAL.Base.Helpers;
-using Contracts.DAL.Base.Repositories;
 using DAL.Base.EF.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Base.EF.Helpers
 {
     public class BaseRepositoryFactory<TDbContext> : IBaseRepositoryFactory<TDbContext>
-    where TDbContext: DbContext
+        where TDbContext : DbContext
     {
         private readonly Dictionary<Type, Func<TDbContext, object>> _repositoryCreationMethodCache;
 
@@ -28,7 +27,6 @@ namespace DAL.Base.EF.Helpers
             _repositoryCreationMethodCache.Add(typeof(TRepository), creationMethod);
         }
 
-    
 
         public Func<TDbContext, object> GetRepositoryFactory<TRepository>()
         {
@@ -40,10 +38,12 @@ namespace DAL.Base.EF.Helpers
             throw new NullReferenceException("No repo creation method found for " + typeof(TRepository).FullName);
         }
 
-        public Func<TDbContext, object> GetEntityRepositoryFactory<TEntity>()
-            where TEntity : class, IBaseEntity, new()
+        public Func<TDbContext, object> GetEntityRepositoryFactory<TDALEntity, TDomainEntity>()
+            where TDALEntity : class, new()
+            where TDomainEntity : class, IBaseEntity, new()
+
         {
-            return dataContext => new BaseRepository<TEntity, TDbContext>(dataContext);
+            return (dataContext) => new BaseRepository<TDALEntity, TDomainEntity, TDbContext>(new BaseDALMapper<TDALEntity, TDomainEntity>(), dataContext);
         }
     }
 }

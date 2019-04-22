@@ -38,10 +38,12 @@ namespace BLL.Base.Helpers
             throw new NullReferenceException("No service creation method found for " + typeof(TService).FullName);
         }
 
-        public virtual Func<TUnitOfWork, object> GetEntityServiceFactory<TEntity>()
-            where TEntity : class, IBaseEntity, new()
+        public virtual Func<TUnitOfWork, object> GetEntityServiceFactory<TBLLEntity, TDALEntity, TDomainEntity>()
+            where TBLLEntity : class, new()
+            where TDALEntity : class, new()
+            where TDomainEntity : class, IBaseEntity, new()
         {
-            return (uow) => new BaseEntityService<TEntity, TUnitOfWork>(uow);
+            return (uow) => new BaseEntityService<TBLLEntity, TDALEntity, TDomainEntity, TUnitOfWork>(new BaseBLLMapper<TBLLEntity, TDALEntity>(),  uow);
         }
     }
 }

@@ -7,13 +7,8 @@ using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DAL;
-using DAL.App.DTO;
-using DAL.App.EF;
-using Domain;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using BLLAppDTO = BLL.App.DTO;
+using DALAppDTO = DAL.App.DTO;
 
 namespace WebApp.ApiControllers
 {
@@ -32,7 +27,7 @@ namespace WebApp.ApiControllers
 
         // GET: api/ContactTypes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ContactTypeDTO>>> GetContactTypes()
+        public async Task<ActionResult<IEnumerable<BLLAppDTO.ContactTypeContactCount>>> GetContactTypes()
         {
 
             return await _bll.ContactTypes.GetAllWithContactCountAsync();
@@ -40,7 +35,7 @@ namespace WebApp.ApiControllers
 
         // GET: api/ContactTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ContactType>> GetContactType(int id)
+        public async Task<ActionResult<BLLAppDTO.ContactType>> GetContactType(int id)
         {
             var contactType = await _bll.ContactTypes.FindAsync(id);
 
@@ -54,7 +49,7 @@ namespace WebApp.ApiControllers
 
         // PUT: api/ContactTypes/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContactType(int id, ContactType contactType)
+        public async Task<IActionResult> PutContactType(int id, BLLAppDTO.ContactType contactType)
         {
             if (id != contactType.Id)
             {
@@ -69,7 +64,7 @@ namespace WebApp.ApiControllers
 
         // POST: api/ContactTypes
         [HttpPost]
-        public async Task<ActionResult<ContactType>> PostContactType(ContactType contactType)
+        public async Task<ActionResult<BLLAppDTO.ContactType>> PostContactType(BLLAppDTO.ContactType contactType)
         {
             await _bll.ContactTypes.AddAsync(contactType);
             await _bll.SaveChangesAsync();
@@ -79,7 +74,7 @@ namespace WebApp.ApiControllers
 
         // DELETE: api/ContactTypes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ContactType>> DeleteContactType(int id)
+        public async Task<ActionResult<BLLAppDTO.ContactType>> DeleteContactType(int id)
         {
             var contactType = await _bll.ContactTypes.FindAsync(id);
             if (contactType == null)
