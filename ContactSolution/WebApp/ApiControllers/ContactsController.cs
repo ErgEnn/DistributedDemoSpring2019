@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DAL;
-using DAL.App.EF;
-using Domain;
 using Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -29,14 +24,14 @@ namespace WebApp.ApiControllers
 
         // GET: api/Contacts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
+        public async Task<ActionResult<IEnumerable<BLL.App.DTO.Contact>>> GetContacts()
         {
             return await _bll.Contacts.AllForUserAsync(User.GetUserId());
         }
 
         // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contact>> GetContact(int id)
+        public async Task<ActionResult<BLL.App.DTO.Contact>> GetContact(int id)
         {
             var contact = await _bll.Contacts.FindForUserAsync(id, User.GetUserId());
 
@@ -50,7 +45,7 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Contacts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContact(int id, Contact contact)
+        public async Task<IActionResult> PutContact(int id, BLL.App.DTO.Contact contact)
         {
             if (id != contact.Id)
             {
@@ -71,7 +66,7 @@ namespace WebApp.ApiControllers
 
         // POST: api/Contacts
         [HttpPost]
-        public async Task<ActionResult<Contact>> PostContact(Contact contact)
+        public async Task<ActionResult<BLL.App.DTO.Contact>> PostContact(BLL.App.DTO.Contact contact)
         {
             
             // check, that the Person being used is really belongs to logged in user

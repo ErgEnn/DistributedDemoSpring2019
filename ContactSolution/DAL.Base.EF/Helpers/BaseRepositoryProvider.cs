@@ -46,20 +46,22 @@ namespace DAL.Base.EF.Helpers
         }
 
 
-        public virtual IBaseRepository<TEntity> GetEntityRepository<TEntity>() where TEntity : class, IBaseEntity, new()
+        public virtual IBaseRepository<TDALEntity> GetEntityRepository<TDALEntity, TDomainEntity>() 
+            where TDALEntity : class, new()
+            where TDomainEntity : class, IDomainEntity, new()
         {
-            if (_repositoryCache.ContainsKey(typeof(IBaseRepositoryAsync<TEntity>)))
+            if (_repositoryCache.ContainsKey(typeof(IBaseRepositoryAsync<TDALEntity>)))
             {
-                return (IBaseRepository<TEntity>) _repositoryCache[typeof(IBaseRepositoryAsync<TEntity>)];
+                return (IBaseRepository<TDALEntity>) _repositoryCache[typeof(IBaseRepositoryAsync<TDALEntity>)];
             }
             // didn't find the repo in cache, lets create it
-            var repoCreationMethod = _repositoryFactory.GetEntityRepositoryFactory<TEntity>();
+            var repoCreationMethod = _repositoryFactory.GetEntityRepositoryFactory<TDALEntity, TDomainEntity>();
 
             object repo = repoCreationMethod(DataContext);
 
 
-            _repositoryCache[typeof(IBaseRepositoryAsync<TEntity>)] = repo;
-            return (IBaseRepository<TEntity>) repo;
+            _repositoryCache[typeof(IBaseRepositoryAsync<TDALEntity>)] = repo;
+            return (IBaseRepository<TDALEntity>) repo;
 
         }
 

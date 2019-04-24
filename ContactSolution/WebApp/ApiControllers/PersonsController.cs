@@ -31,14 +31,14 @@ namespace WebApp.ApiControllers
 
         // GET: api/Persons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
+        public async Task<ActionResult<IEnumerable<BLL.App.DTO.Person>>> GetPersons()
         {
             return await _bll.Persons.AllForUserAsync(User.GetUserId());
         }
 
         // GET: api/Persons/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetPerson(int id)
+        public async Task<ActionResult<BLL.App.DTO.Person>> GetPerson(int id)
         {
             var person = await _bll.Persons.FindForUserAsync(id, User.GetUserId());
 
@@ -52,7 +52,7 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Persons/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson(int id, Person person)
+        public async Task<IActionResult> PutPerson(int id, BLL.App.DTO.Person person)
         {
             if (id != person.Id)
             {
@@ -75,7 +75,7 @@ namespace WebApp.ApiControllers
 
         // POST: api/Persons
         [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
+        public async Task<ActionResult<BLL.App.DTO.Person>> PostPerson(BLL.App.DTO.Person person)
         {
             person.AppUserId = User.GetUserId();
             

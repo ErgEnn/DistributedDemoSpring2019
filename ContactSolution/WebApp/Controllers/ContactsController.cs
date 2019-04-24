@@ -6,9 +6,6 @@ using Contracts.BLL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
-using DAL.App.EF;
-using Domain;
 using Identity;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.ViewModels;
@@ -60,12 +57,12 @@ namespace WebApp.Controllers
             {
                 ContactTypeSelectList = new SelectList(
                     await _bll.ContactTypes.AllAsync(),
-                    nameof(ContactType.Id),
-                    nameof(ContactType.ContactTypeValue)),
+                    nameof(BLL.App.DTO.ContactType.Id),
+                    nameof(BLL.App.DTO.ContactType.ContactTypeValue)),
                 PersonSelectList = new SelectList(
                     await _bll.Persons.AllForUserAsync(User.GetUserId()),
-                    nameof(Person.Id),
-                    nameof(Person.FirstLastName))
+                    nameof(BLL.App.DTO.Person.Id),
+                    nameof(BLL.App.DTO.Person.FirstLastName))
             };
             return View(vm);
         }
@@ -87,13 +84,13 @@ namespace WebApp.Controllers
 
             vm.ContactTypeSelectList = new SelectList(
                 await _bll.ContactTypes.AllAsync(),
-                nameof(ContactType.Id),
-                nameof(ContactType.ContactTypeValue),
+                nameof(BLL.App.DTO.ContactType.Id),
+                nameof(BLL.App.DTO.ContactType.ContactTypeValue),
                 vm.Contact.ContactTypeId);
             vm.PersonSelectList = new SelectList(
                 await _bll.Persons.AllForUserAsync(User.GetUserId()),
-                nameof(Person.Id),
-                nameof(Person.FirstLastName), vm.Contact.PersonId);
+                nameof(BLL.App.DTO.Person.Id),
+                nameof(BLL.App.DTO.Person.FirstLastName), vm.Contact.PersonId);
 
 
             return View(vm);
@@ -117,13 +114,13 @@ namespace WebApp.Controllers
             vm.Contact = contact;
             vm.ContactTypeSelectList = new SelectList(
                 await _bll.ContactTypes.AllAsync(),
-                nameof(ContactType.Id),
-                nameof(ContactType.ContactTypeValue),
+                nameof(BLL.App.DTO.ContactType.Id),
+                nameof(BLL.App.DTO.ContactType.ContactTypeValue),
                 vm.Contact.ContactTypeId);
             vm.PersonSelectList = new SelectList(
                 await _bll.Persons.AllForUserAsync(User.GetUserId()),
-                nameof(Person.Id),
-                nameof(Person.FirstLastName), vm.Contact.PersonId);
+                nameof(BLL.App.DTO.Person.Id),
+                nameof(BLL.App.DTO.Person.FirstLastName), vm.Contact.PersonId);
 
 
             return View(vm);
@@ -157,13 +154,13 @@ namespace WebApp.Controllers
 
             vm.ContactTypeSelectList = new SelectList(
                 await _bll.ContactTypes.AllAsync(),
-                nameof(ContactType.Id),
-                nameof(ContactType.ContactTypeValue),
+                nameof(BLL.App.DTO.ContactType.Id),
+                nameof(BLL.App.DTO.ContactType.ContactTypeValue),
                 vm.Contact.ContactTypeId);
             vm.PersonSelectList = new SelectList(
                 await _bll.Persons.AllForUserAsync(User.GetUserId()),
-                nameof(Person.Id),
-                nameof(Person.FirstLastName), vm.Contact.PersonId);
+                nameof(BLL.App.DTO.Person.Id),
+                nameof(BLL.App.DTO.Person.FirstLastName), vm.Contact.PersonId);
 
             return View(vm);
         }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
-    public class ContactType : BaseEntity
+    public class ContactType : DomainEntity
     {
         [MaxLength(32)]
         [MinLength(1)]

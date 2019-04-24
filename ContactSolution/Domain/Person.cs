@@ -5,7 +5,7 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class Person : BaseEntity
+    public class Person : DomainEntity
     {
         [MaxLength(64)]
         [MinLength(1)]
@@ -24,6 +24,5 @@ namespace Domain
         public ICollection<Contact> Contacts { get; set; }
 
         
-        public string FirstLastName => FirstName + " " + LastName;
     }
 }

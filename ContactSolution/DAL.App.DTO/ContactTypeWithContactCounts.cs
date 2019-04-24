@@ -1,6 +1,6 @@
 ﻿namespace DAL.App.DTO
 {
-    public class ContactTypeDTO
+    public class ContactTypeWithContactCounts
     {
         public int Id { get; set; }
         public string ContactTypeValue { get; set; }

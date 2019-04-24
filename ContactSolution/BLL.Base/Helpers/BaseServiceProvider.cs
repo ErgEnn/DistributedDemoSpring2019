@@ -46,8 +46,9 @@ namespace BLL.Base.Helpers
             return (TService) repo;
         }
 
+        /*
         public virtual IBaseEntityService<TEntity> GetEntityService<TEntity>()
-            where TEntity : class, IBaseEntity, new()
+            where TEntity : class, IDomainEntity, new()
         {
             if (ServiceCache.ContainsKey(typeof(IBaseEntityService<TEntity>)))
             {
@@ -63,5 +64,7 @@ namespace BLL.Base.Helpers
             ServiceCache[typeof(IBaseEntityService<TEntity>)] = repo;
             return (IBaseEntityService<TEntity>) repo;
         }
+        */
+        
     }
 }

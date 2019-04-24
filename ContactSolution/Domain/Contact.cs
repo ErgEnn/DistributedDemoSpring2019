@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
-    public class Contact : BaseEntity
+    public class Contact : DomainEntity
     {
         
         [MaxLength(64)]

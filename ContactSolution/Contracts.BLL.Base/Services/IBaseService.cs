@@ -9,8 +9,8 @@ namespace Contracts.BLL.Base.Services
     {
     }
     
-    public interface IBaseEntityService<TEntity> :IBaseService, IBaseRepository<TEntity> 
-        where TEntity : class, IBaseEntity, new()
+    public interface IBaseEntityService<TBLLEntity> :IBaseService, IBaseRepository<TBLLEntity> 
+        where TBLLEntity : class, new()
     {
         
     }

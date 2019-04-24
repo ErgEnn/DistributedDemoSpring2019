@@ -4,15 +4,16 @@ using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using DAL.App.DTO;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ContactTypeRepository : BaseRepository<ContactType, AppDbContext>, IContactTypeRepository
+    public class ContactTypeRepository : BaseRepository<DAL.App.DTO.ContactType,  Domain.ContactType, AppDbContext>, IContactTypeRepository
     {
-        public ContactTypeRepository(AppDbContext repositoryDbContext) : base(repositoryDbContext)
+        public ContactTypeRepository(AppDbContext repositoryDbContext) : base(repositoryDbContext, new ContactTypeMapper())
         {
         }
 
@@ -20,16 +21,16 @@ namespace DAL.App.EF.Repositories
         /// Get all the records, include contacts
         /// </summary>
         /// <returns></returns>
-        public override async Task<List<ContactType>> AllAsync()
+        public override async Task<List<DAL.App.DTO.ContactType>> AllAsync()
         {
-            return await RepositoryDbSet.Include(c => c.Contacts).ToListAsync();
+            return await RepositoryDbSet.Include(c => c.Contacts).Select(e => ContactTypeMapper.MapFromDomain(e)).ToListAsync();
         }
 
         /// <summary>
         /// Get all the ContactTypes from db, include count of contacts for every ContactType
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<List<ContactTypeDTO>> GetAllWithContactCountAsync()
+        public virtual async Task<List<ContactTypeWithContactCounts>> GetAllWithContactCountAsync()
         {
 /*
       Result is single query against db!
@@ -42,7 +43,7 @@ namespace DAL.App.EF.Repositories
 
  */
             return await RepositoryDbSet
-                .Select(c => new ContactTypeDTO()
+                .Select(c => new ContactTypeWithContactCounts()
                 {
                     Id = c.Id,
                     ContactTypeValue = c.ContactTypeValue,

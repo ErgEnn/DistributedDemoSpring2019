@@ -5,8 +5,10 @@ namespace Contracts.DAL.Base
 {
     public interface IBaseUnitOfWork
     {
-        IBaseRepository<TEntity> BaseRepository<TEntity>() 
-            where TEntity : class, IBaseEntity, new();
+        IBaseRepository<TDALEntity> BaseRepository<TDALEntity, TDomainEntity>()
+            where TDomainEntity : class, IDomainEntity, new()
+            where TDALEntity : class, new();
+        
         Task<int> SaveChangesAsync();
         int SaveChanges();
     }
