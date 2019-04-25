@@ -13,6 +13,6 @@ namespace DAL.App.DTO
         public string ContactTypeValue { get; set; }
 
 
-        public ICollection<Contact> Contacts { get; set; }
+        //public ICollection<Contact> Contacts { get; set; }
     }
 }
