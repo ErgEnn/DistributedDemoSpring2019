@@ -24,14 +24,22 @@ namespace DAL.App.EF.Mappers
 
         public static DAL.App.DTO.ContactType MapFromDomain(Domain.ContactType contactType)
         {
-            throw new InvalidCastException("No conversion");
-            return null;
+            var res = new DAL.App.DTO.ContactType()
+            {
+                Id = contactType.Id,
+                ContactTypeValue = contactType.ContactTypeValue
+            };
+            return res;
         }
         
         public static Domain.ContactType MapFromDAL(DAL.App.DTO.ContactType contactType)
         {
-            throw new InvalidCastException("No conversion");
-            return null;
+            var res = new Domain.ContactType()
+            {
+                Id = contactType.Id,
+                ContactTypeValue = contactType.ContactTypeValue
+            };
+            return res;
         }
         
 

@@ -25,21 +25,34 @@ namespace BLL.App.Mappers
 
         public static BLL.App.DTO.ContactType MapFromDAL(DAL.App.DTO.ContactType contactType)
         {
-            throw new NotImplementedException();
-            return null;
+            var res = new BLL.App.DTO.ContactType()
+            {
+                Id = contactType.Id,
+                ContactTypeValue = contactType.ContactTypeValue
+            };
+            return res;
         }
         
         public static DAL.App.DTO.ContactType MapFromBLL(BLL.App.DTO.ContactType contactType)
         {
-            throw new NotImplementedException();
-            return null;
+            var res = new DAL.App.DTO.ContactType()
+            {
+                Id = contactType.Id,
+                ContactTypeValue = contactType.ContactTypeValue
+            };
+            return res;
         }
         
         
         public static BLL.App.DTO.ContactTypeWithContactCounts MapFromDAL(DAL.App.DTO.ContactTypeWithContactCounts contactTypeWithContactCounts)
         {
-            throw new NotImplementedException();
-            return null;
+            var res = new BLL.App.DTO.ContactTypeWithContactCounts()
+            {
+                Id = contactTypeWithContactCounts.Id,
+                ContactTypeValue = contactTypeWithContactCounts.ContactTypeValue,
+                ContactCount = contactTypeWithContactCounts.ContactCount
+            };
+            return res;
         }
 
     }

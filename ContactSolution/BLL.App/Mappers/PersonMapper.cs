@@ -23,16 +23,30 @@ namespace BLL.App.Mappers
         }
 
 
-        public static BLL.App.DTO.Person MapFromDAL(DAL.App.DTO.Person contactType)
+        public static BLL.App.DTO.Person MapFromDAL(DAL.App.DTO.Person person)
         {
-            throw new NotImplementedException();
-            return null;
+            var res = new BLL.App.DTO.Person()
+            {
+                Id = person.Id,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                AppUserId = person.AppUserId,
+            };
+
+            return res;
         }
         
-        public static DAL.App.DTO.Person MapFromBLL(BLL.App.DTO.Person contactType)
+        public static DAL.App.DTO.Person MapFromBLL(BLL.App.DTO.Person person)
         {
-            throw new NotImplementedException();
-            return null;
+            var res = new DAL.App.DTO.Person()
+            {
+                Id = person.Id,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                AppUserId = person.AppUserId,
+            };
+
+            return res;
         }
 
     }

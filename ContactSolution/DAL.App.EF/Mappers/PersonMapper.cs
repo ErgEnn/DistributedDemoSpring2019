@@ -1,5 +1,6 @@
 using System;
 using Contracts.DAL.Base.Mappers;
+using Domain;
 
 namespace DAL.App.EF.Mappers
 {
@@ -22,16 +23,30 @@ namespace DAL.App.EF.Mappers
         }
 
 
-        public static DAL.App.DTO.Person MapFromDomain(Domain.Person contactType)
+        public static DAL.App.DTO.Person MapFromDomain(Domain.Person person)
         {
-            throw new InvalidCastException("No conversion");
-            return null;
+            var res = new DAL.App.DTO.Person()
+            {
+                Id = person.Id,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                AppUserId = person.AppUserId,
+            };
+
+            return res;
         }
         
-        public static Domain.Person MapFromDAL(DAL.App.DTO.Person contactType)
+        public static Domain.Person MapFromDAL(DAL.App.DTO.Person person)
         {
-            throw new InvalidCastException("No conversion");
-            return null;
+            var res = new Domain.Person()
+            {
+                Id = person.Id,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                AppUserId = person.AppUserId,
+            };
+
+            return res;
         }
 
     }

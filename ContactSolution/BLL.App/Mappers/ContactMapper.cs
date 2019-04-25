@@ -23,39 +23,49 @@ namespace BLL.App.Mappers
 
         public static BLL.App.DTO.Contact MapFromDAL(DAL.App.DTO.Contact contact)
         {
-            var res = new BLL.App.DTO.Contact();
-            res.Id = contact.Id;
-
-            res.PersonId = contact.PersonId;
-            // TODO: Fix this, use DAL.App.DTO.Person inside DTO.Contact
-            res.Person = new BLL.App.DTO.Person()
+            var res = new BLL.App.DTO.Contact
             {
-                Id = contact.Person.Id,
-                AppUserId = contact.Person.AppUserId,
-                FirstName = contact.Person.FirstName,
-                LastName = contact.Person.LastName,
+                Id = contact.Id,
+                PersonId = contact.PersonId,
+                Person = contact.Person == null ? null : new BLL.App.DTO.Person()
+                {
+                    Id = contact.Person.Id,
+                    AppUserId = contact.Person.AppUserId,
+                    FirstName = contact.Person.FirstName,
+                    LastName = contact.Person.LastName,
+                },
+                ContactTypeId = contact.ContactTypeId,
+                ContactType = contact.ContactType == null ? null : new BLL.App.DTO.ContactType()
+                {
+                    Id = contact.ContactType.Id, 
+                    ContactTypeValue = contact.ContactType.ContactTypeValue
+                },
+                ContactValue = contact.ContactValue
             };
-
-            res.ContactTypeId = contact.ContactTypeId;
-            res.ContactType = new BLL.App.DTO.ContactType()
-            {
-                Id = contact.ContactType.Id,
-                ContactTypeValue = contact.ContactType.ContactTypeValue
-            };
-
-
-            res.ContactValue = contact.ContactValue;
 
             return res;
         }
 
         public static DAL.App.DTO.Contact MapFromBLL(BLL.App.DTO.Contact contact)
         {
-            var res = new DAL.App.DTO.Contact();
-            
-            
-            throw new NotImplementedException();
-            
+            var res = new DAL.App.DTO.Contact
+            {
+                Id = contact.Id,
+                PersonId = contact.PersonId,
+                Person = contact.Person == null ? null : new DAL.App.DTO.Person()
+                {
+                    Id = contact.Person.Id,
+                    AppUserId = contact.Person.AppUserId,
+                    FirstName = contact.Person.FirstName,
+                    LastName = contact.Person.LastName,
+                },
+                ContactTypeId = contact.ContactTypeId,
+                ContactType = contact.ContactType == null ? null : new DAL.App.DTO.ContactType()
+                {
+                    Id = contact.ContactType.Id, ContactTypeValue = contact.ContactType.ContactTypeValue
+                },
+                ContactValue = contact.ContactValue
+            };
             return res;
         }
     }
