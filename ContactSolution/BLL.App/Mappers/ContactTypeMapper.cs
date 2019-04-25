@@ -19,13 +19,13 @@ namespace BLL.App.Mappers
                 return MapFromBLL((BLL.App.DTO.ContactType) inObject) as TOutObject;
             }
 
-            throw new InvalidCastException("No conversion");
+            throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
 
         public static BLL.App.DTO.ContactType MapFromDAL(DAL.App.DTO.ContactType contactType)
         {
-            var res = new BLL.App.DTO.ContactType()
+            var res = contactType == null ? null : new BLL.App.DTO.ContactType()
             {
                 Id = contactType.Id,
                 ContactTypeValue = contactType.ContactTypeValue
@@ -35,7 +35,7 @@ namespace BLL.App.Mappers
         
         public static DAL.App.DTO.ContactType MapFromBLL(BLL.App.DTO.ContactType contactType)
         {
-            var res = new DAL.App.DTO.ContactType()
+            var res = contactType == null ? null : new DAL.App.DTO.ContactType()
             {
                 Id = contactType.Id,
                 ContactTypeValue = contactType.ContactTypeValue
@@ -46,7 +46,7 @@ namespace BLL.App.Mappers
         
         public static BLL.App.DTO.ContactTypeWithContactCounts MapFromDAL(DAL.App.DTO.ContactTypeWithContactCounts contactTypeWithContactCounts)
         {
-            var res = new BLL.App.DTO.ContactTypeWithContactCounts()
+            var res = contactTypeWithContactCounts == null ? null : new BLL.App.DTO.ContactTypeWithContactCounts()
             {
                 Id = contactTypeWithContactCounts.Id,
                 ContactTypeValue = contactTypeWithContactCounts.ContactTypeValue,

@@ -18,13 +18,13 @@ namespace DAL.App.EF.Mappers
                 return MapFromDAL((DAL.App.DTO.ContactType) inObject) as TOutObject;
             }
 
-            throw new InvalidCastException("No conversion");
+            throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
 
         public static DAL.App.DTO.ContactType MapFromDomain(Domain.ContactType contactType)
         {
-            var res = new DAL.App.DTO.ContactType()
+            var res = contactType == null ? null : new DAL.App.DTO.ContactType()
             {
                 Id = contactType.Id,
                 ContactTypeValue = contactType.ContactTypeValue
@@ -34,7 +34,7 @@ namespace DAL.App.EF.Mappers
         
         public static Domain.ContactType MapFromDAL(DAL.App.DTO.ContactType contactType)
         {
-            var res = new Domain.ContactType()
+            var res = contactType == null ? null : new Domain.ContactType()
             {
                 Id = contactType.Id,
                 ContactTypeValue = contactType.ContactTypeValue

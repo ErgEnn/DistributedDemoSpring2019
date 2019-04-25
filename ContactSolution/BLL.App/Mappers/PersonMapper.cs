@@ -19,13 +19,13 @@ namespace BLL.App.Mappers
                 return MapFromBLL((BLL.App.DTO.Person) inObject) as TOutObject;
             }
 
-            throw new InvalidCastException("No conversion");
+            throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
 
         public static BLL.App.DTO.Person MapFromDAL(DAL.App.DTO.Person person)
         {
-            var res = new BLL.App.DTO.Person()
+            var res = person == null ? null : new BLL.App.DTO.Person()
             {
                 Id = person.Id,
                 FirstName = person.FirstName,
@@ -38,7 +38,7 @@ namespace BLL.App.Mappers
         
         public static DAL.App.DTO.Person MapFromBLL(BLL.App.DTO.Person person)
         {
-            var res = new DAL.App.DTO.Person()
+            var res = person == null ? null : new DAL.App.DTO.Person()
             {
                 Id = person.Id,
                 FirstName = person.FirstName,

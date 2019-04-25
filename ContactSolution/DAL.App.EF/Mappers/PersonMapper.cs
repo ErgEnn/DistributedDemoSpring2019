@@ -19,13 +19,13 @@ namespace DAL.App.EF.Mappers
                 return MapFromDAL((DAL.App.DTO.Person) inObject) as TOutObject;
             }
 
-            throw new InvalidCastException("No conversion");
+            throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
 
         public static DAL.App.DTO.Person MapFromDomain(Domain.Person person)
         {
-            var res = new DAL.App.DTO.Person()
+            var res = person == null ? null : new DAL.App.DTO.Person()
             {
                 Id = person.Id,
                 FirstName = person.FirstName,
@@ -38,7 +38,7 @@ namespace DAL.App.EF.Mappers
         
         public static Domain.Person MapFromDAL(DAL.App.DTO.Person person)
         {
-            var res = new Domain.Person()
+            var res = person == null ? null : new Domain.Person()
             {
                 Id = person.Id,
                 FirstName = person.FirstName,

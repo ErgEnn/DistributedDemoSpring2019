@@ -17,29 +17,18 @@ namespace BLL.App.Mappers
             {
                 return MapFromBLL((BLL.App.DTO.Contact) inObject) as TOutObject;
             }
-
-            throw new InvalidCastException("No conversion");
+            throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
         public static BLL.App.DTO.Contact MapFromDAL(DAL.App.DTO.Contact contact)
         {
-            var res = new BLL.App.DTO.Contact
+            var res = contact == null ? null : new BLL.App.DTO.Contact
             {
                 Id = contact.Id,
                 PersonId = contact.PersonId,
-                Person = contact.Person == null ? null : new BLL.App.DTO.Person()
-                {
-                    Id = contact.Person.Id,
-                    AppUserId = contact.Person.AppUserId,
-                    FirstName = contact.Person.FirstName,
-                    LastName = contact.Person.LastName,
-                },
+                Person = PersonMapper.MapFromDAL(contact.Person),
                 ContactTypeId = contact.ContactTypeId,
-                ContactType = contact.ContactType == null ? null : new BLL.App.DTO.ContactType()
-                {
-                    Id = contact.ContactType.Id, 
-                    ContactTypeValue = contact.ContactType.ContactTypeValue
-                },
+                ContactType = ContactTypeMapper.MapFromDAL(contact.ContactType),
                 ContactValue = contact.ContactValue
             };
 
@@ -48,22 +37,13 @@ namespace BLL.App.Mappers
 
         public static DAL.App.DTO.Contact MapFromBLL(BLL.App.DTO.Contact contact)
         {
-            var res = new DAL.App.DTO.Contact
+            var res = contact == null ? null : new DAL.App.DTO.Contact
             {
                 Id = contact.Id,
                 PersonId = contact.PersonId,
-                Person = contact.Person == null ? null : new DAL.App.DTO.Person()
-                {
-                    Id = contact.Person.Id,
-                    AppUserId = contact.Person.AppUserId,
-                    FirstName = contact.Person.FirstName,
-                    LastName = contact.Person.LastName,
-                },
+                Person = PersonMapper.MapFromBLL(contact.Person),
                 ContactTypeId = contact.ContactTypeId,
-                ContactType = contact.ContactType == null ? null : new DAL.App.DTO.ContactType()
-                {
-                    Id = contact.ContactType.Id, ContactTypeValue = contact.ContactType.ContactTypeValue
-                },
+                ContactType = ContactTypeMapper.MapFromBLL(contact.ContactType),
                 ContactValue = contact.ContactValue
             };
             return res;

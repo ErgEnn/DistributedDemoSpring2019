@@ -19,42 +19,38 @@ namespace DAL.App.EF.Mappers
                 return MapFromDAL((DAL.App.DTO.Contact) inObject) as TOutObject;
             }
 
-            throw new InvalidCastException("No conversion");
+            throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
         public static DAL.App.DTO.Contact MapFromDomain(Domain.Contact contact)
         {
-            var res = new DAL.App.DTO.Contact();
-            res.Id = contact.Id;
-
-            res.PersonId = contact.PersonId;
-            // TODO: Fix this, use DAL.App.DTO.Person inside DTO.Contact
-            res.Person = new Person()
+            var res = contact == null ? null : new DAL.App.DTO.Contact
             {
-                Id = contact.Person.Id,
-                AppUserId = contact.Person.AppUserId,
-                FirstName = contact.Person.FirstName,
-                LastName = contact.Person.LastName,
+                Id = contact.Id,
+                PersonId = contact.PersonId,
+                Person = PersonMapper.MapFromDomain(contact.Person),
+                ContactTypeId = contact.ContactTypeId,
+                ContactType = ContactTypeMapper.MapFromDomain(contact.ContactType),
+                ContactValue = contact.ContactValue
             };
 
-            res.ContactTypeId = contact.ContactTypeId;
-            res.ContactType = new ContactType()
-            {
-                Id = contact.ContactType.Id,
-                ContactTypeValue = contact.ContactType.ContactTypeValue
-            };
-
-
-            res.ContactValue = contact.ContactValue;
 
             return res;
         }
 
         public static Domain.Contact MapFromDAL(DAL.App.DTO.Contact contact)
         {
-            var res = new Domain.Contact();
-            throw new NotImplementedException();
-            
+            var res = contact == null ? null : new Domain.Contact
+            {
+                Id = contact.Id,
+                PersonId = contact.PersonId,
+                Person = PersonMapper.MapFromDAL(contact.Person),
+                ContactTypeId = contact.ContactTypeId,
+                ContactType = ContactTypeMapper.MapFromDAL(contact.ContactType),
+                ContactValue = contact.ContactValue
+            };
+
+
             return res;
         }
     }
