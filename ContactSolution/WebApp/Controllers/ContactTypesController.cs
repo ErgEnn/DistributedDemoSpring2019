@@ -31,7 +31,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var contactType = await _bll.ContactTypes.FindAsync(id);
+            var contactType = await _bll.ContactTypes.FindAsync(id.Value);
             
             if (contactType == null)
             {
@@ -71,7 +71,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var contactType = await _bll.ContactTypes.FindAsync(id);
+            var contactType = await _bll.ContactTypes.FindAsync(id.Value);
             if (contactType == null)
             {
                 return NotFound();
@@ -109,7 +109,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var contactType = await _bll.ContactTypes.FindAsync(id);
+            var contactType = await _bll.ContactTypes.FindAsync(id.Value);
 
             if (contactType == null)
             {

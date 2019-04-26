@@ -24,16 +24,17 @@ namespace WebApp.ApiControllers
 
         // GET: api/Contacts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BLL.App.DTO.Contact>>> GetContacts()
+        public async Task<ActionResult<IEnumerable<PublicApi.v1.DTO.Contact>>> GetContacts()
         {
-            return await _bll.Contacts.AllForUserAsync(User.GetUserId());
+            return (await _bll.Contacts.AllForUserAsync(User.GetUserId()))
+                .Select(e => PublicApi.v1.Mappers.ContactMapper.MapFromBLL(e)).ToList();
         }
 
         // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BLL.App.DTO.Contact>> GetContact(int id)
+        public async Task<ActionResult<PublicApi.v1.DTO.Contact>> GetContact(int id)
         {
-            var contact = await _bll.Contacts.FindForUserAsync(id, User.GetUserId());
+            var contact = PublicApi.v1.Mappers.ContactMapper.MapFromBLL(await _bll.Contacts.FindForUserAsync(id, User.GetUserId()));
 
             if (contact == null)
             {
@@ -45,7 +46,7 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Contacts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContact(int id, BLL.App.DTO.Contact contact)
+        public async Task<IActionResult> PutContact(int id, PublicApi.v1.DTO.Contact contact)
         {
             if (id != contact.Id)
             {
@@ -58,7 +59,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            _bll.Contacts.Update(contact);
+            _bll.Contacts.Update(PublicApi.v1.Mappers.ContactMapper.MapFromExternal(contact));
             await _bll.SaveChangesAsync();
 
             return NoContent();
@@ -66,7 +67,7 @@ namespace WebApp.ApiControllers
 
         // POST: api/Contacts
         [HttpPost]
-        public async Task<ActionResult<BLL.App.DTO.Contact>> PostContact(BLL.App.DTO.Contact contact)
+        public async Task<ActionResult<PublicApi.v1.DTO.Contact>> PostContact(PublicApi.v1.DTO.Contact contact)
         {
             
             // check, that the Person being used is really belongs to logged in user
@@ -75,7 +76,7 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
             
-            _bll.Contacts.Add(contact);
+            _bll.Contacts.Add(PublicApi.v1.Mappers.ContactMapper.MapFromExternal(contact));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetContact", new { id = contact.Id }, contact);

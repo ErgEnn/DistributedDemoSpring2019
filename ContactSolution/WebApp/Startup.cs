@@ -156,6 +156,8 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //TODO: Handle internal exception in case of API request - return correct response
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

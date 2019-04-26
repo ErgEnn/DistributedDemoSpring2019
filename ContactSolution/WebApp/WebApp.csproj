@@ -18,6 +18,8 @@
       <ProjectReference Include="..\Contracts.BLL.App\Contracts.BLL.App.csproj" />
       <ProjectReference Include="..\DAL.App.EF\DAL.App.EF.csproj" />
       <ProjectReference Include="..\Identity\Identity.csproj" />
+      <ProjectReference Include="..\PublicApi.v1.DTO\PublicApi.v1.DTO.csproj" />
+      <ProjectReference Include="..\PublicApi.v1\PublicApi.v1.csproj" />
     </ItemGroup>
 
 </Project>

@@ -34,7 +34,7 @@ namespace BLL.Base.Services
 
         public virtual void Remove(TBLLEntity entity)
         {
-            ServiceRepository.Remove(entity);
+            ServiceRepository.Remove(_mapper.Map<TDALEntity>(entity));
         }
 
         public virtual void Remove(params object[] id)

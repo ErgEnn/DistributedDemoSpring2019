@@ -32,17 +32,18 @@ namespace WebApp.ApiControllers
 
         // GET: api/ContactTypes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BLL.App.DTO.ContactTypeWithContactCounts>>> GetContactTypes()
+        public async Task<ActionResult<IEnumerable<PublicApi.v1.DTO.ContactTypeWithContactCounts>>> GetContactTypes()
         {
 
-            return await _bll.ContactTypes.GetAllWithContactCountAsync();
+            return (await _bll.ContactTypes.GetAllWithContactCountAsync())
+                .Select(e => PublicApi.v1.Mappers.ContactTypeMapper.MapFromBLL(e)).ToList();
         }
 
         // GET: api/ContactTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BLL.App.DTO.ContactType>> GetContactType(int id)
+        public async Task<ActionResult<PublicApi.v1.DTO.ContactType>> GetContactType(int id)
         {
-            var contactType = await _bll.ContactTypes.FindAsync(id);
+            var contactType = PublicApi.v1.Mappers.ContactTypeMapper.MapFromBLL( await _bll.ContactTypes.FindAsync(id));
 
             if (contactType == null)
             {
@@ -54,14 +55,14 @@ namespace WebApp.ApiControllers
 
         // PUT: api/ContactTypes/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContactType(int id, BLL.App.DTO.ContactType contactType)
+        public async Task<IActionResult> PutContactType(int id, PublicApi.v1.DTO.ContactType contactType)
         {
             if (id != contactType.Id)
             {
                 return BadRequest();
             }
 
-            _bll.ContactTypes.Update(contactType);
+            _bll.ContactTypes.Update(PublicApi.v1.Mappers.ContactTypeMapper.MapFromExternal( contactType));
             await _bll.SaveChangesAsync();
 
             return NoContent();
@@ -69,9 +70,9 @@ namespace WebApp.ApiControllers
 
         // POST: api/ContactTypes
         [HttpPost]
-        public async Task<ActionResult<BLL.App.DTO.ContactType>> PostContactType(BLL.App.DTO.ContactType contactType)
+        public async Task<ActionResult<PublicApi.v1.DTO.ContactType>> PostContactType(PublicApi.v1.DTO.ContactType contactType)
         {
-            await _bll.ContactTypes.AddAsync(contactType);
+            await _bll.ContactTypes.AddAsync(PublicApi.v1.Mappers.ContactTypeMapper.MapFromExternal(contactType));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetContactType", new { id = contactType.Id }, contactType);
@@ -79,7 +80,7 @@ namespace WebApp.ApiControllers
 
         // DELETE: api/ContactTypes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<BLL.App.DTO.ContactType>> DeleteContactType(int id)
+        public async Task<ActionResult<PublicApi.v1.DTO.ContactType>> DeleteContactType(int id)
         {
             var contactType = await _bll.ContactTypes.FindAsync(id);
             if (contactType == null)
@@ -87,10 +88,10 @@ namespace WebApp.ApiControllers
                 return NotFound();
             }
 
-            _bll.ContactTypes.Remove(contactType);
+            _bll.ContactTypes.Remove(id);
             await _bll.SaveChangesAsync();
 
-            return contactType;
+            return NoContent();
         }
     }
 }

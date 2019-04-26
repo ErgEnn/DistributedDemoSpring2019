@@ -31,16 +31,17 @@ namespace WebApp.ApiControllers
 
         // GET: api/Persons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BLL.App.DTO.Person>>> GetPersons()
+        public async Task<ActionResult<IEnumerable<PublicApi.v1.DTO.Person>>> GetPersons()
         {
-            return await _bll.Persons.AllForUserAsync(User.GetUserId());
+            return (await _bll.Persons.AllForUserAsync(User.GetUserId()))
+                .Select(e => PublicApi.v1.Mappers.PersonMapper.MapFromBLL(e)).ToList();
         }
 
         // GET: api/Persons/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BLL.App.DTO.Person>> GetPerson(int id)
+        public async Task<ActionResult<PublicApi.v1.DTO.Person>> GetPerson(int id)
         {
-            var person = await _bll.Persons.FindForUserAsync(id, User.GetUserId());
+            var person = PublicApi.v1.Mappers.PersonMapper.MapFromBLL(await _bll.Persons.FindForUserAsync(id, User.GetUserId()));
 
             if (person == null)
             {
@@ -52,7 +53,7 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Persons/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson(int id, BLL.App.DTO.Person person)
+        public async Task<IActionResult> PutPerson(int id, PublicApi.v1.DTO.Person person)
         {
             if (id != person.Id)
             {
@@ -66,7 +67,7 @@ namespace WebApp.ApiControllers
             }
             person.AppUserId = User.GetUserId();
             
-            _bll.Persons.Update(person);
+            _bll.Persons.Update(PublicApi.v1.Mappers.PersonMapper.MapFromExternal( person));
             await _bll.SaveChangesAsync();
 
 
@@ -75,11 +76,11 @@ namespace WebApp.ApiControllers
 
         // POST: api/Persons
         [HttpPost]
-        public async Task<ActionResult<BLL.App.DTO.Person>> PostPerson(BLL.App.DTO.Person person)
+        public async Task<ActionResult<PublicApi.v1.DTO.Person>> PostPerson(PublicApi.v1.DTO.Person person)
         {
             person.AppUserId = User.GetUserId();
             
-            _bll.Persons.Add(person);
+            _bll.Persons.Add(PublicApi.v1.Mappers.PersonMapper.MapFromExternal(person));
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetPerson", new { id = person.Id }, person);
