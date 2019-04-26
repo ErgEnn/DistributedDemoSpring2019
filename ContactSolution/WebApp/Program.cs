@@ -16,8 +16,8 @@ namespace WebApp
     {
         public static void Main(string[] args)
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("et-EE");
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("et-EE");
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("ru");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru");
             CreateWebHostBuilder(args).Build().Run();
         }
 

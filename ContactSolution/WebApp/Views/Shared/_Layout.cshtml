@@ -59,7 +59,8 @@
         <div class="container">
             &copy; 2019 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             Culture: @Thread.CurrentThread.CurrentCulture.Name  @(5600.ToString("c")) UICulture: @CultureInfo.CurrentUICulture.Name
-        </div>
+                Hello: @Resources.Default.Hello
+            </div>
     </footer>
 
     <environment include="Development">
