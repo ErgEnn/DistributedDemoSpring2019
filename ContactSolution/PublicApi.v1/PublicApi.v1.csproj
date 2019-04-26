@@ -6,8 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BLL.App.DTO\BLL.App.DTO.csproj" />
-      <ProjectReference Include="..\BLL.Base\BLL.Base.csproj" />
-      <ProjectReference Include="..\Contracts.BLL.App\Contracts.BLL.App.csproj" />
+      <ProjectReference Include="..\PublicApi.v1.DTO\PublicApi.v1.DTO.csproj" />
     </ItemGroup>
 
 </Project>
