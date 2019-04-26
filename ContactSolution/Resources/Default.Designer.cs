@@ -68,5 +68,14 @@ namespace Resources {
                 return ResourceManager.GetString("Hello", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too long!.
+        /// </summary>
+        public static string MaxLengthError {
+            get {
+                return ResourceManager.GetString("MaxLengthError", resourceCulture);
+            }
+        }
     }
 }

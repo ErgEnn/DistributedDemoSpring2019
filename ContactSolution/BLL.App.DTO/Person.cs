@@ -14,7 +14,7 @@ namespace BLL.App.DTO
         [Required]
         public string FirstName { get; set; }
 
-        [MaxLength(64)]
+        [MaxLength(6,ErrorMessageResourceName ="MaxLengthError" ,ErrorMessageResourceType = typeof(Resources.Default))]
         [MinLength(1)]
         [Required]
         public string LastName { get; set; }
