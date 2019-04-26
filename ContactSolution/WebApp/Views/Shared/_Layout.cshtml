@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Globalization
+@using System.Threading
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -56,6 +58,7 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2019 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            Culture: @Thread.CurrentThread.CurrentCulture.Name  @(5600.ToString("c")) UICulture: @CultureInfo.CurrentUICulture.Name
         </div>
     </footer>
 

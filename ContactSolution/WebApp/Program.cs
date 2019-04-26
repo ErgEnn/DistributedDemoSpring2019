@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +16,8 @@ namespace WebApp
     {
         public static void Main(string[] args)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("et-EE");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("et-EE");
             CreateWebHostBuilder(args).Build().Run();
         }
 
