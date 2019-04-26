@@ -60,7 +60,9 @@
             &copy; 2019 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             Culture: @Thread.CurrentThread.CurrentCulture.Name  @(5600.ToString("c")) UICulture: @CultureInfo.CurrentUICulture.Name
                 Hello: @Resources.Default.Hello
-            </div>
+            
+            <partial name="_LanguagePartial"/>
+        </div>
     </footer>
 
     <environment include="Development">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
@@ -26,11 +27,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using WebApp.Helpers;
@@ -71,9 +75,8 @@ namespace WebApp
             services.AddSingleton<IBaseServiceFactory<IAppUnitOfWork>, AppServiceFactory>();
             services.AddScoped<IBaseServiceProvider, BaseServiceProvider<IAppUnitOfWork>>();
             services.AddScoped<IAppBLL, AppBLL>();
-            
-            
-            
+
+
             /*
             services.AddDefaultIdentity<AppUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
@@ -84,7 +87,7 @@ namespace WebApp
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            
+
             // Relax password requirements for easy testing
             // TODO: Remove in production
             services.Configure<IdentityOptions>(options =>
@@ -95,7 +98,6 @@ namespace WebApp
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireNonAlphanumeric = false;
-
             });
 
             services.AddCors(options =>
@@ -107,9 +109,8 @@ namespace WebApp
                         builder.AllowAnyHeader();
                         builder.AllowAnyMethod();
                     });
-                
             });
-            
+
             services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -123,7 +124,7 @@ namespace WebApp
                     //options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                     options.SerializerSettings.Formatting = Formatting.Indented;
                 });
-            
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = $"/Identity/Account/Login";
@@ -150,6 +151,24 @@ namespace WebApp
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
+            
+            
+            // configure i18n
+            services.Configure<RequestLocalizationOptions>(options => {
+                var supportedCultures = new[]{
+                    new CultureInfo(name: "en"),
+                    new CultureInfo(name: "et")
+                };
+
+                // State what the default culture for your application is. 
+                options.DefaultRequestCulture = new RequestCulture(culture: "en-GB", uiCulture: "en-GB");
+
+                // You must explicitly state which cultures your application supports.
+                options.SupportedCultures = supportedCultures;
+
+                // These are the cultures the app supports for UI strings
+                options.SupportedUICultures = supportedCultures;
+            });
 
         }
 
@@ -168,6 +187,8 @@ namespace WebApp
                 app.UseHsts();
             }
 
+            
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -175,21 +196,22 @@ namespace WebApp
             app.UseAuthentication();
 
             app.UseCors("CorsAllowAll");
-            
+
+            app.UseRequestLocalization(options: 
+                app.ApplicationServices
+                    .GetService<IOptions<RequestLocalizationOptions>>().Value);
+    
             app.UseMvc(routes =>
             {
-
                 routes.MapRoute(
                     name: "area",
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-                
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            
-            
         }
     }
 }
