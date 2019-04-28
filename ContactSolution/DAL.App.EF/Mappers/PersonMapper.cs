@@ -1,6 +1,7 @@
 using System;
 using Contracts.DAL.Base.Mappers;
-using Domain;
+using internalDTO = Domain;
+using externalDTO = DAL.App.DTO;
 
 namespace DAL.App.EF.Mappers
 {
@@ -9,23 +10,23 @@ namespace DAL.App.EF.Mappers
         public TOutObject Map<TOutObject>(object inObject)
             where TOutObject : class
         {
-            if (typeof(TOutObject) == typeof(DAL.App.DTO.Person))
+            if (typeof(TOutObject) == typeof(externalDTO.Person))
             {
-                return MapFromDomain((Domain.Person) inObject) as TOutObject;
+                return MapFromDomain((internalDTO.Person) inObject) as TOutObject;
             }
 
-            if (typeof(TOutObject) == typeof(Domain.Person))
+            if (typeof(TOutObject) == typeof(internalDTO.Person))
             {
-                return MapFromDAL((DAL.App.DTO.Person) inObject) as TOutObject;
+                return MapFromDAL((externalDTO.Person) inObject) as TOutObject;
             }
 
             throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
 
-        public static DAL.App.DTO.Person MapFromDomain(Domain.Person person)
+        public static externalDTO.Person MapFromDomain(internalDTO.Person person)
         {
-            var res = person == null ? null : new DAL.App.DTO.Person()
+            var res = person == null ? null : new externalDTO.Person()
             {
                 Id = person.Id,
                 FirstName = person.FirstName,
@@ -36,9 +37,9 @@ namespace DAL.App.EF.Mappers
             return res;
         }
         
-        public static Domain.Person MapFromDAL(DAL.App.DTO.Person person)
+        public static internalDTO.Person MapFromDAL(externalDTO.Person person)
         {
-            var res = person == null ? null : new Domain.Person()
+            var res = person == null ? null : new internalDTO.Person()
             {
                 Id = person.Id,
                 FirstName = person.FirstName,

@@ -1,6 +1,8 @@
 using System;
 using Contracts.BLL.Base.Mappers;
 using Contracts.DAL.Base.Mappers;
+using internalDTO = DAL.App.DTO;
+using externalDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
@@ -9,23 +11,23 @@ namespace BLL.App.Mappers
         public TOutObject Map<TOutObject>(object inObject)
             where TOutObject : class
         {
-            if (typeof(TOutObject) == typeof(BLL.App.DTO.Person))
+            if (typeof(TOutObject) == typeof(externalDTO.Person))
             {
-                return MapFromDAL((DAL.App.DTO.Person) inObject) as TOutObject;
+                return MapFromDAL((internalDTO.Person) inObject) as TOutObject;
             }
 
-            if (typeof(TOutObject) == typeof(DAL.App.DTO.Person))
+            if (typeof(TOutObject) == typeof(internalDTO.Person))
             {
-                return MapFromBLL((BLL.App.DTO.Person) inObject) as TOutObject;
+                return MapFromBLL((externalDTO.Person) inObject) as TOutObject;
             }
 
             throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
 
-        public static BLL.App.DTO.Person MapFromDAL(DAL.App.DTO.Person person)
+        public static externalDTO.Person MapFromDAL(internalDTO.Person person)
         {
-            var res = person == null ? null : new BLL.App.DTO.Person()
+            var res = person == null ? null : new externalDTO.Person()
             {
                 Id = person.Id,
                 FirstName = person.FirstName,
@@ -36,9 +38,9 @@ namespace BLL.App.Mappers
             return res;
         }
         
-        public static DAL.App.DTO.Person MapFromBLL(BLL.App.DTO.Person person)
+        public static internalDTO.Person MapFromBLL(externalDTO.Person person)
         {
-            var res = person == null ? null : new DAL.App.DTO.Person()
+            var res = person == null ? null : new internalDTO.Person()
             {
                 Id = person.Id,
                 FirstName = person.FirstName,

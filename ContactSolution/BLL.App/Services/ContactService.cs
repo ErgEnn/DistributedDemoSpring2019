@@ -17,12 +17,12 @@ namespace BLL.App.Services
 
         public async Task<List<BLL.App.DTO.Contact>> AllForUserAsync(int userId)
         {
-            return (await Uow.Contacts.AllForUserAsync(userId)).Select(e => ContactMapper.MapFromDAL(e)).ToList();
+            return (await Uow.Contacts.AllForUserAsync(userId)).Select(e => ContactMapper.MapFromInternal(e)).ToList();
         }
 
         public async Task<BLL.App.DTO.Contact> FindForUserAsync(int id, int userId)
         {
-            return ContactMapper.MapFromDAL(await Uow.Contacts.FindForUserAsync(id, userId));
+            return ContactMapper.MapFromInternal(await Uow.Contacts.FindForUserAsync(id, userId));
         }
 
         public async Task<bool> BelongsToUserAsync(int id, int userId)

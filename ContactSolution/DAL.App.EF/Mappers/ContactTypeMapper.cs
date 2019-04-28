@@ -1,5 +1,7 @@
 using System;
 using Contracts.DAL.Base.Mappers;
+using internalDTO = Domain;
+using externalDTO = DAL.App.DTO;
 
 namespace DAL.App.EF.Mappers
 {
@@ -8,23 +10,23 @@ namespace DAL.App.EF.Mappers
         public TOutObject Map<TOutObject>(object inObject)
             where TOutObject : class
         {
-            if (typeof(TOutObject) == typeof(DAL.App.DTO.ContactType))
+            if (typeof(TOutObject) == typeof(externalDTO.ContactType))
             {
-                return MapFromDomain((Domain.ContactType) inObject) as TOutObject;
+                return MapFromDomain((internalDTO.ContactType) inObject) as TOutObject;
             }
 
-            if (typeof(TOutObject) == typeof(Domain.ContactType))
+            if (typeof(TOutObject) == typeof(internalDTO.ContactType))
             {
-                return MapFromDAL((DAL.App.DTO.ContactType) inObject) as TOutObject;
+                return MapFromDAL((externalDTO.ContactType) inObject) as TOutObject;
             }
 
             throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
 
-        public static DAL.App.DTO.ContactType MapFromDomain(Domain.ContactType contactType)
+        public static externalDTO.ContactType MapFromDomain(internalDTO.ContactType contactType)
         {
-            var res = contactType == null ? null : new DAL.App.DTO.ContactType()
+            var res = contactType == null ? null : new externalDTO.ContactType()
             {
                 Id = contactType.Id,
                 ContactTypeValue = contactType.ContactTypeValue
@@ -32,9 +34,9 @@ namespace DAL.App.EF.Mappers
             return res;
         }
         
-        public static Domain.ContactType MapFromDAL(DAL.App.DTO.ContactType contactType)
+        public static internalDTO.ContactType MapFromDAL(externalDTO.ContactType contactType)
         {
-            var res = contactType == null ? null : new Domain.ContactType()
+            var res = contactType == null ? null : new internalDTO.ContactType()
             {
                 Id = contactType.Id,
                 ContactTypeValue = contactType.ContactTypeValue

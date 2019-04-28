@@ -1,6 +1,7 @@
 using System;
 using Contracts.DAL.Base.Mappers;
-using DAL.App.DTO;
+using internalDTO = Domain;
+using externalDTO = DAL.App.DTO;
 
 namespace DAL.App.EF.Mappers
 {
@@ -9,22 +10,22 @@ namespace DAL.App.EF.Mappers
         public TOutObject Map<TOutObject>(object inObject)
             where TOutObject : class
         {
-            if (typeof(TOutObject) == typeof(DAL.App.DTO.Contact))
+            if (typeof(TOutObject) == typeof(externalDTO.Contact))
             {
-                return MapFromDomain((Domain.Contact) inObject) as TOutObject;
+                return MapFromDomain((internalDTO.Contact) inObject) as TOutObject;
             }
 
-            if (typeof(TOutObject) == typeof(Domain.Contact))
+            if (typeof(TOutObject) == typeof(internalDTO.Contact))
             {
-                return MapFromDAL((DAL.App.DTO.Contact) inObject) as TOutObject;
+                return MapFromDAL((externalDTO.Contact) inObject) as TOutObject;
             }
 
             throw new InvalidCastException($"No conversion from {inObject.GetType().FullName} to {typeof(TOutObject).FullName}");
         }
 
-        public static DAL.App.DTO.Contact MapFromDomain(Domain.Contact contact)
+        public static externalDTO.Contact MapFromDomain(internalDTO.Contact contact)
         {
-            var res = contact == null ? null : new DAL.App.DTO.Contact
+            var res = contact == null ? null : new externalDTO.Contact
             {
                 Id = contact.Id,
                 PersonId = contact.PersonId,
@@ -38,9 +39,9 @@ namespace DAL.App.EF.Mappers
             return res;
         }
 
-        public static Domain.Contact MapFromDAL(DAL.App.DTO.Contact contact)
+        public static internalDTO.Contact MapFromDAL(externalDTO.Contact contact)
         {
-            var res = contact == null ? null : new Domain.Contact
+            var res = contact == null ? null : new internalDTO.Contact
             {
                 Id = contact.Id,
                 PersonId = contact.PersonId,

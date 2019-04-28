@@ -1,6 +1,8 @@
 using System;
 using Contracts.BLL.Base.Mappers;
 using Contracts.DAL.Base.Mappers;
+using internalDTO = DAL.App.DTO;
+using externalDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
@@ -11,10 +13,10 @@ namespace BLL.App.Mappers
         {
             if (typeof(TOutObject) == typeof(BLL.App.DTO.ContactType))
             {
-                return MapFromDAL((DAL.App.DTO.ContactType) inObject) as TOutObject;
+                return MapFromDAL((internalDTO.ContactType) inObject) as TOutObject;
             }
 
-            if (typeof(TOutObject) == typeof(DAL.App.DTO.ContactType))
+            if (typeof(TOutObject) == typeof(internalDTO.ContactType))
             {
                 return MapFromBLL((BLL.App.DTO.ContactType) inObject) as TOutObject;
             }
@@ -23,7 +25,7 @@ namespace BLL.App.Mappers
         }
 
 
-        public static BLL.App.DTO.ContactType MapFromDAL(DAL.App.DTO.ContactType contactType)
+        public static BLL.App.DTO.ContactType MapFromDAL(internalDTO.ContactType contactType)
         {
             var res = contactType == null ? null : new BLL.App.DTO.ContactType()
             {
@@ -33,9 +35,9 @@ namespace BLL.App.Mappers
             return res;
         }
         
-        public static DAL.App.DTO.ContactType MapFromBLL(BLL.App.DTO.ContactType contactType)
+        public static internalDTO.ContactType MapFromBLL(BLL.App.DTO.ContactType contactType)
         {
-            var res = contactType == null ? null : new DAL.App.DTO.ContactType()
+            var res = contactType == null ? null : new internalDTO.ContactType()
             {
                 Id = contactType.Id,
                 ContactTypeValue = contactType.ContactTypeValue
@@ -44,7 +46,7 @@ namespace BLL.App.Mappers
         }
         
         
-        public static BLL.App.DTO.ContactTypeWithContactCounts MapFromDAL(DAL.App.DTO.ContactTypeWithContactCounts contactTypeWithContactCounts)
+        public static BLL.App.DTO.ContactTypeWithContactCounts MapFromDAL(internalDTO.ContactTypeWithContactCounts contactTypeWithContactCounts)
         {
             var res = contactTypeWithContactCounts == null ? null : new BLL.App.DTO.ContactTypeWithContactCounts()
             {
