@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
@@ -26,11 +27,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using WebApp.Helpers;
@@ -150,6 +153,24 @@ namespace WebApp
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
+            
+            //  =============== i18n support ===============
+            services.Configure<RequestLocalizationOptions>(options => {
+                var supportedCultures = new[]{
+                    new CultureInfo(name: "en"),
+                    new CultureInfo(name: "et")
+                };
+
+                // State what the default culture for your application is. 
+                options.DefaultRequestCulture = new RequestCulture(culture: "en-GB", uiCulture: "en-GB");
+
+                // You must explicitly state which cultures your application supports.
+                options.SupportedCultures = supportedCultures;
+
+                // These are the cultures the app supports for UI strings
+                options.SupportedUICultures = supportedCultures;
+            });
+
 
         }
 
@@ -177,6 +198,13 @@ namespace WebApp
             app.UseAuthentication();
 
             app.UseCors("CorsAllowAll");
+            
+            
+            // ======= plug i18n locale switcher into pipeline ================
+            app.UseRequestLocalization(options: 
+                app.ApplicationServices
+                    .GetService<IOptions<RequestLocalizationOptions>>().Value);
+
             
             app.UseMvc(routes =>
             {

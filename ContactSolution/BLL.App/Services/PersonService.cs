@@ -12,7 +12,7 @@ namespace BLL.App.Services
     {
         public PersonService(IAppUnitOfWork uow) : base(uow, new PersonMapper())
         {
-            ServiceRepository = Uow.BaseRepository<DAL.App.DTO.Person, Domain.Person>();
+            ServiceRepository = Uow.Persons;  //Uow.BaseRepository<DAL.App.DTO.Person, Domain.Person>();
         }
 
         public async Task<List<BLL.App.DTO.Person>> AllForUserAsync(int userId)

@@ -15,7 +15,7 @@ namespace BLL.App.Services
     {
         public ContactTypeService(IAppUnitOfWork uow) : base(uow, new ContactTypeMapper())
         {
-            ServiceRepository = Uow.BaseRepository<DAL.App.DTO.ContactType, Domain.ContactType>();
+            ServiceRepository = Uow.ContactTypes;
         }
 
         public async Task<List<BLL.App.DTO.ContactTypeWithContactCounts>> GetAllWithContactCountAsync()

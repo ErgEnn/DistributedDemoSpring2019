@@ -12,7 +12,7 @@ namespace BLL.App.Services
     {
         public ContactService(IAppUnitOfWork uow) : base(uow, new ContactMapper())
         {
-            ServiceRepository = Uow.BaseRepository<DAL.App.DTO.Contact, Domain.Contact>();
+            ServiceRepository = Uow.Contacts;
         }
 
         public async Task<List<BLL.App.DTO.Contact>> AllForUserAsync(int userId)
