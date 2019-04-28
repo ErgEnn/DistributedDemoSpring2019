@@ -1,44 +1,49 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{B85D5E5A-260F-43BA-88BD-671161F86CF7}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{B85D5E5A-260F-43BA-88BD-671161F86CF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{1E00AFEC-566C-4477-A49C-16888BA37CD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{1E00AFEC-566C-4477-A49C-16888BA37CD5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C95BEE3-4748-4E8C-B5E0-8DD017CE1AF0}"
-ProjectSection(SolutionItems) = preProject
-	..\.gitignore = ..\.gitignore
-	..\README.md = ..\README.md
-	..\AURELIA.md = ..\AURELIA.md
-	Directory.Build.props = Directory.Build.props
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\AURELIA.md = ..\AURELIA.md
+		Directory.Build.props = Directory.Build.props
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity", "Identity\Identity.csproj", "{0D7F08B2-BD20-4E9D-90EB-4A5BE551C98D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity", "Identity\Identity.csproj", "{0D7F08B2-BD20-4E9D-90EB-4A5BE551C98D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.DAL.Base", "Contracts.DAL.Base\Contracts.DAL.Base.csproj", "{447F4B0F-27A1-41DA-94B6-DED0D4145BC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts.DAL.Base", "Contracts.DAL.Base\Contracts.DAL.Base.csproj", "{447F4B0F-27A1-41DA-94B6-DED0D4145BC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.DAL.App", "Contracts.DAL.App\Contracts.DAL.App.csproj", "{20204F78-BEA6-498D-B503-627D1E1CCC06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts.DAL.App", "Contracts.DAL.App\Contracts.DAL.App.csproj", "{20204F78-BEA6-498D-B503-627D1E1CCC06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.Base.EF", "DAL.Base.EF\DAL.Base.EF.csproj", "{953AEB68-5146-42B7-8C1A-1994D3158B3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.Base.EF", "DAL.Base.EF\DAL.Base.EF.csproj", "{953AEB68-5146-42B7-8C1A-1994D3158B3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.App.EF", "DAL.App.EF\DAL.App.EF.csproj", "{63B49079-2C79-49C4-BA63-4EE671242B24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.App.EF", "DAL.App.EF\DAL.App.EF.csproj", "{63B49079-2C79-49C4-BA63-4EE671242B24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.App.DTO", "DAL.App.DTO\DAL.App.DTO.csproj", "{E77BDC9E-9ACF-4673-83B8-E5970258C12A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.App.DTO", "DAL.App.DTO\DAL.App.DTO.csproj", "{E77BDC9E-9ACF-4673-83B8-E5970258C12A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL.App.DTO", "BLL.App.DTO\BLL.App.DTO.csproj", "{740710D4-3B91-44C2-A16B-1E1CAAABF6BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL.App.DTO", "BLL.App.DTO\BLL.App.DTO.csproj", "{740710D4-3B91-44C2-A16B-1E1CAAABF6BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.BLL.Base", "Contracts.BLL.Base\Contracts.BLL.Base.csproj", "{296C746B-8138-4F02-9DF0-8D77C108BB11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts.BLL.Base", "Contracts.BLL.Base\Contracts.BLL.Base.csproj", "{296C746B-8138-4F02-9DF0-8D77C108BB11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.BLL.App", "Contracts.BLL.App\Contracts.BLL.App.csproj", "{F2ED4BEF-A415-49AD-A324-4A0C54A57D00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts.BLL.App", "Contracts.BLL.App\Contracts.BLL.App.csproj", "{F2ED4BEF-A415-49AD-A324-4A0C54A57D00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts.Base", "Contracts.Base\Contracts.Base.csproj", "{6EAD1226-D30D-432E-A5B9-85799DE63311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts.Base", "Contracts.Base\Contracts.Base.csproj", "{6EAD1226-D30D-432E-A5B9-85799DE63311}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL.Base", "BLL.Base\BLL.Base.csproj", "{44887411-9738-41E1-8698-77B565CAC5EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL.Base", "BLL.Base\BLL.Base.csproj", "{44887411-9738-41E1-8698-77B565CAC5EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL.App", "BLL.App\BLL.App.csproj", "{EDA8BF77-D8F1-43F6-B14E-52127C8C0A01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL.App", "BLL.App\BLL.App.csproj", "{EDA8BF77-D8F1-43F6-B14E-52127C8C0A01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicApi.v1.DTO", "PublicApi.v1.DTO\PublicApi.v1.DTO.csproj", "{FA8F0897-484B-4581-A442-25D9898ED8DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicApi.v1.DTO", "PublicApi.v1.DTO\PublicApi.v1.DTO.csproj", "{FA8F0897-484B-4581-A442-25D9898ED8DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicApi.v1", "PublicApi.v1\PublicApi.v1.csproj", "{FB43AFA7-13E4-46B5-A149-4A47A3427891}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicApi.v1", "PublicApi.v1\PublicApi.v1.csproj", "{FB43AFA7-13E4-46B5-A149-4A47A3427891}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{724DBE74-B0E3-48BE-9586-0F57B42630D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,5 +115,15 @@ Global
 		{FB43AFA7-13E4-46B5-A149-4A47A3427891}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB43AFA7-13E4-46B5-A149-4A47A3427891}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB43AFA7-13E4-46B5-A149-4A47A3427891}.Release|Any CPU.Build.0 = Release|Any CPU
+		{724DBE74-B0E3-48BE-9586-0F57B42630D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{724DBE74-B0E3-48BE-9586-0F57B42630D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{724DBE74-B0E3-48BE-9586-0F57B42630D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{724DBE74-B0E3-48BE-9586-0F57B42630D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {727033DA-0347-4915-A3FD-1A63459D08F6}
 	EndGlobalSection
 EndGlobal

@@ -13,7 +13,7 @@
 
 <form id="selectLanguage" asp-controller="Home" asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path" method="post">
     <div class="form-group row">
-        <label for="languageSelect" class="col-md-7 col-form-label text-right" style="padding-top: 17px">Language:</label>
+        <label for="languageSelect" class="col-md-7 col-form-label text-right" style="padding-top: 17px">@Resources.Views.Shared._Layout.Language</label>
         <div class="col-md-5 text-right" style="padding-top: 14px">
             <select id="languageSelect" name="culture" onchange="this.form.submit();" asp-items="cultureItems" class="form-control form-control-sm"></select>
         </div>

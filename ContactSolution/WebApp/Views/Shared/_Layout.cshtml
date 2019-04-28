@@ -1,5 +1,4 @@
 ﻿@using System.Globalization
-@using System.Threading
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,16 +31,16 @@
                 <partial name="_LoginPartial"/>
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Resources.Views.Shared._Layout.NavHome</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Persons" asp-action="Index">Persons</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Persons" asp-action="Index">@Resources.Views.Shared._Layout.NavPersons</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Contacts" asp-action="Index">Contacts</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Contacts" asp-action="Index">@Resources.Views.Shared._Layout.NavContacts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="ContactTypes" asp-action="Index">ContactTypes</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="ContactTypes" asp-action="Index">@Resources.Views.Shared._Layout.NavContactTypes</a>
                     </li>
                 </ul>
             </div>
@@ -58,7 +57,7 @@
 <footer class="border-top footer text-muted">
     <div class="container">
         <div class="row">
-            <div class="col-md-4">&copy; 2019 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></div>
+            <div class="col-md-4">&copy; 2019 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Resources.Views.Shared._Layout.Privacy</a></div>
             <div class="col-md-4">UICulture: @CultureInfo.CurrentUICulture.Name Culture: @CultureInfo.CurrentUICulture.Name</div>
             <div class="col-md-4"><partial name="_LanguageSelectionPartial"/></div>
         </div>
