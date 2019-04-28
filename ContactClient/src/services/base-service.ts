@@ -114,7 +114,7 @@ export class BaseService<TEntity extends IBaseEntity> {
   delete(id: number): Promise<Response> {
     let url = this.serviceAppConfig.apiUrl + this.serviceEndPoint + '/' + id;
 
-    return this.serviceHttpClient.delete(url, {
+    return this.serviceHttpClient.delete(url, null, {
       cache: 'no-store',
       headers: {
         Authorization: 'Bearer ' + this.serviceAppConfig.jwt,
