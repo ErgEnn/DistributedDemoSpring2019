@@ -74,9 +74,8 @@ namespace WebApp
             services.AddSingleton<IBaseServiceFactory<IAppUnitOfWork>, AppServiceFactory>();
             services.AddScoped<IBaseServiceProvider, BaseServiceProvider<IAppUnitOfWork>>();
             services.AddScoped<IAppBLL, AppBLL>();
-            
-            
-            
+
+
             /*
             services.AddDefaultIdentity<AppUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
@@ -87,7 +86,7 @@ namespace WebApp
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            
+
             // Relax password requirements for easy testing
             // TODO: Remove in production
             services.Configure<IdentityOptions>(options =>
@@ -98,7 +97,6 @@ namespace WebApp
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireNonAlphanumeric = false;
-
             });
 
             services.AddCors(options =>
@@ -110,11 +108,10 @@ namespace WebApp
                         builder.AllowAnyHeader();
                         builder.AllowAnyMethod();
                     });
-                
             });
-            
+
             services
-                .AddMvc()
+                .AddMvc(options => options.EnableEndpointRouting = true)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>
                 {
@@ -126,7 +123,9 @@ namespace WebApp
                     //options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                     options.SerializerSettings.Formatting = Formatting.Indented;
                 });
-            
+
+            services.AddApiVersioning(options => { options.ReportApiVersions = true; });
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = $"/Identity/Account/Login";
@@ -153,10 +152,12 @@ namespace WebApp
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
-            
+
             //  =============== i18n support ===============
-            services.Configure<RequestLocalizationOptions>(options => {
-                var supportedCultures = new[]{
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
                     new CultureInfo(name: "en"),
                     new CultureInfo(name: "et")
                 };
@@ -170,15 +171,13 @@ namespace WebApp
                 // These are the cultures the app supports for UI strings
                 options.SupportedUICultures = supportedCultures;
             });
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             //TODO: Handle internal exception in case of API request - return correct response
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -198,28 +197,25 @@ namespace WebApp
             app.UseAuthentication();
 
             app.UseCors("CorsAllowAll");
-            
-            
+
+
             // ======= plug i18n locale switcher into pipeline ================
-            app.UseRequestLocalization(options: 
+            app.UseRequestLocalization(options:
                 app.ApplicationServices
                     .GetService<IOptions<RequestLocalizationOptions>>().Value);
 
-            
+
             app.UseMvc(routes =>
             {
-
                 routes.MapRoute(
                     name: "area",
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-                
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            
-            
         }
     }
 }
