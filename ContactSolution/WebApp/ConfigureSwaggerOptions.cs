@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -16,9 +19,14 @@ namespace WebApp
                 options.SwaggerDoc(
                     description.GroupName,
                     new Info(){
-                        Title = $"Sample API {description.ApiVersion}",
+                        Title = $"Contact API {description.ApiVersion}",
                         Version = description.ApiVersion.ToString()
                     });
+                // include xml comments (enable creation in csproj file)
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+                
             }
         }
     }

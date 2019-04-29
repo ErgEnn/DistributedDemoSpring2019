@@ -28,7 +28,7 @@ namespace DAL.Base.EF.Repositories
         where TDbContext : DbContext
         where TKey : IComparable
     {
-        protected readonly DbContext RepositoryDbContext;
+        protected readonly TDbContext RepositoryDbContext;
         protected readonly DbSet<TDomainEntity> RepositoryDbSet;
 
         private readonly IBaseDALMapper _mapper;
