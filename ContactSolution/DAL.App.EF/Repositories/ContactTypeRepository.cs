@@ -9,6 +9,7 @@ using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
+using ContactType = DAL.App.DTO.ContactType;
 
 namespace DAL.App.EF.Repositories
 {
@@ -18,6 +19,43 @@ namespace DAL.App.EF.Repositories
         {
         }
 
+
+        public async override Task<ContactType> FindAsync(params object[] id)
+        {
+            var contactType = await RepositoryDbSet.FindAsync(id);
+            if (contactType != null)
+            {
+                await RepositoryDbContext.Entry(contactType)
+                    .Reference(c => c.ContactTypeValue)
+                    .LoadAsync();
+                await RepositoryDbContext.Entry(contactType.ContactTypeValue)
+                    .Collection(b => b.Translations)
+                    .LoadAsync();
+            }
+
+            return ContactTypeMapper.MapFromDomain(contactType);
+        }
+
+        public override ContactType Update(ContactType entity)
+        {
+            var entityInDb = RepositoryDbSet
+                .Include(m => m.ContactTypeValue)
+                .ThenInclude(t => t.Translations)
+                .FirstOrDefault(x => x.Id == entity.Id);
+            
+            entityInDb.ContactTypeValue.SetTranslation(entity.ContactTypeValue);
+
+            return entity;
+        }
+        
+        
+        /*
+       public virtual TDALEntity Update(TDALEntity entity)
+        {
+            return _mapper.Map<TDALEntity>(RepositoryDbSet.Update(_mapper.Map<TDomainEntity>(entity)).Entity);
+        }
+         */
+        
         /// <summary>
         /// Get all the records, include contacts
         /// </summary>

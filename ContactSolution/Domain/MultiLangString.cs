@@ -37,12 +37,12 @@ namespace Domain
 
         #endregion
 
-        private void SetTranslation(string value)
+        public void SetTranslation(string value)
         {
             SetTranslation(value, Thread.CurrentThread.CurrentUICulture.Name);
         }
 
-        private void SetTranslation(string value, string culture)
+        public void SetTranslation(string value, string culture)
         {
             // use only neutral part en-US => en
             culture = culture.Substring(0, 2).ToLower();
