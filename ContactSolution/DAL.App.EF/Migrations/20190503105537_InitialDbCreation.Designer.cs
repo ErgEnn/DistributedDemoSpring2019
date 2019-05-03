@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.App.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20190325145656_InitialDbCreation")]
+    [Migration("20190503105537_InitialDbCreation")]
     partial class InitialDbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Domain.Contact", b =>
@@ -46,11 +46,11 @@ namespace DAL.App.EF.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ContactTypeValue")
-                        .IsRequired()
-                        .HasMaxLength(32);
+                    b.Property<int>("ContactTypeValueId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ContactTypeValueId");
 
                     b.ToTable("ContactTypes");
                 });
@@ -128,6 +128,19 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Domain.MultiLangString", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(10240);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MultiLangStrings");
+                });
+
             modelBuilder.Entity("Domain.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -148,6 +161,26 @@ namespace DAL.App.EF.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Persons");
+                });
+
+            modelBuilder.Entity("Domain.Translation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Culture")
+                        .HasMaxLength(5);
+
+                    b.Property<int>("MultiLangStringId");
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(10240);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MultiLangStringId");
+
+                    b.ToTable("Translations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -244,11 +277,27 @@ namespace DAL.App.EF.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("Domain.ContactType", b =>
+                {
+                    b.HasOne("Domain.MultiLangString", "ContactTypeValue")
+                        .WithMany()
+                        .HasForeignKey("ContactTypeValueId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("Domain.Person", b =>
                 {
                     b.HasOne("Domain.Identity.AppUser", "AppUser")
                         .WithMany("Persons")
                         .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Domain.Translation", b =>
+                {
+                    b.HasOne("Domain.MultiLangString", "MultiLangString")
+                        .WithMany("Translations")
+                        .HasForeignKey("MultiLangStringId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

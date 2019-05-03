@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
@@ -42,14 +43,31 @@ namespace DAL.App.EF.Repositories
       FROM `ContactTypes` AS `c`
 
  */
-            return await RepositoryDbSet
-                .Select(c => new ContactTypeWithContactCounts()
+
+            var culture = Thread.CurrentThread.CurrentUICulture.Name.Substring(0, 2).ToLower();
+        
+             var res = await RepositoryDbSet
+                .Include(m => m.ContactTypeValue)
+                .ThenInclude(t => t.Translations)
+                //.Where(x => x.ContactTypeValue.Translations.Any(t => t.Culture == culture))
+                .Select(c => new
                 {
                     Id = c.Id,
                     ContactTypeValue = c.ContactTypeValue,
+                    Translations = c.ContactTypeValue.Translations,
                     ContactCount = c.Contacts.Count
                 })
                 .ToListAsync();
+
+             
+             var resultList = res.Select(c => new ContactTypeWithContactCounts()
+             {
+                 Id = c.Id,
+                 ContactCount = c.ContactCount,
+                 ContactTypeValue = c.ContactTypeValue.Translate()
+                     
+             }).ToList();
+             return resultList;
         }
     }
 }

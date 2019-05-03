@@ -39,7 +39,7 @@ namespace DAL.App.EF.Mappers
             var res = contactType == null ? null : new internalDTO.ContactType()
             {
                 Id = contactType.Id,
-                ContactTypeValue = contactType.ContactTypeValue
+                ContactTypeValue = new internalDTO.MultiLangString(contactType.ContactTypeValue) 
             };
             return res;
         }

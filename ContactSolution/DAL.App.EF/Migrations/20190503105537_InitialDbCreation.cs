@@ -50,16 +50,16 @@ namespace DAL.App.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContactTypes",
+                name: "MultiLangStrings",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ContactTypeValue = table.Column<string>(maxLength: 32, nullable: false)
+                    Value = table.Column<string>(maxLength: 10240, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContactTypes", x => x.Id);
+                    table.PrimaryKey("PK_MultiLangStrings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,6 +190,46 @@ namespace DAL.App.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ContactTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ContactTypeValueId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContactTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ContactTypes_MultiLangStrings_ContactTypeValueId",
+                        column: x => x.ContactTypeValueId,
+                        principalTable: "MultiLangStrings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Translations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Culture = table.Column<string>(maxLength: 5, nullable: true),
+                    Value = table.Column<string>(maxLength: 10240, nullable: true),
+                    MultiLangStringId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Translations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Translations_MultiLangStrings_MultiLangStringId",
+                        column: x => x.MultiLangStringId,
+                        principalTable: "MultiLangStrings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Contacts",
                 columns: table => new
                 {
@@ -264,9 +304,19 @@ namespace DAL.App.EF.Migrations
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ContactTypes_ContactTypeValueId",
+                table: "ContactTypes",
+                column: "ContactTypeValueId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Persons_AppUserId",
                 table: "Persons",
                 column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Translations_MultiLangStringId",
+                table: "Translations",
+                column: "MultiLangStringId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -290,6 +340,9 @@ namespace DAL.App.EF.Migrations
                 name: "Contacts");
 
             migrationBuilder.DropTable(
+                name: "Translations");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -297,6 +350,9 @@ namespace DAL.App.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "Persons");
+
+            migrationBuilder.DropTable(
+                name: "MultiLangStrings");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
