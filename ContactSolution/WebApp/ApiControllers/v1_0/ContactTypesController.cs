@@ -69,9 +69,12 @@ namespace WebApp.ApiControllers.v1_0
         public async Task<ActionResult<PublicApi.v1.DTO.ContactType>> PostContactType(
             PublicApi.v1.DTO.ContactType contactType)
         {
-            await _bll.ContactTypes.AddAsync(PublicApi.v1.Mappers.ContactTypeMapper.MapFromExternal(contactType));
+            contactType = PublicApi.v1.Mappers.ContactTypeMapper.MapFromBLL(await _bll.ContactTypes.AddAsync(PublicApi.v1.Mappers.ContactTypeMapper.MapFromExternal(contactType)));
             await _bll.SaveChangesAsync();
-
+            
+            // TODO: get ID of new object from EF
+            // contactType.Id is -MaxInt currently
+            
             //return NoContent();
 
             return CreatedAtAction(

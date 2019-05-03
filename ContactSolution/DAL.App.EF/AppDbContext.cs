@@ -14,6 +14,9 @@ namespace DAL.App.EF
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<ContactType> ContactTypes { get; set; }
 
+        public DbSet<MultiLangString> MultiLangStrings { get; set; }
+        public DbSet<Translation> Translations { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }

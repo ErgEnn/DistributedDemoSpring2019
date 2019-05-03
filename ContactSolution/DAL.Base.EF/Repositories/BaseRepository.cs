@@ -68,9 +68,9 @@ namespace DAL.Base.EF.Repositories
             return _mapper.Map<TDALEntity>( (await RepositoryDbSet.FindAsync(id)));
         }
 
-        public virtual async Task AddAsync(TDALEntity entity)
+        public virtual async Task<TDALEntity> AddAsync(TDALEntity entity)
         {
-            await RepositoryDbSet.AddAsync(_mapper.Map<TDomainEntity>(entity));
+            return _mapper.Map<TDALEntity>((await RepositoryDbSet.AddAsync(_mapper.Map<TDomainEntity>(entity))).Entity);
         }
 
         public List<TDALEntity> All()
@@ -83,9 +83,9 @@ namespace DAL.Base.EF.Repositories
             return _mapper.Map<TDALEntity>(RepositoryDbSet.Find(id));
         }
 
-        public void Add(TDALEntity entity)
+        public TDALEntity Add(TDALEntity entity)
         {
-            RepositoryDbSet.Add(_mapper.Map<TDomainEntity>(entity));
+            return _mapper.Map<TDALEntity>(RepositoryDbSet.Add(_mapper.Map<TDomainEntity>(entity)).Entity);
         }
     }
 }

@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain
 {
     public class ContactType : DomainEntity
     {
-        [MaxLength(32)]
-        [MinLength(1)]
-        [Required]
-        public string ContactTypeValue { get; set; }
+
+        //[ForeignKey(nameof(ContactTypeValue))]
+        public int ContactTypeValueId { get; set; }
+
+        public MultiLangString ContactTypeValue { get; set; }
 
 
         public ICollection<Contact> Contacts { get; set; }

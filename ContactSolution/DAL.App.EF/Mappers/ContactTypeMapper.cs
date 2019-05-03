@@ -29,7 +29,7 @@ namespace DAL.App.EF.Mappers
             var res = contactType == null ? null : new externalDTO.ContactType()
             {
                 Id = contactType.Id,
-                ContactTypeValue = contactType.ContactTypeValue
+                ContactTypeValue = contactType.ContactTypeValue.Translate()
             };
             return res;
         }
