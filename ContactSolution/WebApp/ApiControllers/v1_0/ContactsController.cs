@@ -77,10 +77,12 @@ namespace WebApp.ApiControllers.v1_0
                 return NotFound();
             }
 
+            // get the enitity back with attached state id - (- maxint)
             contact = PublicApi.v1.Mappers.ContactMapper.MapFromBLL(
                 _bll.Contacts.Add(PublicApi.v1.Mappers.ContactMapper.MapFromExternal(contact)));
+            // ef will update its internally tracked entities
             await _bll.SaveChangesAsync();
-            // get the new id into the object
+            // get the updated entity, now with ID from database
             contact = PublicApi.v1.Mappers.ContactMapper.MapFromBLL(
                 _bll.Contacts.GetUpdatesAfterUOWSaveChanges(
                     PublicApi.v1.Mappers.ContactMapper.MapFromExternal(contact)));
