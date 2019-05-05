@@ -25,7 +25,8 @@ namespace WebApp.ApiControllers.v1_0
         /// </summary>
         /// <returns>Array of all ContactTypes with counts of contacts.</returns>
         /// <response code="200">The array of ContactTypes was successfully retrieved.</response>
-        [ProducesResponseType(typeof(IEnumerable<PublicApi.v1.DTO.ContactTypeWithContactCounts>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<PublicApi.v1.DTO.ContactTypeWithContactCounts>),
+            StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PublicApi.v1.DTO.ContactTypeWithContactCounts>>> GetContactTypes()
         {
@@ -69,12 +70,16 @@ namespace WebApp.ApiControllers.v1_0
         public async Task<ActionResult<PublicApi.v1.DTO.ContactType>> PostContactType(
             PublicApi.v1.DTO.ContactType contactType)
         {
-            contactType = PublicApi.v1.Mappers.ContactTypeMapper.MapFromBLL(await _bll.ContactTypes.AddAsync(PublicApi.v1.Mappers.ContactTypeMapper.MapFromExternal(contactType)));
+            contactType = PublicApi.v1.Mappers.ContactTypeMapper.MapFromBLL(
+                await _bll.ContactTypes.AddAsync(PublicApi.v1.Mappers.ContactTypeMapper.MapFromExternal(contactType)));
+
             await _bll.SaveChangesAsync();
-            
-            // TODO: get ID of new object from EF
-            // contactType.Id is -MaxInt currently
-            
+
+            contactType = PublicApi.v1.Mappers.ContactTypeMapper.MapFromBLL(
+                _bll.ContactTypes.GetUpdatesAfterUOWSaveChanges(
+                    PublicApi.v1.Mappers.ContactTypeMapper.MapFromExternal(contactType)));
+
+
             //return NoContent();
 
             return CreatedAtAction(

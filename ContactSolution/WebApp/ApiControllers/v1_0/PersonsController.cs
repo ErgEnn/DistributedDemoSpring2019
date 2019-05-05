@@ -9,11 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers.v1_0
 {
-    [ApiVersion( "1.0" )]
+    [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-
     public class PersonsController : ControllerBase
     {
         private readonly IAppBLL _bll;
@@ -36,7 +35,8 @@ namespace WebApp.ApiControllers.v1_0
         [HttpGet("{id}")]
         public async Task<ActionResult<PublicApi.v1.DTO.Person>> GetPerson(int id)
         {
-            var person = PublicApi.v1.Mappers.PersonMapper.MapFromBLL(await _bll.Persons.FindForUserAsync(id, User.GetUserId()));
+            var person =
+                PublicApi.v1.Mappers.PersonMapper.MapFromBLL(await _bll.Persons.FindForUserAsync(id, User.GetUserId()));
 
             if (person == null)
             {
@@ -60,9 +60,10 @@ namespace WebApp.ApiControllers.v1_0
             {
                 return NotFound();
             }
+
             person.AppUserId = User.GetUserId();
-            
-            _bll.Persons.Update(PublicApi.v1.Mappers.PersonMapper.MapFromExternal( person));
+
+            _bll.Persons.Update(PublicApi.v1.Mappers.PersonMapper.MapFromExternal(person));
             await _bll.SaveChangesAsync();
 
 
@@ -74,11 +75,17 @@ namespace WebApp.ApiControllers.v1_0
         public async Task<ActionResult<PublicApi.v1.DTO.Person>> PostPerson(PublicApi.v1.DTO.Person person)
         {
             person.AppUserId = User.GetUserId();
-            
-            _bll.Persons.Add(PublicApi.v1.Mappers.PersonMapper.MapFromExternal(person));
-            await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetPerson", new { id = person.Id }, person);
+            person = PublicApi.v1.Mappers.PersonMapper.MapFromBLL(
+                _bll.Persons.Add(PublicApi.v1.Mappers.PersonMapper.MapFromExternal(person)));
+            await _bll.SaveChangesAsync();
+            person = PublicApi.v1.Mappers.PersonMapper.MapFromBLL(
+                _bll.Persons.GetUpdatesAfterUOWSaveChanges(PublicApi.v1.Mappers.PersonMapper.MapFromExternal(person)));
+
+            // get the new id into the object
+
+
+            return CreatedAtAction("GetPerson", new {id = person.Id}, person);
         }
 
         // DELETE: api/Persons/5
@@ -90,12 +97,11 @@ namespace WebApp.ApiControllers.v1_0
             {
                 return NotFound();
             }
-            
+
             _bll.Persons.Remove(id);
             await _bll.SaveChangesAsync();
 
             return NoContent();
         }
-
     }
 }

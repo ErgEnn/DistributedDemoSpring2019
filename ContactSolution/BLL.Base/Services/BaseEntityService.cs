@@ -42,6 +42,12 @@ namespace BLL.Base.Services
             ServiceRepository.Remove(id);
         }
 
+        public TBLLEntity GetUpdatesAfterUOWSaveChanges(TBLLEntity entity)
+        {
+            return _mapper.Map<TBLLEntity>(ServiceRepository.GetUpdatesAfterUOWSaveChanges(_mapper.Map<TDALEntity>(entity)));
+
+        }
+
         public virtual async Task<List<TBLLEntity>> AllAsync()
         {
             return (await ServiceRepository.AllAsync()).Select(e => _mapper.Map<TBLLEntity>(e)).ToList();

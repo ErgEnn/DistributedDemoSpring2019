@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -22,6 +23,8 @@ namespace DAL.App.EF.Repositories
 
         public async override Task<ContactType> FindAsync(params object[] id)
         {
+            var culture = Thread.CurrentThread.CurrentUICulture.Name.Substring(0, 2).ToLower();
+            
             var contactType = await RepositoryDbSet.FindAsync(id);
             if (contactType != null)
             {
@@ -30,9 +33,11 @@ namespace DAL.App.EF.Repositories
                     .LoadAsync();
                 await RepositoryDbContext.Entry(contactType.ContactTypeValue)
                     .Collection(b => b.Translations)
+                    .Query()
+                    .Where(t => t.Culture == culture)
                     .LoadAsync();
             }
-
+ 
             return ContactTypeMapper.MapFromDomain(contactType);
         }
 
@@ -62,7 +67,11 @@ namespace DAL.App.EF.Repositories
         /// <returns></returns>
         public override async Task<List<DAL.App.DTO.ContactType>> AllAsync()
         {
-            return await RepositoryDbSet.Include(c => c.Contacts).Select(e => ContactTypeMapper.MapFromDomain(e)).ToListAsync();
+            return await RepositoryDbSet
+                .Include(m => m.ContactTypeValue)
+                .ThenInclude(t => t.Translations)
+                .Include(c => c.Contacts)
+                .Select(e => ContactTypeMapper.MapFromDomain(e)).ToListAsync();
         }
 
         /// <summary>

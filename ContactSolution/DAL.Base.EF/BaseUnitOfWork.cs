@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contracts.DAL.Base;
 using Contracts.DAL.Base.Helpers;
@@ -12,6 +13,7 @@ namespace DAL.Base.EF
         protected readonly TDbContext UOWDbContext;
         protected readonly IBaseRepositoryProvider _repositoryProvider;
 
+        
         public BaseUnitOfWork(TDbContext dataContext, IBaseRepositoryProvider repositoryProvider)
         {
             _repositoryProvider = repositoryProvider;

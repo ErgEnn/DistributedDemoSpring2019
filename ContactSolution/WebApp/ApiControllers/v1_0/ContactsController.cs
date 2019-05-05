@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers.v1_0
 {
-    [ApiVersion( "1.0" )]
+    [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -34,7 +34,9 @@ namespace WebApp.ApiControllers.v1_0
         [HttpGet("{id}")]
         public async Task<ActionResult<PublicApi.v1.DTO.Contact>> GetContact(int id)
         {
-            var contact = PublicApi.v1.Mappers.ContactMapper.MapFromBLL(await _bll.Contacts.FindForUserAsync(id, User.GetUserId()));
+            var contact =
+                PublicApi.v1.Mappers.ContactMapper.MapFromBLL(
+                    await _bll.Contacts.FindForUserAsync(id, User.GetUserId()));
 
             if (contact == null)
             {
@@ -69,35 +71,38 @@ namespace WebApp.ApiControllers.v1_0
         [HttpPost]
         public async Task<ActionResult<PublicApi.v1.DTO.Contact>> PostContact(PublicApi.v1.DTO.Contact contact)
         {
-            
             // check, that the Person being used is really belongs to logged in user
             if (!await _bll.Persons.BelongsToUserAsync(contact.PersonId, User.GetUserId()))
             {
                 return NotFound();
             }
-            
-            _bll.Contacts.Add(PublicApi.v1.Mappers.ContactMapper.MapFromExternal(contact));
-            await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
+            contact = PublicApi.v1.Mappers.ContactMapper.MapFromBLL(
+                _bll.Contacts.Add(PublicApi.v1.Mappers.ContactMapper.MapFromExternal(contact)));
+            await _bll.SaveChangesAsync();
+            // get the new id into the object
+            contact = PublicApi.v1.Mappers.ContactMapper.MapFromBLL(
+                _bll.Contacts.GetUpdatesAfterUOWSaveChanges(
+                    PublicApi.v1.Mappers.ContactMapper.MapFromExternal(contact)));
+
+
+            return CreatedAtAction("GetContact", new {id = contact.Id}, contact);
         }
 
         // DELETE: api/Contacts/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteContact(int id)
         {
-
             // check, that the Person being used is really belongs to logged in user
             if (!await _bll.Contacts.BelongsToUserAsync(id, User.GetUserId()))
             {
                 return NotFound();
             }
-            
+
             _bll.Contacts.Remove(id);
             await _bll.SaveChangesAsync();
 
             return NoContent();
         }
-
     }
 }

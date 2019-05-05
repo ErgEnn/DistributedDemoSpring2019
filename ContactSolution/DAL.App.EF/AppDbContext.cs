@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Contracts.DAL.Base;
 using Domain;
 using Domain.Identity;
@@ -16,6 +17,8 @@ namespace DAL.App.EF
 
         public DbSet<MultiLangString> MultiLangStrings { get; set; }
         public DbSet<Translation> Translations { get; set; }
+
+        
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

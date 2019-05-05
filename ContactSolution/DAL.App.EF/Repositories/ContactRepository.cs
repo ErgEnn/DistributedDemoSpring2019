@@ -24,6 +24,8 @@ namespace DAL.App.EF.Repositories
         {
             return await RepositoryDbSet
                 .Include(c => c.ContactType)
+                .ThenInclude(m => m.ContactTypeValue)
+                .ThenInclude(t => t.Translations)
                 .Include(c => c.Person)
                 .Where(c => c.Person.AppUserId == userId)
                 .Select(e => ContactMapper.MapFromDomain(e)).ToListAsync();
@@ -33,6 +35,8 @@ namespace DAL.App.EF.Repositories
         {
             var contact = await RepositoryDbSet
                 .Include(c => c.ContactType)
+                .ThenInclude(m => m.ContactTypeValue)
+                .ThenInclude(t => t.Translations)
                 .Include(c => c.Person)
                 .FirstOrDefaultAsync(m => m.Id == id && m.Person.AppUserId == userId);
 
