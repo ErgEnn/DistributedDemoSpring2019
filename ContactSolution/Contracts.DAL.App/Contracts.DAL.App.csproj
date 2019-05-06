@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="ee.itcollege.akaver.Contracts.DAL.Base" Version="1.0.0" />
+      <PackageReference Include="ee.itcollege.akaver.Contracts.DAL.Base" Version="1.0.2" />
     </ItemGroup>
 
 </Project>
