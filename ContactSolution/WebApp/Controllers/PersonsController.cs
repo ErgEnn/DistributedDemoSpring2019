@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
+using ee.itcollege.akaver.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Identity;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers

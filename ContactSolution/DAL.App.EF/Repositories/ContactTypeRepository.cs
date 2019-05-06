@@ -4,11 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
-using Contracts.DAL.Base;
 using DAL.App.DTO;
 using DAL.App.EF.Mappers;
-using DAL.Base.EF.Repositories;
-using Domain;
+using ee.itcollege.akaver.DAL.Base.EF.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ContactType = DAL.App.DTO.ContactType;
 

@@ -1,6 +1,5 @@
 using System;
 using Contracts.BLL.Base.Mappers;
-using Contracts.DAL.Base.Mappers;
 using internalDTO = DAL.App.DTO;
 using externalDTO = BLL.App.DTO;
 
