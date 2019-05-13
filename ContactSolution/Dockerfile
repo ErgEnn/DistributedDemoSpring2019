@@ -6,7 +6,6 @@ COPY *.sln .
 COPY BLL.App/*.csproj ./BLL.App/
 COPY BLL.App.DTO/*.csproj ./BLL.App.DTO/
 COPY Contracts.BLL.App/*.csproj ./Contracts.BLL.App/
-COPY Contracts.BLL.App/*.csproj ./Contracts.BLL.App/
 COPY Contracts.DAL.App/*.csproj ./Contracts.DAL.App/
 COPY DAL.App.DTO/*.csproj ./DAL.App.DTO/
 COPY DAL.App.EF/*.csproj ./DAL.App.EF/
@@ -23,7 +22,6 @@ RUN dotnet restore
 
 COPY BLL.App/. ./BLL.App/
 COPY BLL.App.DTO/. ./BLL.App.DTO/
-COPY Contracts.BLL.App/. ./Contracts.BLL.App/
 COPY Contracts.BLL.App/. ./Contracts.BLL.App/
 COPY Contracts.DAL.App/. ./Contracts.DAL.App/
 COPY DAL.App.DTO/. ./DAL.App.DTO/
