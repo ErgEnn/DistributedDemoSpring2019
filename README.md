@@ -344,3 +344,18 @@ docker build -t webapp .
 docker run --name webapp_docker --rm -it -p 8000:80 webapp
 ~~~
 
+Tag/add version description of your new container for publishing
+~~~
+docker tag webapp akaver/contactwebapp:test
+~~~
+
+log into docker from console
+~~~
+docker login -u [username]
+~~~
+
+and publish your tagged docker image
+~~~
+docker push akaver/contactwebapp:test  
+~~~
+
