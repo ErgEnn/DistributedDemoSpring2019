@@ -295,3 +295,33 @@ Delete GET - only show data, if it belong to logged in user
 
 Delete POST - only allow db deletion, when you are deleting record which belongs to logged in user (its easy to modify post data)
 
+
+
+#Docker
+~~~
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
+WORKDIR /app
+
+# copy csproj and restore as distinct layers
+COPY *.sln .
+COPY WebApp/*.csproj ./WebApp/
+RUN dotnet restore
+
+# copy everything else and build app
+COPY WebApp/. ./WebApp/
+WORKDIR /app/WebApp
+RUN dotnet publish -c Release -o out
+
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
+WORKDIR /app
+COPY --from=build /app/WebApp/out ./
+ENTRYPOINT ["dotnet", "WebApp.dll"]
+~~~
+
+
+~~~
+docker build -t webapp .
+docker run --name webapp_docker --rm -it -p 8000:80 webapp
+~~~
+
