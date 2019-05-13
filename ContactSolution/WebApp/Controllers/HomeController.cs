@@ -24,6 +24,34 @@ namespace WebApp.Controllers
             return View();
         }
 
+        public IActionResult Test()
+        {
+            var vm = new TestViewModel()
+            {
+                JustTime = DateTime.Now,
+                JustDate = DateTime.Today.Subtract(TimeSpan.FromDays(478)),
+                DateAndTime = DateTime.Now.AddMinutes(47856)
+            };
+            
+            return View(vm);
+        }
+
+
+        [HttpPost]
+        public IActionResult Test(TestViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                ModelState.Clear();
+                vm.JustTime = DateTime.Now.AddMinutes(60);
+                vm.JustDate = DateTime.Today.Subtract(TimeSpan.FromDays(1));
+                vm.DateAndTime = DateTime.Now.AddMinutes(60);
+            }
+
+            return View(vm);
+        }
+
+        
         // ================================== i18n ===================================
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
